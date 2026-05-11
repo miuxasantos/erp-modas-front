@@ -1,6 +1,8 @@
+import { VariacaoProdutoResponseDto } from "../variacaoProduto/variacao-produto-response.dto";
+
 export interface ItemCondicionalResponseDto {
     id: number;
     compraId: number;
-    variacaoProdutoId: number;
+    variacaoProduto: VariacaoProdutoResponseDto;
     quantidade: number;
 }

@@ -1,11 +1,12 @@
 import { StatusConta } from "../../enums/status-conta.enum";
+import { CompraResponseDto } from "../compra/compra-response.dto";
 
 export interface ContasPagarResponseDto {
     id: number;
     dataLancamento: string;
     dataVencimento: string;
     dataPagamento: string;
-    compraId: number;
+    compra: CompraResponseDto;
     valor: number;
     numeroParcela: number;
     totalParcelas: number;

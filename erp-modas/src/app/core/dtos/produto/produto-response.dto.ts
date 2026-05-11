@@ -1,3 +1,6 @@
+import { CategoriaResponseDto } from "../categoria/categoria-response.dto";
+import { CompraResponseDto } from "../compra/compra-response.dto";
+
 export interface ProdutoResponseDto {
     id: number;
     nome: string;
@@ -8,9 +11,9 @@ export interface ProdutoResponseDto {
     precoVenda: number;
     dataInclusao: string;
     dataDesativacao: string;
-    compraId: number;
+    compra: CompraResponseDto;
     tecido: string;
     marca: string;
-    categoriaId: number;
+    categoria: CategoriaResponseDto;
     imagem: string;
 }
