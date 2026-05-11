@@ -1,9 +1,9 @@
 import { ItemCondicionalResponseDto } from "../itemCondicional/item-condicional-response.dto";
 
-export interface CompraUpdateDto {
+export interface CondicionalUpdateDto {
     clienteId: number;
     dataInicio: string;
     periodo: number;
     dataFinal: string;
-    itens: ItemCondicionalResponseDto[];
+    itensCondicional: ItemCondicionalResponseDto[];
 }

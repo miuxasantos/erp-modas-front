@@ -9,8 +9,8 @@ export interface ProdutoResponseDto {
     dataInclusao: string;
     dataDesativacao: string;
     compraId: number;
-    tecido: number;
-    marca: number;
+    tecido: string;
+    marca: string;
     categoriaId: number;
     imagem: string;
 }

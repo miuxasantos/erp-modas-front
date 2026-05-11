@@ -1,6 +1,6 @@
-import { Tamanho } from "../../enums/tamanho.enum";
+import { TamanhoEnum } from "../../enums/tamanho.enum";
 
 export interface TamanhoResponseDto {
     id: number;
-    tamanho: Tamanho;
+    tamanho: TamanhoEnum;
 }

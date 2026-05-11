@@ -1,4 +1,4 @@
-export enum Tamanho {
+export enum TamanhoEnum {
     UNICO = 'Único',
     G = 'G',
     GG = 'GG',

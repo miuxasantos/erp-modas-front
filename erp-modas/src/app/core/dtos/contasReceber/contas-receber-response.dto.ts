@@ -4,11 +4,11 @@ export interface ContasReceberResponseDto {
     id: number;
     dataLancamento: string;
     dataVencimento: string;
-    dataPagamento: string;
+    dataRecebimento: string;
     vendaId: number;
     valor: number;
     numeroParcela: number;
     totalParcelas: number;
-    observacao: string;
+    observacoes: string;
     statusConta: StatusConta;
 }

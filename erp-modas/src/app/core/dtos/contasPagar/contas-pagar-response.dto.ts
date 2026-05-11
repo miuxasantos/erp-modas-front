@@ -9,6 +9,6 @@ export interface ContasPagarResponseDto {
     valor: number;
     numeroParcela: number;
     totalParcelas: number;
-    observacao: string;
+    observacoes: string;
     statusConta: StatusConta;
 }

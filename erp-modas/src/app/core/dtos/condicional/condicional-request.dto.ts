@@ -5,5 +5,5 @@ export interface CondicionalRequestDto {
     dataInicio: string;
     periodo: number;
     dataFinal: string;
-    itens: ItemCondicionalResponseDto[];
+    itensCondicional: ItemCondicionalResponseDto[];
 }

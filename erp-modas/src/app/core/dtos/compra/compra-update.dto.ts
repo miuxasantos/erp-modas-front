@@ -1,4 +1,5 @@
 import { FormaPagamento } from "../../enums/forma-pagamento.enum";
+import { ContasPagarResponseDto } from "../contasPagar/contas-pagar-response.dto";
 import { ItemCompraResponseDto } from "../itemCompra/item-compra-response.dto";
 
 export interface CompraUpdateDto {
@@ -9,5 +10,6 @@ export interface CompraUpdateDto {
     formaPagamento?: FormaPagamento;
     numeroParcelas?: number;
     valorTotal?: number;
-    itens?: ItemCompraResponseDto[];
+    itensCompra?: ItemCompraResponseDto[];
+    contasPagar?: ContasPagarResponseDto[];
 }

@@ -8,6 +8,6 @@ export interface ContasPagarRequestDto {
     valor: number;
     numeroParcela: number;
     totalParcelas: number;
-    observacao: string;
+    observacoes: string;
     statusConta: StatusConta;
 }
