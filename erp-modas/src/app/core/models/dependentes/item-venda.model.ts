@@ -12,8 +12,8 @@ export class ItemVenda {
 
     constructor(dto: ItemVendaResponseDto) {
         this.id = dto.id;
-        this.venda = new Venda(dto.vendaId);
-        this.variacaoProduto = new VariacaoProduto(dto.variacaoProdutoId);
+        this.venda = new Venda(dto.venda);
+        this.variacaoProduto = new VariacaoProduto(dto.variacaoProduto);
         this.valorUnit = dto.valorUnit;
         this.quantidade = dto.quantidade;
         this.subTotal = dto.subTotal;

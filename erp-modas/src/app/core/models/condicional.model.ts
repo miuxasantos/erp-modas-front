@@ -1,4 +1,6 @@
-import { ItemCondicional } from "./item-condicional.model";
+import { CondicionalResponseDto } from "../dtos/condicional/condicional-response.dto";
+import { Cliente } from "./cliente.model";
+import { ItemCondicional } from "./dependentes/item-condicional.model";
 
 export class Condicional {
     id: number;

@@ -1,6 +1,6 @@
 import { CaixaResponseDto } from "../dtos/caixa/caixa-response.dto";
 import { StatusCaixa } from "../enums/status-caixa.enum";
-import { MovimentacoesCaixa } from "./movimentacoes-caixa.model";
+import { MovimentacoesCaixa } from "./dependentes/movimentacoes-caixa.model";
 
 export class Caixa {
     id: number;

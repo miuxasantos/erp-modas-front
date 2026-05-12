@@ -1,5 +1,6 @@
-import { ItemCondicionalResponseDto } from "../dtos/itemCondicional/item-condicional-response.dto";
-import { VariacaoProduto } from "./variacao-produto.model";
+import { ItemCondicionalResponseDto } from "../../dtos/itemCondicional/item-condicional-response.dto";
+import { VariacaoProduto } from "../apoio/variacao-produto.model";
+import { Condicional } from "../condicional.model";
 
 export class ItemCondicional {
     id: number;

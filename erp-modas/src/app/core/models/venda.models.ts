@@ -1,5 +1,8 @@
 import { VendaResponseDto } from "../dtos/venda/venda-response.dto";
 import { FormaPagamento } from "../enums/forma-pagamento.enum";
+import { Cliente } from "./cliente.model";
+import { ContasReceber } from "./dependentes/contas-receber.model";
+import { ItemVenda } from "./dependentes/item-venda.model";
 
 export class Venda {
     id: number;
@@ -15,7 +18,7 @@ export class Venda {
 
     constructor(dto: VendaResponseDto) {
         this.id = dto.id;
-        this.cliente = new Cliente(dto.clienteId);
+        this.cliente = new Cliente(dto.cliente);
         this.dataVenda = new Date(dto.dataVenda);
         this.observacoes = dto.observacoes;
         this.formaPagamento = dto.formaPagamento;

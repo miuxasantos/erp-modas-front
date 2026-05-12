@@ -1,5 +1,6 @@
 import { ProdutoResponseDto } from "../dtos/produto/produto-response.dto";
 import { Categoria } from "./categoria.model";
+import { Compra } from "./compra.model";
 
 export class Produto {
     id: number;
@@ -27,10 +28,10 @@ export class Produto {
         this.precoVenda = dto.precoVenda;
         this.dataInclusao = new Date(dto.dataInclusao);
         this.dataDesativacao = new Date(dto.dataDesativacao);
-        this.compra = new Compra(dto.compraId);
+        this.compra = new Compra(dto.compra);
         this.tecido = dto.tecido;
         this.marca = dto.marca;
-        this.categoria = new Categoria(dto.categoriaId);
+        this.categoria = new Categoria(dto.categoria);
         this.imagem = dto.imagem;
     }
 }

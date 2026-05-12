@@ -1,6 +1,8 @@
 import { CompraResponseDto } from "../dtos/compra/compra-response.dto";
 import { FormaPagamento } from "../enums/forma-pagamento.enum";
+import { ContasPagar } from "./dependentes/contas-pagar.model";
 import { ItemCompra } from "./dependentes/item-compra.model";
+import { Fornecedor } from "./fornecedor.model";
 
 export class Compra {
     id: number;
@@ -16,7 +18,7 @@ export class Compra {
 
     constructor(dto: CompraResponseDto) {
         this.id = dto.id;
-        this.fornecedor = new Fornecedor(dto.fornecedorId);
+        this.fornecedor = new Fornecedor(dto.fornecedor);
         this.lote = dto.lote;
         this.dataChegada = new Date(dto.dataChegada);
         this.observacoes = dto.observacoes;
