@@ -10,5 +10,4 @@ export interface CaixaRequestDto {
     movimentacoes: MovimentacoesCaixaResponseDto[];
     totalEntradas: number;
     totalSaidas: number;
-    saldoTotal: number;
 }

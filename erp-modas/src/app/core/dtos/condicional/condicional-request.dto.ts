@@ -1,8 +1,7 @@
-import { ClienteResponseDto } from "../cliente/cliente-response.dto";
 import { ItemCondicionalResponseDto } from "../itemCondicional/item-condicional-response.dto";
 
 export interface CondicionalRequestDto {
-    cliente: ClienteResponseDto;
+    clienteId: number;
     dataInicio: string;
     periodo: number;
     dataFinal: string;

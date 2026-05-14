@@ -1,11 +1,10 @@
 import { StatusConta } from "../../enums/status-conta.enum";
-import { VendaResponseDto } from "../venda/venda-response.dto";
 
 export interface ContasReceberRequestDto {
     dataLancamento: string;
     dataVencimento: string;
     dataRecebimento: string;
-    venda: VendaResponseDto;
+    vendaId: number;
     valor: number;
     numeroParcela: number;
     totalParcelas: number;

@@ -1,8 +1,6 @@
-import { UsuarioResponseDto } from "../usuario/usuario-response.dto";
-
 export interface SessionTokenUpdateDto {
     token?: string;
-    usuario?: UsuarioResponseDto;
+    usuarioId?: number;
     dataCriacao?: string;
     dataExp?: string;
     ativo?: boolean;

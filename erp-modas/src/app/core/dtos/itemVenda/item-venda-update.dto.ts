@@ -1,9 +1,6 @@
-import { VariacaoProdutoResponseDto } from "../variacaoProduto/variacao-produto-response.dto";
-import { VendaResponseDto } from "../venda/venda-response.dto";
-
 export interface ItemVendaUpdateDto {
-    venda?: VendaResponseDto;
-    variacaoProduto?: VariacaoProdutoResponseDto;
+    vendaId?: number;
+    variacaoProdutoId?: number;
     valorUnit?: number;
     quantidade?: number;
     subTotal?: number;
