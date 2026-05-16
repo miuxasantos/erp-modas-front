@@ -5,7 +5,6 @@ export interface ProdutoRequestDto {
     ativo: boolean;
     precoCusto: number;
     precoVenda: number;
-    compraId: number;
     tecido: string;
     marca: string;
     categoriaId: number;

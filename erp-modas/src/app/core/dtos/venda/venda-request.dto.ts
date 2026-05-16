@@ -9,7 +9,6 @@ export interface VendaRequestDto {
     formaPagamento: FormaPagamento;
     numeroParcelas: number;
     valorTotal: number;
-    contasReceber: ContasReceberResponseDto[];
     itensVenda: ItemVendaResponseDto[];
     desconto: number;
 }

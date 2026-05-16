@@ -1,13 +1,12 @@
 export interface ProdutoUpdateDto {
-    nome: string;
-    codigo: number;
-    descricao: string;
-    ativo: boolean;
-    precoCusto: number;
-    precoVenda: number;
-    compraId: number;
-    tecido: string;
-    marca: string;
-    categoriaId: number;
-    imagem: string;
+    nome?: string;
+    codigo?: number;
+    descricao?: string;
+    ativo?: boolean;
+    precoCusto?: number;
+    precoVenda?: number;
+    tecido?: string;
+    marca?: string;
+    categoriaId?: number;
+    imagem?: string;
 }

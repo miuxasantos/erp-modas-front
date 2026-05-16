@@ -24,8 +24,8 @@ export class Venda {
         this.formaPagamento = dto.formaPagamento;
         this.valorTotal = dto.valorTotal;
         this.numeroParcelas = dto.numeroParcelas;
-        this.contasReceber = dto.contasReceber.map(cr => new ContasReceber(cr));
-        this.itensVenda = dto.itensVenda.map(iv => new ItemVenda(iv));
+        this.contasReceber = dto.contasReceber?.map(cr => new ContasReceber(cr) || []);
+        this.itensVenda = dto.itensVenda?.map(iv => new ItemVenda(iv) || []);
         this.desconto = dto.desconto;
     }
 }

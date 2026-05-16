@@ -1,10 +1,8 @@
 import { ItemVendaResponseDto } from "../../dtos/itemVenda/item-venda-response.dto";
 import { VariacaoProduto } from "../apoio/variacao-produto.model";
-import { Venda } from "../venda.models";
 
 export class ItemVenda {
     id: number;
-    venda: Venda;
     variacaoProduto: VariacaoProduto;
     valorUnit: number;
     quantidade: number;
@@ -12,7 +10,6 @@ export class ItemVenda {
 
     constructor(dto: ItemVendaResponseDto) {
         this.id = dto.id;
-        this.venda = new Venda(dto.venda);
         this.variacaoProduto = new VariacaoProduto(dto.variacaoProduto);
         this.valorUnit = dto.valorUnit;
         this.quantidade = dto.quantidade;

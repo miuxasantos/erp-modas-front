@@ -5,6 +5,5 @@ export interface UsuarioRequestDto {
     email: string;
     senha: string;
     status: boolean;
-    ultimoAcesso: string;
     cargo: Cargo;
 }

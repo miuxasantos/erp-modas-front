@@ -11,7 +11,6 @@ export interface ProdutoResponseDto {
     precoVenda: number;
     dataInclusao: string;
     dataDesativacao: string;
-    compra: CompraResponseDto;
     tecido: string;
     marca: string;
     categoria: CategoriaResponseDto;

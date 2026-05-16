@@ -25,7 +25,7 @@ export class Compra {
         this.formaPagamento = dto.formaPagamento;
         this.numeroParcelas = dto.numeroParcelas;
         this.valorTotal = dto.valorTotal;
-        this.contasPagar = dto.contasPagar.map(cp => new ContasPagar(cp));
-        this.itensCompra = dto.itensCompra.map(ic => new ItemCompra(ic));
+        this.contasPagar = dto.contasPagar?.map(cp => new ContasPagar(cp) || []);
+        this.itensCompra = dto.itensCompra?.map(ic => new ItemCompra(ic) || []);
     }
 }

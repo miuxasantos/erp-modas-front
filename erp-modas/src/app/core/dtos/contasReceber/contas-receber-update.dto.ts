@@ -4,7 +4,6 @@ export interface ContasReceberUpdateDto {
     dataLancamento: string;
     dataVencimento: string;
     dataRecebimento: string;
-    vendaId: number;
     valor: number;
     numeroParcela: number;
     totalParcelas: number;

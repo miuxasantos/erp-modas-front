@@ -6,7 +6,6 @@ export interface ContasPagarResponseDto {
     dataLancamento: string;
     dataVencimento: string;
     dataPagamento: string;
-    compra: CompraResponseDto;
     valor: number;
     numeroParcela: number;
     totalParcelas: number;

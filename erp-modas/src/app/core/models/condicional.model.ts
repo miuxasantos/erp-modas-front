@@ -16,6 +16,6 @@ export class Condicional {
         this.dataInicio = new Date(dto.dataInicio);
         this.periodo = dto.periodo;
         this.dataFinal = new Date(dto.dataFinal);
-        this.itensCondicional = dto.itensCondicional.map(item => new ItemCondicional(item));
+        this.itensCondicional = dto.itensCondicional?.map(item => new ItemCondicional(item) || []);
     }
 }
