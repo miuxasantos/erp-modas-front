@@ -1,0 +1,30 @@
+<div class="p-4">
+
+    <app-page-header
+        titulo="Detalhe da Cor"
+        [breadcrumbs]="breadcrumbs"
+        botaoLabel="Voltar"
+        botaoIcone="pi pi-arrow-left"
+        (botaoClick)="voltar()"
+    />
+
+    @if (cor) {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <p-card header="Dados">
+                <div class="flex flex-col gap-3">
+                    <div>
+                        <p class="text-xs text-gray-400">Nome</p>
+                        <p class="text-sm font-medium">{{ cor.nome }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Código Hexadecimal</p>
+                        <p class="text-sm font-medium">{{ cor.codigoHex }}</p>
+                    </div>
+                </div>
+            </p-card>
+
+        </div>
+    }
+
+</div>

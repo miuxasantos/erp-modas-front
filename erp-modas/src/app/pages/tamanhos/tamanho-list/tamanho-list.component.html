@@ -1,0 +1,33 @@
+<div clas="p-4">
+
+    <p-table
+        [value]="tamanhos"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [globalFilterFields]="['tamanho']"
+        stripedRows
+    >
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="tamanho">Tamanho <p-sortIcon field="tamanho"/></th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-tamanho>
+            <tr>
+                <td>{{ tamanho.tamanho}}</td>
+            </tr>
+        </ng-template>
+
+        <ng-template #empty>
+            <tr>
+                <td colspan="5" class="text-center py-8 text-gray-400">
+                Nenhum tamanho encontrado
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+
+</div>

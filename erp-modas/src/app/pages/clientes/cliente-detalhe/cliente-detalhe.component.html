@@ -1,0 +1,53 @@
+<div class="p-4">
+
+    <app-page-header
+        titulo="Detalhe do Cliente"
+        [breadcrumbs]="breadcrumbs"
+        botaoLabel="Voltar"
+        botaoIcone="pi pi-arrow-left"
+        (botaoClick)="voltar()"
+    />
+
+    @if (cliente) {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <p-card header="Dados pessoais">
+                <div class="flex flex-col gap-3">
+                    <div>
+                        <p class="text-xs text-gray-400">Nome</p>
+                        <p class="text-sm font-medium">{{ cliente.nome }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Contato</p>
+                        <p class="text-sm font-medium">{{ cliente.contato }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Documento</p>
+                        <p class="text-sm font-medium">{{ cliente.documento || '—' }}</p>
+                    </div>
+                </div>
+            </p-card>
+
+            <p-card header="Endereço">
+                <div class="flex flex-col gap-3">
+                <div>
+                    <p class="text-xs text-gray-400">Rua</p>
+                    <p class="text-sm font-medium">
+                    {{ cliente.rua || '—' }}, {{ cliente.numero || 'S/N' }}
+                    </p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400">Bairro</p>
+                    <p class="text-sm font-medium">{{ cliente.bairro || '—' }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400">Cidade</p>
+                    <p class="text-sm font-medium">{{ cliente.cidade || '—' }}</p>
+                </div>
+                </div>
+            </p-card>
+
+        </div>
+    }
+
+</div>

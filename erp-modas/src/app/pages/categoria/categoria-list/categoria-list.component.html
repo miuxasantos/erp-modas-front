@@ -1,0 +1,104 @@
+<div clas="p-4">
+    <app-page-header
+        titulo="Categorias"
+        [breadcrumbs]="breadcrumbs"
+        botaoLabel="Novo Categoria"
+        botaoIcone="pi pi-plus"
+        (botaoClick)="abrirNovo()"
+    />
+
+    <p-table
+        [value]="categorias"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [globalFilterFields]="['nome']"
+        stripedRows
+    >
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="nome">Nome <p-sortIcon field="nome"/></th>
+                <th style="width: 120px">Ações</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-categoria>
+            <tr>
+                <td>{{ categoria.nome}}</td>
+                <td>
+                    <div class="flex gap-1">
+                        <p-button
+                            icon="pi pi-eye"
+                            [text]="true"
+                            [rounded]="true"
+                            severity="info"
+                            pTooltio="Ver detalhe"
+                            (onClick)="verDetalhe(categoria.id)"
+                        />
+                        <p-button
+                            icon="pi pi-pencil"
+                            [text]="true"
+                            [rounded]="true"
+                            severity="secondary"
+                            pTooltip="Editar"
+                            (onClick)="abrirEdicao(categoria)"
+                        />
+                        <p-button
+                            icon="pi pi-trash"
+                            [text]="true"
+                            [rounded]="true"
+                            severity="danger"
+                            pTooltip="Excluir"
+                            (onClick)="confirmarExclusao(categoria.id)"
+                        />
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #empty>
+            <tr>
+                <td colspan="5" class="text-center py-8 text-gray-400">
+                Nenhuma categoria encontrado
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+
+    <p-dialog
+        [header]="categoriaEditando ? 'Editar Categoria' : 'Nova Categoria'"
+        [visible]="dialogVisivel()"
+        (visibleChange)="fecharDialog()"
+        [modal]="true"
+        [style]="{ width: '500px' }"
+        [draggable]="false"
+    >
+
+        <form [formGroup]="form" class="flex flex-col gap-4 pt-2">
+
+            <div class="flex flex-col gap-1">
+                <label class="text-sm text-gray-600">Nome *</label>
+                <input pInputText formControlName="nome" placeholder="Nome completo" />
+            </div>
+        </form>
+
+        <ng-template #footer>
+            <p-button
+                label="Cancelar"
+                [text]="true"
+                severity="secondary"
+                (onClick)="fecharDialog()"
+            />
+            <p-button
+                [label]="categoriaEditando ? 'Salvar alterações' : 'Criar categoria'"
+                icon="pi pi-check"
+                [loading]="salvando()"
+                [disabled]="form.invalid"
+                (onClick)="salvar()"
+            />
+        </ng-template>
+
+    </p-dialog>
+
+</div>

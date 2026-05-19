@@ -1,0 +1,11 @@
+@if (loadingService.isLoading()) {
+    <div class="fixed inset-0 bg-black/30 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl p-6 flex flex-col items-center gap-3 shadow-sm">
+          <p-progress-spinner
+            strokeWidth="4"
+            [style]="{ width: '48px', height: '48px' }"
+          />
+          <span class="text-sm text-gray-500">Carregando...</span>
+        </div>
+    </div>
+}

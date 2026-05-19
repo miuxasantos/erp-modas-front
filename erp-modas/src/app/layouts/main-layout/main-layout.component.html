@@ -1,0 +1,21 @@
+<div class="min-h-screen bg-gray-5">
+    <app-topbar (menuClick)="abrirSidebar()"/>
+
+    @if (sidebarVisivel()) {
+        <div 
+            class="fixed inset-0 bg-black/40 z-40"
+            (click)="fecharSidebar()"
+        ></div>
+    }
+
+    <app-sidebar
+        [visivel]="sidebarVisivel()"
+        (fechar)="fecharSidebar()"
+    />
+
+    <main class="p-6">
+        <router-outlet />
+    </main>
+
+    <app-footer />
+</div>
