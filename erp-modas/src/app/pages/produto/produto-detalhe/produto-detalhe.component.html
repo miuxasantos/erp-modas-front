@@ -1,0 +1,80 @@
+<div class="p-4">
+
+    <app-page-header
+        titulo="Detalhe do Produto"
+        [breadcrumbs]="breadcrumbs"
+        botaoLabel="Voltar"
+        botaoIcone="pi pi-arrow-left"
+        (botaoClick)="voltar()"
+    />
+
+    @if (produto) {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <p-card header="Produto">
+                <div class="flex flex-col gap-3">
+                    <div>
+                        <p class="text-xs text-gray-400">Nome</p>
+                        <p class="text-sm font-medium">{{ produto.nome }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Código</p>
+                        <p class="text-sm font-medium">{{ produto.codigo }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Descricao</p>
+                        <p class="text-sm font-medium">{{ produto.descricao }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Categoria</p>
+                        <p class="text-sm font-medium">{{ produto.categoria}}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Marca</p>
+                        <p class="text-sm font-medium">{{ produto.marca }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Tecido</p>
+                        <p class="text-sm font-medium">{{ produto.tecido }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Imagem</p>
+                        <img class="text-sm font-medium">{{ produto.imagem }} />
+                    </div>
+
+                </div>
+            </p-card>
+
+            <p-card header="Controle">
+                <div class="flex flex-col gap-3">
+                    <div>
+                        <p class="text-xs text-gray-400">Data de Inclusão</p>
+                        <p class="text-sm font-medium">{{ produto.dataInclusao }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Data de Desativação</p>
+                        <p class="text-sm font-medium">{{ produto.dataDesativacao || null }}</p>
+                    </div>
+                    <div>
+                            <p class="text-xs text-gray-400">Ativo</p>
+                            <p class="text-sm font-medium">{{ produto.ativo }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Preço de Custo</p>
+                        <p class="text-sm font-medium">{{ produto.precoCusto | currency:'BRL'}}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Preço de Venda</p>
+                        <p class="text-sm font-medium">{{ produto.precoVenda | currency:'BRL'}}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Margem de Lucro</p>
+                        <p class="text-sm font-medium"></p>
+                    </div>
+                </div>
+            </p-card>
+
+        </div>
+    }
+
+</div>

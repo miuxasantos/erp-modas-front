@@ -1,6 +1,4 @@
-<div class="min-h-screen bg-gray-5">
-    <app-topbar (menuClick)="abrirSidebar()"/>
-
+<div class="min-h-full flex flex-col bg-gray-5">
     @if (sidebarVisivel()) {
         <div 
             class="fixed inset-0 bg-black/40 z-40"
@@ -13,9 +11,11 @@
         (fechar)="fecharSidebar()"
     />
 
-    <main class="p-6">
-        <router-outlet />
-    </main>
+    <div class="flex flex-col flex-1 min-h-screen">
+        <app-topbar (menuClick)="abrirSidebar()"/>
+        <main class="p-6">
+            <router-outlet />
+        </main>
 
-    <app-footer />
+    </div>
 </div>

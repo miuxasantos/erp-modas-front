@@ -1,0 +1,80 @@
+<div clas="p-4">
+    <app-page-header
+        titulo="Produtos"
+        [breadcrumbs]="breadcrumbs"
+        botaoLabel="Novo Produto"
+        botaoIcone="pi pi-plus"
+        (botaoClick)="novo()"
+    />
+
+    <p-table
+        [value]="produtos"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        stripedRows
+    >
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="nome">Nome <p-sortIcon field="nome" /></th>
+                <th>Categoria</th>
+                <th>Marca</th>
+                <th pSortableColumn="precoVenda">Preço de Venda <p-sortIcon field="precoVenda" /></th>
+                <th>Status</th>
+                <th style="width: 150px">Ações</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-produto>
+            <tr>
+                <td>{{ produto.nome}}</td>
+                <td>{{ produto.categoria.nome }}</td>
+                <td>{{ produto.marca }}</td>
+                <td>{{ produto.precoVenda | currency:'BRL' }}</td>
+                <td>
+                    <p-tag
+                        [value]="produto.ativo ? 'Ativo' : 'Inativo'"
+                        [severity]="produto.ativo ? 'success' : 'danger'"
+                    />
+                </td>
+                <td>
+                    <div class="flex gap-1">
+                        <p-button
+                            icon="pi pi-eye"
+                            [text]="true"
+                            [rounded]="true"
+                            severity="info"
+                            pTooltio="Ver detalhe"
+                            (onClick)="verDetalhe(produto.id)"
+                        />
+                        <p-button
+                            icon="pi pi-pencil"
+                            [text]="true"
+                            [rounded]="true"
+                            severity="secondary"
+                            pTooltip="Editar"
+                            (onClick)="editar(produto)"
+                        />
+                        <p-button
+                            icon="pi pi-trash"
+                            [text]="true"
+                            [rounded]="true"
+                            severity="danger"
+                            pTooltip="Excluir"
+                            (onClick)="confirmarExclusao(produto.id)"
+                        />
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #empty>
+            <tr>
+                <td colspan="5" class="text-center py-8 text-gray-400">
+                Nenhum produto encontrado
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+</div>

@@ -1,0 +1,119 @@
+<div class="p-4">
+
+  <app-page-header
+    [titulo]="isEdicao ? 'Editar Produto' : 'Novo Produto'"
+    [breadcrumbs]="breadcrumbs"
+    botaoLabel="Cancelar"
+    botaoIcone="pi pi-times"
+    (botaoClick)="cancelar()"
+  />
+
+  <form [formGroup]="form">
+    <p-card header="Dados do produto">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm text-gray-600">Nome *</label>
+          <input pInputText formControlName="nome" placeholder="Ex: Vestido Midi Sara" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm text-gray-600">Marca *</label>
+          <input pInputText formControlName="marca" placeholder="Marca" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm text-gray-600">Categoria *</label>
+          <p-select
+            formControlName="categoriaId"
+            [options]="categorias"
+            optionLabel="nome"
+            optionValue="id"
+            placeholder="Selecione a categoria"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm text-gray-600">Tecido</label>
+          <input pInputText formControlName="tecido" placeholder="Ex: Algodão, Viscose" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm text-gray-600">Preço de custo *</label>
+          <p-inputNumber
+            formControlName="precoCusto"
+            mode="currency"
+            currency="BRL"
+            locale="pt-BR"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm text-gray-600">Preço de venda *</label>
+          <p-inputNumber
+            formControlName="precoVenda"
+            mode="currency"
+            currency="BRL"
+            locale="pt-BR"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1 md:col-span-2">
+          <label class="text-sm text-gray-600">Descrição</label>
+          <input pInputText formControlName="descricao" placeholder="Descrição do produto" />
+        </div>
+
+        <div class="flex items-center gap-2">
+          <p-checkbox formControlName="ativo" [binary]="true" inputId="ativo" />
+          <label for="ativo" class="text-sm text-gray-600">Produto ativo</label>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center gap-2">
+            <input
+              type="file"
+              accept="image/*"
+              class="hidden"
+              #inputImagem
+              (change)="onImagemSelecionada($event)"
+            />
+            <p-button
+              [label]="imagemPreview() ? 'Trocar imagem' : 'Selecionar imagem'"
+              icon="pi pi-upload"
+              severity="secondary"
+              [loading]="uploading()"
+              (onClick)="inputImagem.click()"
+            />
+
+            <label class="text-sm text-gray-600">Imagem do produto</label>
+            <!-- preview -->
+            @if (imagemPreview()) {
+              <img
+                [src]="imagemPreview()"
+                class="w-32 h-32 object-cover rounded-lg border border-gray-200"
+              />
+            }
+            @if (uploading()) {
+              <span class="text-sm text-gray-400">Enviando...</span>
+            }
+          </div>
+        </div>
+
+      </div>
+    </p-card>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <p-button label="Cancelar" [text]="true" severity="secondary" (onClick)="cancelar()" />
+      <p-button
+        [label]="isEdicao ? 'Salvar' : 'Salvar e cadastrar variações'"
+        icon="pi pi-arrow-right"
+        iconPos="right"
+        [loading]="salvando()"
+        [disabled]="form.invalid"
+        (onClick)="salvar()"
+      />
+    </div>
+
+  </form>
+
+</div>

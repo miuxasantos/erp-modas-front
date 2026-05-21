@@ -1,0 +1,76 @@
+<!-- pages/compras/compra-list/compra-list.component.html -->
+<div class="p-4">
+
+    <app-page-header
+        titulo="Compras"
+        [breadcrumbs]="breadcrumbs"
+        botaoLabel="Nova Compra"
+        botaoIcone="pi pi-plus"
+        (botaoClick)="nova()"
+    />
+
+    <p-table
+        [value]="compras"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        stripedRows
+    >
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="fornecedor.nome">Fornecedor <p-sortIcon field="fornecedor.nome" /></th>
+                <th pSortableColumn="dataChegada">Data <p-sortIcon field="dataChegada" /></th>
+                <th>Forma Pagamento</th>
+                <th pSortableColumn="valorTotal">Total <p-sortIcon field="valorTotal" /></th>
+                <th style="width: 130px">Ações</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-compra>
+            <tr>
+                <td>{{ compra.fornecedor.nome }}</td>
+                <td>{{ compra.dataChegada | date:'dd/MM/yyyy' }}</td>
+                <td>{{ compra.formaPagamento }}</td>
+                <td>{{ compra.valorTotal | currency:'BRL' }}</td>
+                <td>
+                <div class="flex gap-1">
+                    <p-button
+                    icon="pi pi-eye"
+                    [text]="true"
+                    [rounded]="true"
+                    severity="info"
+                    pTooltip="Ver detalhe"
+                    (onClick)="verDetalhe(compra.id)"
+                    />
+                    <p-button
+                    icon="pi pi-pencil"
+                    [text]="true"
+                    [rounded]="true"
+                    severity="secondary"
+                    pTooltip="Editar"
+                    (onClick)="editar(compra.id)"
+                    />
+                    <p-button
+                    icon="pi pi-trash"
+                    [text]="true"
+                    [rounded]="true"
+                    severity="danger"
+                    pTooltip="Excluir"
+                    (onClick)="confirmarExclusao(compra.id)"
+                    />
+                </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #empty>
+            <tr>
+                <td colspan="5" class="text-center py-8 text-gray-400">
+                Nenhuma compra encontrada
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+
+</div>

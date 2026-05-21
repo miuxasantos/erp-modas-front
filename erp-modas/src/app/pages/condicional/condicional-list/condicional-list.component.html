@@ -1,0 +1,76 @@
+<!-- pages/condicionals/condicional-list/condicional-list.component.html -->
+<div class="p-4">
+
+    <app-page-header
+        titulo="Condicionais"
+        [breadcrumbs]="breadcrumbs"
+        botaoLabel="Nova Condicional"
+        botaoIcone="pi pi-plus"
+        (botaoClick)="nova()"
+    />
+
+    <p-table
+        [value]="condicionais"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        stripedRows
+    >
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="cliente.nome">Cliente <p-sortIcon field="cliente.nome" /></th>
+                <th pSortableColumn="dataInicio">Data de Início<p-sortIcon field="dataInicio" /></th>
+                <th pSortableColumn="dataFinal">Data Final<p-sortIcon field="dataFinal" /></th>
+                <th>Período</th>
+                <th style="width: 130px">Ações</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-condicional>
+            <tr>
+                <td>{{ condicional.cliente.nome }}</td>
+                <td>{{ condicional.dataInicio | date:'dd/MM/yyyy' }}</td>
+                <td>{{ condicional.dataFinal | date:'dd/MM/yyyy' }}</td>
+                <td>{{ condicional.periodo }}</td>
+                <td>
+                    <div class="flex gap-1">
+                        <p-button
+                        icon="pi pi-eye"
+                        [text]="true"
+                        [rounded]="true"
+                        severity="info"
+                        pTooltip="Ver detalhe"
+                        (onClick)="verDetalhe(condicional.id)"
+                        />
+                        <p-button
+                        icon="pi pi-pencil"
+                        [text]="true"
+                        [rounded]="true"
+                        severity="secondary"
+                        pTooltip="Editar"
+                        (onClick)="editar(condicional.id)"
+                        />
+                        <p-button
+                        icon="pi pi-trash"
+                        [text]="true"
+                        [rounded]="true"
+                        severity="danger"
+                        pTooltip="Excluir"
+                        (onClick)="confirmarExclusao(condicional.id)"
+                        />
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #empty>
+            <tr>
+                <td colspan="5" class="text-center py-8 text-gray-400">
+                Nenhuma condicional encontrada
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+
+</div>

@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { environment } from "../../environments/environment";
+import { environment } from "../../../environments/environment";
 import { Observable } from "rxjs";
 import { UsuarioResponseDto } from "@core/dtos/usuario/usuario-response.dto";
 import { UsuarioRequestDto } from "@core/dtos/usuario/usuario-request.dto";

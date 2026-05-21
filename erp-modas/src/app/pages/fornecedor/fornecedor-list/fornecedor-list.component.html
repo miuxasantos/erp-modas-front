@@ -1,0 +1,118 @@
+<div clas="p-4">
+    <app-page-header
+        titulo="Fornecedores"
+        [breadcrumbs]="breadcrumbs"
+        botaoLabel="Novo Fornecedor"
+        botaoIcone="pi pi-plus"
+        (botaoClick)="abrirNovo()"
+    />
+
+    <p-table
+        [value]="fornecedores"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [globalFilterFields]="['nome']"
+        stripedRows
+    >
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="nome">Nome <p-sortIcon field="nome"/></th>
+                <th>Contato</th>
+                <th>Assessoria</th>
+                <th style="width: 120px">Ações</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-fornecedor>
+            <tr>
+                <td>{{ fornecedor.nome }}</td>
+                <td>{{ fornecedor.contato }}</td>
+                <td>{{ fornecedor.assessoria }}</td>
+                <td>
+                    <div class="flex gap-1">
+                        <p-button
+                            icon="pi pi-eye"
+                            [text]="true"
+                            [rounded]="true"
+                            severity="info"
+                            pTooltio="Ver detalhe"
+                            (onClick)="verDetalhe(fornecedor.id)"
+                        />
+                        <p-button
+                            icon="pi pi-pencil"
+                            [text]="true"
+                            [rounded]="true"
+                            severity="secondary"
+                            pTooltip="Editar"
+                            (onClick)="abrirEdicao(fornecedor)"
+                        />
+                        <p-button
+                            icon="pi pi-trash"
+                            [text]="true"
+                            [rounded]="true"
+                            severity="danger"
+                            pTooltip="Excluir"
+                            (onClick)="confirmarExclusao(fornecedor.id)"
+                        />
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #empty>
+            <tr>
+                <td colspan="5" class="text-center py-8 text-gray-400">
+                Nenhuma fornecedor encontrado
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+
+    <p-dialog
+        [header]="fornecedorEditando ? 'Editar Fornecedor' : 'Novo Fornecedor'"
+        [visible]="dialogVisivel()"
+        (visibleChange)="fecharDialog()"
+        [modal]="true"
+        [style]="{ width: '500px' }"
+        [draggable]="false"
+    >
+
+        <form [formGroup]="form" class="flex flex-col gap-4 pt-2">
+
+            <div class="flex flex-col gap-1">
+                <label class="text-sm text-gray-600">Nome *</label>
+                <input pInputText formControlName="nome" placeholder="Nome completo" />
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="text-sm text-gray-600">Contato *</label>
+                <input pInputText formControlName="contato" placeholder="Contato" />
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="text-sm text-gray-600">Assessoria *</label>
+                <input pInputText formControlName="assessoria" placeholder="Assessoria" />
+            </div>
+        </form>
+
+        <ng-template #footer>
+            <p-button
+                label="Cancelar"
+                [text]="true"
+                severity="secondary"
+                (onClick)="fecharDialog()"
+            />
+            <p-button
+                [label]="fornecedorEditando ? 'Salvar alterações' : 'Criar fornecedor'"
+                icon="pi pi-check"
+                [loading]="salvando()"
+                [disabled]="form.invalid"
+                (onClick)="salvar()"
+            />
+        </ng-template>
+
+    </p-dialog>
+
+</div>

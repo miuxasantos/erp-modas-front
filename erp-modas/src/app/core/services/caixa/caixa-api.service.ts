@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { environment } from "../../../environments/environment";
+import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
 import { CaixaResponseDto } from "@core/dtos/caixa/caixa-response.dto";
 import { CaixaRequestDto } from "@core/dtos/caixa/caixa-request.dto";

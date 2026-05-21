@@ -41,4 +41,10 @@ export class CaixaService {
             map(dtos => dtos.map(dto => new Caixa(dto)))
         );
     }
+
+    getById(id: number): Observable<Caixa> {
+        return this.api.getById(id).pipe(
+            map(dto => new Caixa(dto)),
+        )
+    }
 }

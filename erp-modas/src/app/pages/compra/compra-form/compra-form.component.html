@@ -1,0 +1,229 @@
+<div class="p-4 flex flex-col gap-4">
+
+    <app-page-header
+        [titulo]="isEdicao ? 'Editar Compra' : 'Nova Compra'"
+        [breadcrumbs]="breadcrumbs"
+        botaoLabel="Cancelar"
+        botaoIcone="pi pi-times"
+        (botaoClick)="cancelar()"
+    />
+
+    <form [formGroup]="form" class="flex flex-col gap-4">
+
+        <p-card header="Dados da compra">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-sm text-gray-600">Fornecedor *</label>
+                    <p-select
+                        formControlName="fornecedorId"
+                        [options]="fornecedores"
+                        optionLabel="nome"
+                        optionValue="id"
+                        placeholder="Selecione o cliente"
+                        [filter]="true"
+                        filterPlaceholder="Buscar cliente"
+                    />
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-sm text-gray-600">Data de Chegada *</label>
+                    <input pInputText type="date" formControlName="dataChegada" />
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-sm text-gray-600">Forma de pagamento *</label>
+                    <p-select
+                        formControlName="formaPagamento"
+                        [options]="formasPagamento"
+                        placeholder="Selecione"
+                    />
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-sm text-gray-600">Número de parcelas</label>
+                    <p-inputNumber formControlName="numeroParcelas" [min]="1" [max]="12" />
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-sm text-gray-600">Lote</label>
+                    <input pInputText type="date" formControlName="lote" />
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-sm text-gray-600">Observações</label>
+                    <input pInputText formControlName="observacoes" placeholder="Observações" />
+                </div>
+
+            </div>
+        </p-card>
+
+        <p-card header="Itens da compra">
+
+            <div class="flex flex-col gap-1 mb-4">
+                <label class="text-sm text-gray-600">Buscar produto</label>
+                <div class="relative">
+                <input
+                    pInputText
+                    [value]="termoBusca()"
+                    (input)="buscarProduto($event)"
+                    placeholder="Digite o nome ou marca do produto..."
+                    class="w-full"
+                />
+
+                @if (produtosFiltrados.length) {
+                    <div class="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+                    @for (produto of produtosFiltrados; track produto.id) {
+                        <div
+                        class="flex items-center justify-between px-4 py-2.5 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0"
+                        (click)="selecionarProduto(produto)"
+                        >
+                        <div>
+                            <p class="text-sm font-medium text-gray-800">{{ produto.nome }}</p>
+                            <p class="text-xs text-gray-400">{{ produto.marca }} · {{ produto.categoria.nome }}</p>
+                        </div>
+                        <span class="text-sm text-green-600">{{ produto.precoCusto | currency:'BRL' }}</span>
+                        </div>
+                    }
+                    </div>
+                }
+                </div>
+            </div>
+
+            <p-table [value]="itens.controls" formArrayName="itens">
+                <ng-template #header>
+                <tr>
+                    <th>Produto</th>
+                    <th>SKU</th>
+                    <th style="width: 120px">Qtd</th>
+                    <th style="width: 150px">Valor unit.</th>
+                    <th style="width: 130px">Subtotal</th>
+                    <th style="width: 60px"></th>
+                </tr>
+                </ng-template>
+
+                <ng-template #body let-item let-i="rowIndex">
+                <tr [formGroupName]="i">
+                    <td>{{ item.get('nomeProduto')?.value }}</td>
+                    <td><code>{{ item.get('sku')?.value }}</code></td>
+                    <td>
+                    <p-inputNumber formControlName="quantidade" [min]="1" />
+                    </td>
+                    <td>
+                    <p-inputNumber
+                        formControlName="valorUnit"
+                        mode="currency"
+                        currency="BRL"
+                        locale="pt-BR"
+                    />
+                    </td>
+                    <td>{{ item.get('subTotal')?.value | currency:'BRL' }}</td>
+                    <td>
+                    <p-button
+                        icon="pi pi-trash"
+                        [text]="true" [rounded]="true"
+                        severity="danger"
+                        (onClick)="removerItem(i)"
+                    />
+                    </td>
+                </tr>
+                </ng-template>
+
+                <ng-template #empty>
+                <tr>
+                    <td colspan="6" class="text-center py-6 text-gray-400">
+                    Busque um produto acima para adicionar itens
+                    </td>
+                </tr>
+                </ng-template>
+            </p-table>
+
+        <!-- Resumo de valores -->
+            @if (itens.length) {
+                <div class="flex flex-col items-end gap-1 mt-4 border-t border-gray-100 pt-4">
+                <div class="flex gap-8 text-sm text-gray-500">
+                    <span>Subtotal</span>
+                    <span>{{ subtotal | currency:'BRL' }}</span>
+                </div>
+                <div class="flex gap-8 text-lg font-medium text-green-600">
+                    <span>Total</span>
+                    <span>{{ valorTotal | currency:'BRL' }}</span>
+                </div>
+                </div>
+            }
+        </p-card>
+
+        <!-- Ações -->
+        <div class="flex justify-end gap-2">
+            <p-button
+                label="Cancelar"
+                [text]="true"
+                severity="secondary"
+                (onClick)="cancelar()"
+            />
+            <p-button
+                [label]="isEdicao ? 'Salvar alterações' : 'Finalizar compra'"
+                icon="pi pi-check"
+                [loading]="salvando()"
+                [disabled]="form.invalid || itens.length === 0"
+                (onClick)="salvar()"
+            />
+        </div>
+
+    </form>
+
+    <!-- Dialog de variações -->
+    <p-dialog
+        [header]="'Selecionar variação — ' + (produtoSelecionado?.nome || '')"
+        [visible]="dialogVariacaoVisivel()"
+        (visibleChange)="dialogVariacaoVisivel.set($event)"
+        [modal]="true"
+        [style]="{ width: '600px' }"
+        [draggable]="false"
+    >
+        <p-table [value]="variacoesDoProduto">
+            <ng-template #header>
+                <tr>
+                <th>SKU</th>
+                <th>Cor</th>
+                <th>Tamanho</th>
+                <th>Estoque</th>
+                <th>Preço de Custo</th>
+                <th style="width: 80px"></th>
+                </tr>
+            </ng-template>
+
+            <ng-template #body let-variacao>
+                <tr>
+                <td><code>{{ variacao.sku }}</code></td>
+                <td>{{ variacao.cor.nome }}</td>
+                <td>{{ variacao.tamanho.tamanho }}</td>
+                <td>
+                    <p-tag
+                    [value]="variacao.estoque.toString()"
+                    [severity]="variacao.estoque === 0 ? 'danger' : variacao.estoque <= 5 ? 'warn' : 'success'"
+                    />
+                </td>
+                <td>{{ variacao.precoCusto | currency:'BRL' }}</td>
+                <td>
+                    <p-button
+                    label="Selecionar"
+                    size="small"
+                    [disabled]="variacao.estoque === 0"
+                    (onClick)="selecionarVariacao(variacao)"
+                    />
+                </td>
+                </tr>
+            </ng-template>
+
+            <ng-template #empty>
+                <tr>
+                <td colspan="6" class="text-center py-6 text-gray-400">
+                    Nenhuma variação disponível para este produto
+                </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-dialog>
+
+</div>

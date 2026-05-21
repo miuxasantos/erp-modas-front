@@ -9,6 +9,9 @@ export class Caixa {
     saldoAbertura: number;
     saldoFechamento: number;
     statusCaixa: StatusCaixa;
+    totalEntradas: number;
+    totalSaidas: number;
+    saldoTotal: number;
     movimentacoes: MovimentacoesCaixa[];
 
     constructor(dto: CaixaResponseDto) {
@@ -18,6 +21,9 @@ export class Caixa {
         this.saldoAbertura = dto.saldoAbertura;
         this.saldoFechamento = dto.saldoFechamento;
         this.statusCaixa = dto.statusCaixa;
+        this.totalEntradas = dto.totalEntradas;
+        this.totalSaidas = dto.totalSaidas;
+        this.saldoTotal = dto.saldoTotal;
         this.movimentacoes = dto.movimentacoes?.map(m => new MovimentacoesCaixa(m)) || [];
     }
 }

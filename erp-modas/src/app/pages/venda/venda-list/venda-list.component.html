@@ -1,0 +1,76 @@
+<!-- pages/vendas/venda-list/venda-list.component.html -->
+<div class="p-4">
+
+    <app-page-header
+        titulo="Vendas"
+        [breadcrumbs]="breadcrumbs"
+        botaoLabel="Nova Venda"
+        botaoIcone="pi pi-plus"
+        (botaoClick)="nova()"
+    />
+
+    <p-table
+        [value]="vendas"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        stripedRows
+    >
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="cliente.nome">Cliente <p-sortIcon field="cliente.nome" /></th>
+                <th pSortableColumn="dataVenda">Data <p-sortIcon field="dataVenda" /></th>
+                <th>Forma Pagamento</th>
+                <th pSortableColumn="valorTotal">Total <p-sortIcon field="valorTotal" /></th>
+                <th style="width: 130px">Ações</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-venda>
+            <tr>
+                <td>{{ venda.cliente.nome }}</td>
+                <td>{{ venda.dataVenda | date:'dd/MM/yyyy' }}</td>
+                <td>{{ venda.formaPagamento }}</td>
+                <td>{{ venda.valorTotal | currency:'BRL' }}</td>
+                <td>
+                <div class="flex gap-1">
+                    <p-button
+                    icon="pi pi-eye"
+                    [text]="true"
+                    [rounded]="true"
+                    severity="info"
+                    pTooltip="Ver detalhe"
+                    (onClick)="verDetalhe(venda.id)"
+                    />
+                    <p-button
+                    icon="pi pi-pencil"
+                    [text]="true"
+                    [rounded]="true"
+                    severity="secondary"
+                    pTooltip="Editar"
+                    (onClick)="editar(venda.id)"
+                    />
+                    <p-button
+                    icon="pi pi-trash"
+                    [text]="true"
+                    [rounded]="true"
+                    severity="danger"
+                    pTooltip="Excluir"
+                    (onClick)="confirmarExclusao(venda.id)"
+                    />
+                </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #empty>
+            <tr>
+                <td colspan="5" class="text-center py-8 text-gray-400">
+                Nenhuma venda encontrada
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+
+</div>

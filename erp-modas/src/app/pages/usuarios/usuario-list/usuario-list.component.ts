@@ -13,6 +13,7 @@ import { UsuarioResponseDto } from "@core/dtos/usuario/usuario-response.dto";
 import { Cargo } from "@core/enums/cargo.enum";
 import { enumToOptions } from "@core/utils/enum-options.utils";
 import { SelectModule } from "primeng/select";
+import { ToggleSwitchModule } from "primeng/toggleswitch";
 
 @Component({
     selector: 'app-usuario-list',
@@ -24,6 +25,7 @@ import { SelectModule } from "primeng/select";
         InputTextModule,
         TagModule,
         SelectModule,
+        ToggleSwitchModule,
         PageHeaderComponent,
     ],
     templateUrl: './usuario-list.component.html'
@@ -67,8 +69,8 @@ export class UsuarioListComponent implements OnInit {
             true
         ),
 
-        senha: new FormControl<string | null>(
-            null
+        senha: new FormControl<string>(
+            '', Validators.required
         )
     });
 
@@ -84,26 +86,66 @@ export class UsuarioListComponent implements OnInit {
 
     abrirNovo(): void {
         this.usuarioEditando = null;
-        this.form.reset();
+        this.form.reset({
+            nome: null,
+            email: null,
+            cargo: null,
+            status: true,
+            senha: ''
+        });
+        this.form.controls.senha.setValidators(Validators.required);
+        this.form.controls.senha.updateValueAndValidity();
         this.dialogVisivel.set(true);
     }
 
     abrirEdicao(usuario: UsuarioResponseDto): void {
         this.usuarioEditando = usuario;
         this.form.patchValue(usuario);
+        this.form.controls.senha.clearValidators();
+        this.form.controls.senha.updateValueAndValidity();
         this.dialogVisivel.set(true);
     }
 
     fecharDialog(): void {
         this.dialogVisivel.set(false);
-        this.form.reset();
+        this.form.reset({
+            nome: null,
+            email: null,
+            cargo: null,
+            status: true,
+            senha: ''
+        });
     }
 
     salvar(): void {
         if (this.form.invalid) return;
         
         this.salvando.set(true);
-        const dto = this.form.getRawValue() as any;
+        const formValue = this.form.getRawValue();
+
+        let dto: any;
+
+        if (this.usuarioEditando) {
+            dto = {
+                nome: formValue.nome,
+                email: formValue.email,
+                cargo: formValue.cargo,
+                status: formValue.status,
+            };
+
+            if (formValue.senha?.trim()) {
+                dto.senha = formValue.senha;
+            }
+        } else {
+            dto = {
+                nome: formValue.nome,
+                email: formValue.email,
+                cargo: formValue.cargo,
+                status: formValue.status,
+                senha: formValue.senha,
+            };
+        }
+
         const request$ = this.usuarioEditando ? this.usuarioApi.update(this.usuarioEditando.id, dto) 
             : this.usuarioApi.create(dto);
 

@@ -1,7 +1,5 @@
 import { Component, inject, OnInit, signal } from "@angular/core";
-import { PageHeaderComponent } from "@shared/components/page-header/page-header.component";
 import { ButtonModule } from "primeng/button";
-import { DialogModule } from "primeng/dialog";
 import { TableModule } from "primeng/table";
 import { InputTextModule } from "primeng/inputtext";
 import { TagModule } from "primeng/tag"

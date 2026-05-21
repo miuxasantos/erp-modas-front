@@ -3,9 +3,12 @@ export function enumToOptions<T extends string>( enumObj: Record<string, T>) {
 
         label: value
             .toLowerCase()
-            .replace('_', ' ')
-            .replace(/\b\w/g, l => l.toUpperCase()),
-
+            .replace(/_/g, ' ')
+            .split(' ')
+            .map(word =>
+                word.charAt(0).toUpperCase() + word.slice(1)
+            )
+            .join(' '),
         value
 
     }));

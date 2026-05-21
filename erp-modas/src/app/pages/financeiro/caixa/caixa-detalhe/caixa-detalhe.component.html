@@ -1,0 +1,99 @@
+<div class="p-4 flex flex-col gap-4">
+
+    <app-page-header
+        titulo="Detalhe do Caixa"
+        [breadcrumbs]="breadcrumbs"
+        [botaoVisivel]="false"
+    />
+
+    @if (caixa) {
+
+        <!-- Resumo -->
+        <p-card header="Resumo">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                    <p class="text-xs text-gray-400">Abertura</p>
+                    <p class="text-sm font-medium">{{ caixa.dataAbertura | date:'dd/MM/yyyy HH:mm' }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400">Fechamento</p>
+                    <p class="text-sm font-medium">
+                        {{ caixa.dataFechamento ? (caixa.dataFechamento | date:'dd/MM/yyyy HH:mm') : '—' }}
+                </p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400">Saldo Abertura</p>
+                    <p class="text-sm font-medium">{{ caixa.saldoAbertura | currency:'BRL' }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400">Saldo Fechamento</p>
+                    <p class="text-sm font-medium">{{ caixa.saldoFechamento | currency:'BRL' }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400">Total Entradas</p>
+                    <p class="text-sm font-medium text-green-600">{{ caixa.totalEntradas | currency:'BRL' }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400">Total Saídas</p>
+                    <p class="text-sm font-medium text-red-500">{{ caixa.totalSaidas | currency:'BRL' }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400">Saldo Final</p>
+                    <p class="text-lg font-bold text-gray-800">{{ caixa.saldoTotal | currency:'BRL' }}</p>
+                </div>
+            </div>
+        </p-card>
+
+        <!-- Movimentações -->
+        <p-card header="Movimentações">
+            <p-table [value]="movimentacoes" [paginator]="true" [rows]="10" stripedRows>
+                <ng-template #header>
+                    <tr>
+                        <th pSortableColumn="data">Data/Hora <p-sortIcon field="data" /></th>
+                        <th>Descrição</th>
+                        <th>Origem</th>
+                        <th>Tipo</th>
+                        <th pSortableColumn="valor">Valor <p-sortIcon field="valor" /></th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-mov>
+                    <tr>
+                        <td>{{ mov.data | date:'dd/MM/yyyy HH:mm' }}</td>
+                        <td>{{ mov.descricao }}</td>
+                        <td>{{ mov.origemMov }}</td>
+                        <td>
+                        <p-tag
+                            [value]="mov.tipoMovCaixa"
+                            [severity]="getTipoSeverity(mov.tipoMovCaixa)"
+                        />
+                        </td>
+                        <td [class]="mov.tipoMovCaixa === 'ENTRADA' ? 'text-green-600 font-medium' : 'text-red-500 font-medium'">
+                        {{ mov.tipoMovCaixa === 'ENTRADA' ? '+' : '-' }}
+                        {{ mov.valor | currency:'BRL' }}
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template #empty>
+                    <tr>
+                        <td colspan="5" class="text-center py-6 text-gray-400">
+                        Nenhuma movimentação encontrada
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-card>
+
+    }
+
+    <div>
+        <p-button
+        label="Voltar ao histórico"
+        icon="pi pi-arrow-left"
+        [text]="true"
+        severity="secondary"
+        (onClick)="voltar()"
+        />
+    </div>
+
+</div>

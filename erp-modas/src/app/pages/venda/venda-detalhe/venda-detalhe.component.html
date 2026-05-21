@@ -1,0 +1,121 @@
+<div class="p-4 flex flex-col gap-4">
+
+    <app-page-header
+        titulo="Detalhe da Venda"
+        [breadcrumbs]="breadcrumbs"
+        botaoLabel="Editar"
+        botaoIcone="pi pi-pencil"
+        (botaoClick)="editar()"
+    />
+
+    @if (venda) {
+
+        <!-- Dados gerais -->
+        <p-card header="Dados da venda">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                    <p class="text-xs text-gray-400">Cliente</p>
+                    <p class="text-sm font-medium">{{ venda.cliente.nome }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400">Data</p>
+                    <p class="text-sm font-medium">{{ venda.dataVenda | date:'dd/MM/yyyy' }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400">Forma de pagamento</p>
+                    <p class="text-sm font-medium">{{ venda.formaPagamento }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400">Parcelas</p>
+                    <p class="text-sm font-medium">{{ venda.numeroParcelas }}x</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400">Desconto</p>
+                    <p class="text-sm font-medium text-red-500">- {{ venda.desconto | currency:'BRL' }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400">Total</p>
+                    <p class="text-sm font-medium text-green-600">{{ venda.valorTotal | currency:'BRL' }}</p>
+                </div>
+                @if (venda.observacoes) {
+                    <div class="col-span-2 md:col-span-4">
+                        <p class="text-xs text-gray-400">Observações</p>
+                        <p class="text-sm font-medium">{{ venda.observacoes }}</p>
+                    </div>
+                }
+            </div>
+        </p-card>
+
+        <!-- Itens -->
+        <p-card header="Itens da venda">
+            <p-table [value]="venda.itensVenda">
+                <ng-template #header>
+                    <tr>
+                        <th>Produto</th>
+                        <th>SKU</th>
+                        <th>Cor</th>
+                        <th>Tamanho</th>
+                        <th>Qtd</th>
+                        <th>Valor unit.</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-item>
+                    <tr>
+                        <td>{{ item.variacaoProduto.produto.nome }}</td>
+                        <td><code>{{ item.variacaoProduto.sku }}</code></td>
+                        <td>{{ item.variacaoProduto.cor.nome }}</td>
+                        <td>{{ item.variacaoProduto.tamanho.tamanho }}</td>
+                        <td>{{ item.quantidade }}</td>
+                        <td>{{ item.valorUnit | currency:'BRL' }}</td>
+                        <td>{{ item.subTotal | currency:'BRL' }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-card>
+
+        @if (venda.contasReceber?.length) {
+            <p-card header="Contas a receber">
+                <p-table [value]="venda.contasReceber">
+                    <ng-template #header>
+                        <tr>
+                        <th>Parcela</th>
+                        <th>Vencimento</th>
+                        <th>Recebimento</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-conta>
+                        <tr>
+                        <td>{{ conta.numeroParcela }}/{{ conta.totalParcelas }}</td>
+                        <td>{{ conta.dataLancamento  | date:'dd/MM/yyyy' }}</td>
+                        <td>{{ conta.dataVencimento  | date:'dd/MM/yyyy' }}</td>
+                        <td>{{ conta.dataRecebimento ? (conta.dataRecebimento | date:'dd/MM/yyyy') : '—' }}</td>
+                        <td>{{ conta.valor | currency:'BRL' }}</td>
+                        <td>
+                            <p-tag
+                            [value]="conta.statusConta"
+                            [severity]="getStatusSeverity(conta.statusConta)"
+                            />
+                        </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-card>
+        }
+
+    }
+
+    <!-- Botão voltar -->
+    <div>
+        <p-button
+        label="Voltar para vendas"
+        icon="pi pi-arrow-left"
+        [text]="true"
+        severity="secondary"
+        (onClick)="voltar()"
+        />
+    </div>
+
+</div>

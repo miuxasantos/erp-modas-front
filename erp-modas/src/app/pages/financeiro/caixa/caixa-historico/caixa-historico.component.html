@@ -1,0 +1,57 @@
+<div class="p-4">
+
+  <app-page-header
+    titulo="Histórico de Caixas"
+    [breadcrumbs]="breadcrumbs"
+    [botaoVisivel]="false"
+  />
+
+  <p-table [value]="caixas" [paginator]="true" [rows]="10" stripedRows>
+    <ng-template #header>
+      <tr>
+        <th pSortableColumn="dataAbertura">Abertura <p-sortIcon field="dataAbertura" /></th>
+        <th pSortableColumn="dataFechamento">Fechamento <p-sortIcon field="dataFechamento" /></th>
+        <th>Saldo Abertura</th>
+        <th>Entradas</th>
+        <th>Saídas</th>
+        <th>Saldo Final</th>
+        <th>Status</th>
+        <th style="width: 80px">Ações</th>
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-caixa>
+      <tr>
+        <td>{{ caixa.dataAbertura | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ caixa.dataFechamento ? (caixa.dataFechamento | date:'dd/MM/yyyy HH:mm') : '—' }}</td>
+        <td>{{ caixa.saldoAbertura  | currency:'BRL' }}</td>
+        <td class="text-green-600">{{ caixa.totalEntradas | currency:'BRL' }}</td>
+        <td class="text-red-500">{{ caixa.totalSaidas | currency:'BRL' }}</td>
+        <td class="font-medium">{{ caixa.saldoTotal | currency:'BRL' }}</td>
+        <td>
+          <p-tag
+            [value]="caixa.statusCaixa"
+            [severity]="getStatusSeverity(caixa.statusCaixa)"
+          />
+        </td>
+        <td>
+          <p-button
+            icon="pi pi-eye"
+            [text]="true" [rounded]="true"
+            severity="info"
+            (onClick)="verDetalhe(caixa.id)"
+          />
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #empty>
+      <tr>
+        <td colspan="8" class="text-center py-8 text-gray-400">
+          Nenhum caixa encontrado
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+</div>

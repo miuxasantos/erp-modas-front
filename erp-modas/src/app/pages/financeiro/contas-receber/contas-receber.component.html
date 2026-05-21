@@ -1,0 +1,134 @@
+<div class="p-4">
+
+    <app-page-header
+        titulo="Contas a Receber"
+        [breadcrumbs]="breadcrumbs"
+        [botaoVisivel]="false"
+    />
+
+    <p-table
+        [value]="contas"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        stripedRows
+    >
+        <ng-template #header>
+        <tr>
+            <th>Cliente</th>
+            <th>Parcela</th>
+            <th pSortableColumn="dataVencimento">Vencimento <p-sortIcon field="dataVencimento" /></th>
+            <th>Recebimento</th>
+            <th pSortableColumn="valor">Valor <p-sortIcon field="valor" /></th>
+            <th>Status</th>
+            <th style="width: 120px">Ações</th>
+        </tr>
+        </ng-template>
+
+        <ng-template #body let-conta>
+        <tr>
+            <td>{{ conta.venda.cliente.nome }}</td>
+            <td>{{ conta.numeroParcela }}/{{ conta.totalParcelas }}</td>
+            <td>{{ conta.dataVencimento  | date:'dd/MM/yyyy' }}</td>
+            <td>{{ conta.dataRecebimento ? (conta.dataRecebimento | date:'dd/MM/yyyy') : '—' }}</td>
+            <td>{{ conta.valor | currency:'BRL' }}</td>
+            <td>
+            <p-tag
+                [value]="conta.statusConta"
+                [severity]="getStatusSeverity(conta.statusConta)"
+            />
+            </td>
+            <td>
+            <div class="flex gap-1">
+                @if (isPendente(conta.statusConta)) {
+                <p-button
+                    icon="pi pi-check"
+                    [text]="true" [rounded]="true"
+                    severity="success"
+                    pTooltip="Registrar recebimento"
+                    (onClick)="abrirBaixa(conta)"
+                />
+                }
+                <p-button
+                icon="pi pi-trash"
+                [text]="true" [rounded]="true"
+                severity="danger"
+                pTooltip="Excluir"
+                (onClick)="confirmarExclusao(conta.id)"
+                />
+            </div>
+            </td>
+        </tr>
+        </ng-template>
+
+        <ng-template #empty>
+        <tr>
+            <td colspan="7" class="text-center py-8 text-gray-400">
+            Nenhuma conta a receber encontrada
+            </td>
+        </tr>
+        </ng-template>
+    </p-table>
+
+    <!-- Dialog registrar baixa -->
+    <p-dialog
+        header="Registrar Recebimento"
+        [visible]="dialogBaixaVisivel()"
+        (visibleChange)="dialogBaixaVisivel.set($event)"
+        [modal]="true"
+        [style]="{ width: '400px' }"
+        [draggable]="false"
+    >
+        @if (contaSelecionada) {
+        <div class="bg-gray-50 rounded-lg p-4 mb-4">
+            <p class="text-sm text-gray-500 mb-2">Resumo da parcela</p>
+            <div class="flex justify-between text-sm mb-1">
+            <span class="text-gray-500">Cliente</span>
+            <span class="font-medium"></span>
+            </div>
+            <div class="flex justify-between text-sm mb-1">
+            <span class="text-gray-500">Parcela</span>
+            <span>{{ contaSelecionada.numeroParcela }}/{{ contaSelecionada.totalParcelas }}</span>
+            </div>
+            <div class="flex justify-between text-sm">
+            <span class="text-gray-500">Vencimento</span>
+            <span>{{ contaSelecionada.dataVencimento | date:'dd/MM/yyyy' }}</span>
+            </div>
+        </div>
+        }
+
+        <form [formGroup]="formBaixa" class="flex flex-col gap-4">
+        <div class="flex flex-col gap-1">
+            <label class="text-sm text-gray-600">Data do recebimento</label>
+            <input pInputText type="date" formControlName="dataRecebimento" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="text-sm text-gray-600">Valor recebido (R$)</label>
+            <p-inputNumber
+            formControlName="valor"
+            mode="currency"
+            currency="BRL"
+            locale="pt-BR"
+            />
+        </div>
+        </form>
+
+        <ng-template #footer>
+        <p-button
+            label="Cancelar"
+            [text]="true"
+            severity="secondary"
+            (onClick)="dialogBaixaVisivel.set(false)"
+        />
+        <p-button
+            label="Confirmar recebimento"
+            icon="pi pi-check"
+            severity="success"
+            [loading]="processando()"
+            [disabled]="formBaixa.invalid"
+            (onClick)="registrarBaixa()"
+        />
+        </ng-template>
+    </p-dialog>
+
+</div>

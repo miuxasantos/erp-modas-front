@@ -1,11 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { environment } from "../../../environments/environment";
+import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
 import { AuditoriaResponseDto } from "@core/dtos/auditoria/auditoria-response.dto";
 
 @Injectable({ providedIn: 'root' })
-export class VendaApiService {
+export class AuditoriaApiService {
     private readonly http = inject(HttpClient);
     private readonly url = `${environment.apiUrl}/auditorias`;
 

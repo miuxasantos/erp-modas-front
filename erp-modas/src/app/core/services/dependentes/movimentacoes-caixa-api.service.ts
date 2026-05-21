@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { environment } from "../../../environments/environment";
+import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
 import { MovimentacoesCaixaResponseDto } from "@core/dtos/movimentacoesCaixa/movimentacoes-caixa-response.dto";
 import { MovimentacoesCaixaRequestDto } from "@core/dtos/movimentacoesCaixa/movimentacoes-caixa-request.dto";
@@ -19,8 +19,8 @@ export class MovimentacoesCaixaApiService {
         return this.http.get<MovimentacoesCaixaResponseDto>(`${this.url}/${id}`);
     }
 
-    getByCaixa(caixaId: number): Observable<MovimentacoesCaixaResponseDto> {
-        return this.http.get<MovimentacoesCaixaResponseDto>(`${this.url}/caixa/${caixaId}`);
+    getByCaixa(caixaId: number): Observable<MovimentacoesCaixaResponseDto[]> {
+        return this.http.get<MovimentacoesCaixaResponseDto[]>(`${this.url}/caixa/${caixaId}`);
     }
 
     create(dto: MovimentacoesCaixaRequestDto): Observable<MovimentacoesCaixaResponseDto> {

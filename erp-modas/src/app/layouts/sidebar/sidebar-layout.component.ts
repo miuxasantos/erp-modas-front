@@ -47,16 +47,16 @@ export class SidebarComponent {
         {
             label: 'Financeiro',
             items: [
-                { label: 'Caixa', icon: 'pi pi-wallet', route: '/caixas'},
-                { label: 'Contas a Pagar', icon: 'pi pi-arrow-down-left', route: '/contas-pagar'},
-                { label: 'Contas a Receber', icon: 'pi pi-arrow-up-right', route: '/contas-receber'},
+                { label: 'Caixa', icon: 'pi pi-wallet', route: '/financeiro/caixa'},
+                { label: 'Contas a Pagar', icon: 'pi pi-arrow-down-left', route: '/financeiro/contas-pagar'},
+                { label: 'Contas a Receber', icon: 'pi pi-arrow-up-right', route: '/financeiro/contas-receber'},
             ]
         },
         {
             label: 'Configurações',
             items: [
                 { label: 'Usuários', icon: 'pi pi-user', route: '/usuarios'},
-                { label: 'Auditoria', icon: 'pi pi-history', route: '/auditoria'},
+                //{ label: 'Auditoria', icon: 'pi pi-history', route: '/auditoria'},
                 { label: 'Tamanhos', icon: 'pi pi-sort-alt', route: '/tamanhos'},
                 { label: 'Administrador', icon: 'pi pi-home', route: '/dashboard'},
             ]

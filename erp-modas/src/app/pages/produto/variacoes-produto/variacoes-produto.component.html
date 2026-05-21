@@ -1,0 +1,196 @@
+<div class="p-4 flex flex-col gap-4">
+
+    <app-page-header
+        [titulo]="breadcrumbs[2].label || 'Variações'"
+        [breadcrumbs]="breadcrumbs"
+        botaoLabel="Voltar para produtos"
+        botaoIcone="pi pi-arrow-left"
+        (botaoClick)="voltar()"
+    />
+
+    <!-- Gerador de grade -->
+    <p-card header="Gerar grade de variações">
+        <div class="flex flex-col gap-4">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" [formGroup]="formGrade">
+
+            <div class="flex flex-col gap-1">
+                <label class="text-sm text-gray-600">Cores</label>
+                <p-multiSelect
+                    formControlName="coresSelecionadas"
+                    [options]="cores"
+                    optionLabel="nome"
+                    placeholder="Selecione as cores"
+                    display="chip"
+                />
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="text-sm text-gray-600">Tamanhos</label>
+                <p-multiSelect
+                    formControlName="tamanhosSelecionados"
+                    [options]="tamanhos"
+                    optionLabel="tamanho"
+                    placeholder="Selecione os tamanhos"
+                    display="chip"
+                />
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="text-sm text-gray-600">Preço de custo</label>
+                <p-inputNumber
+                    formControlName="precoCusto"
+                    mode="currency"
+                    currency="BRL"
+                    locale="pt-BR"
+                />
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="text-sm text-gray-600">Preço de venda</label>
+                <p-inputNumber
+                    formControlName="precoVenda"
+                    mode="currency"
+                    currency="BRL"
+                    locale="pt-BR"
+                />
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="text-sm text-gray-600">Estoque inicial</label>
+                <p-inputNumber formControlName="estoqueInicial" [min]="0" />
+            </div>
+
+            <div class="flex flex-col gap-2 md:col-span-2">
+                <label class="text-sm text-gray-600">Imagem específica da variação</label>
+
+                <!-- preview -->
+                @if (imagemEspPreview()) {
+                    <img
+                    [src]="imagemEspPreview()"
+                    class="w-24 h-24 object-cover rounded-lg border border-gray-200"
+                    />
+                }
+
+                <div class="flex items-center gap-2">
+                    <input
+                    type="file"
+                    accept="image/*"
+                    class="hidden"
+                    #inputImagemEsp
+                    (change)="onImagemEspSelecionada($event)"
+                    />
+                    <p-button
+                    [label]="imagemEspPreview() ? 'Trocar imagem' : 'Selecionar imagem'"
+                    icon="pi pi-upload"
+                    severity="secondary"
+                    [loading]="uploadingEsp()"
+                    (onClick)="inputImagemEsp.click()"
+                    />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="flex justify-end">
+            <p-button
+            label="Gerar grade"
+            icon="pi pi-table"
+            severity="secondary"
+            (onClick)="gerarGrade()"
+            />
+        </div>
+
+        <!-- Preview da grade gerada -->
+        @if (gradePreview.length) {
+            <div>
+            <p class="text-sm text-gray-500 mb-2">
+                {{ gradePreview.length }} variações serão criadas:
+            </p>
+
+            <p-table [value]="gradePreview">
+                <ng-template #header>
+                <tr>
+                    <th>SKU</th>
+                    <th>Cor</th>
+                    <th>Tamanho</th>
+                    <th>Estoque</th>
+                    <th>Preço venda</th>
+                </tr>
+                </ng-template>
+                <ng-template #body let-variacao>
+                <tr>
+                    <td><code>{{ variacao.sku }}</code></td>
+                    <td>{{ variacao.corNome }}</td>
+                    <td>{{ variacao.tamanhoNome }}</td>
+                    <td>{{ variacao.estoque }}</td>
+                    <td>{{ variacao.precoVenda | currency:'BRL' }}</td>
+                </tr>
+                </ng-template>
+            </p-table>
+
+            <div class="flex justify-end mt-3">
+                <p-button
+                [label]="'Salvar ' + gradePreview.length + ' variações'"
+                icon="pi pi-check"
+                [loading]="salvando()"
+                (onClick)="salvarGrade()"
+                />
+            </div>
+            </div>
+        }
+
+        </div>
+    </p-card>
+
+    <!-- Variações já cadastradas -->
+    <p-card header="Variações cadastradas">
+        <p-table [value]="variacoesCadastradas">
+        <ng-template #header>
+            <tr>
+            <th>SKU</th>
+            <th>Cor</th>
+            <th>Tamanho</th>
+            <th>Estoque</th>
+            <th>Preço venda</th>
+            <th style="width: 80px">Ações</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-variacao>
+            <tr>
+            <td><code>{{ variacao.sku }}</code></td>
+            <td>{{ variacao.cor.nome }}</td>
+            <td>{{ variacao.tamanho.tamanho }}</td>
+            <td>
+                <p-tag
+                [value]="variacao.estoque.toString()"
+                [severity]="variacao.estoque === 0 ? 'danger' : variacao.estoque <= 5 ? 'warn' : 'success'"
+                />
+            </td>
+            <td>{{ variacao.precoVenda | currency:'BRL' }}</td>
+            <td>{{ variacao.imagemEsp }}</td>
+            <td>
+                <p-button
+                icon="pi pi-trash"
+                [text]="true"
+                [rounded]="true"
+                severity="danger"
+                pTooltip="Excluir variação"
+                (onClick)="excluirVariacao(variacao.id)"
+                />
+            </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #empty>
+            <tr>
+            <td colspan="6" class="text-center py-8 text-gray-400">
+                Nenhuma variação cadastrada — use o gerador acima
+            </td>
+            </tr>
+        </ng-template>
+        </p-table>
+    </p-card>
+
+</div>
