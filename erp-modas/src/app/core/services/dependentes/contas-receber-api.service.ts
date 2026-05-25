@@ -3,6 +3,7 @@ import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
 import { ContasReceberResponseDto } from "@core/dtos/contasReceber/contas-receber-response.dto";
+import { DataPagamentoDto } from "@core/dtos/contasPagar/data-pagamento.dto";
 
 @Injectable({ providedIn: 'root' })
 export class ContasReceberApiService {
@@ -33,7 +34,7 @@ export class ContasReceberApiService {
         return this.http.delete<void>(`${this.url}/${id}`);
     }
 
-    receber(id: number, dto: ContasReceberResponseDto): Observable<ContasReceberResponseDto> {
+    receber(id: number, dto: DataPagamentoDto): Observable<ContasReceberResponseDto> {
         return this.http.put<ContasReceberResponseDto>(`${this.url}/${id}/receber`, dto)
     }
 }

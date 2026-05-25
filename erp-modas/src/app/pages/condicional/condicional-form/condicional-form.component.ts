@@ -21,6 +21,13 @@ import { ProdutoResponseDto } from '@core/dtos/produto/produto-response.dto';
 import { ClienteResponseDto } from '@core/dtos/cliente/cliente-response.dto';
 import { VariacaoProdutoResponseDto } from '@core/dtos/variacaoProduto/variacao-produto-response.dto';
 import { ActivatedRoute } from '@angular/router';
+import { CorResponseDto } from '@core/dtos/cor/cor-response.dto';
+import { TamanhoResponseDto } from '@core/dtos/tamanho/tamanho-response.dto';
+
+interface VariacaoEnriquecida extends Omit<VariacaoProdutoResponseDto, 'cor' | 'tamanho'> {
+    cor: CorResponseDto;
+    tamanho: TamanhoResponseDto;
+}
 
 @Component({
     selector: 'app-condicional-form',
@@ -55,10 +62,12 @@ export class CondicionalFormComponent implements OnInit {
     termoBusca = signal('');
     produtosFiltrados: ProdutoResponseDto[] = [];
     todosProdutos: ProdutoResponseDto[] = [];
+    cores: CorResponseDto[] = [];
+    tamanhos: TamanhoResponseDto[] = [];
 
     // dialog de variações
     dialogVariacaoVisivel = signal(false);
-    variacoesDoProduto: VariacaoProdutoResponseDto[] = [];
+    variacoesDoProduto: VariacaoEnriquecida[] = [];
     produtoSelecionado: ProdutoResponseDto | null = null;
 
     breadcrumbs: MenuItem[] = [
@@ -139,13 +148,18 @@ export class CondicionalFormComponent implements OnInit {
         this.produtoSelecionado = produto;
         this.produtosFiltrados  = [];
         this.termoBusca.set('');
-
-        // carrega as variações do produto selecionado
+                // carrega as variações do produto selecionado
         this.variacaoApi.getAll(produto.id).subscribe({
-            next: variacoes => {
-                this.variacoesDoProduto = variacoes;
+        next: variacoes => {
+            this.variacoesDoProduto = variacoes.map(variacao => ({
+                ...variacao,
+                cor: this.cores.find(c => c.id === variacao.corId)
+                    ?? { id: variacao.corId, nome: '—', codigoHex: '' } as CorResponseDto,
+                tamanho: this.tamanhos.find(t => t.id === variacao.tamanhoId)
+                    ?? { id: variacao.tamanhoId, tamanho: '—' as any } as TamanhoResponseDto,
+            })) as VariacaoEnriquecida[];
                 this.dialogVariacaoVisivel.set(true);
-            },
+        },
         });
     }
 
@@ -153,7 +167,7 @@ export class CondicionalFormComponent implements OnInit {
     // DIALOG DE VARIAÇÃO
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    selecionarVariacao(variacao: VariacaoProdutoResponseDto): void {
+    selecionarVariacao(variacao: VariacaoEnriquecida): void {
         this.adicionarItemForm(variacao);
         this.dialogVariacaoVisivel.set(false);
         this.variacoesDoProduto  = [];

@@ -31,7 +31,7 @@
                 </div>
                 <div>
                     <p class="text-xs text-gray-400">Lote</p>
-                    <p class="text-sm font-medium text-red-500">- {{ compra.lote}}</p>
+                    <p class="text-sm font-medium text-blue-500"> {{ compra.lote}}</p>
                 </div>
                 <div>
                     <p class="text-xs text-gray-400">Total</p>
@@ -51,10 +51,10 @@
             <p-table [value]="compra.itensCompra">
                 <ng-template #header>
                     <tr>
-                        <th>Produto</th>
+                        <!--<th>Produto</th>-->
                         <th>SKU</th>
-                        <th>Cor</th>
-                        <th>Tamanho</th>
+                        <!--<th>Cor</th>
+                        <th>Tamanho</th>-->
                         <th>Qtd</th>
                         <th>Valor unit.</th>
                         <th>Subtotal</th>
@@ -62,10 +62,10 @@
                 </ng-template>
                 <ng-template #body let-item>
                     <tr>
-                        <td>{{ item.variacaoProduto.produto.nome }}</td>
-                        <td><code>{{ item.variacaoProduto.sku }}</code></td>
-                        <td>{{ item.variacaoProduto.cor.nome }}</td>
-                        <td>{{ item.variacaoProduto.tamanho.tamanho }}</td>
+                        <!--<td>{{ item.variacaoProduto?.produto?.nome ?? "-"}}</td>-->
+                        <td><code>{{ item.variacaoProduto?.sku ?? "-" }}</code></td>
+                        <!--<td>{{ item.variacaoProduto?.cor?.nome ?? "-" }}</td>
+                        <td>{{ item.variacaoProduto?.tamanho?.tamanho ?? "-" }}</td> -->
                         <td>{{ item.quantidade }}</td>
                         <td>{{ item.valorUnit | currency:'BRL' }}</td>
                         <td>{{ item.subTotal | currency:'BRL' }}</td>

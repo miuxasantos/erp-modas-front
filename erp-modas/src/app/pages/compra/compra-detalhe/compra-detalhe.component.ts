@@ -53,7 +53,11 @@ export class CompraDetalheComponent implements OnInit {
 
     carregarCompra(): void {
         this.compraApi.getById(this.id!).subscribe({
-            next: compra => this.compra = compra,
+            next: compra => {
+                console.log('primeiro item:', compra.itensCompra[0]);
+            console.log('variacaoProduto:', compra.itensCompra[0]?.variacaoProduto);
+                this.compra = compra;
+            },
         });
     }
 

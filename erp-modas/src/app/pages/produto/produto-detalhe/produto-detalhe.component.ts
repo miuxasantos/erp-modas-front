@@ -22,6 +22,7 @@ export class ProdutoDetalheComponent implements OnInit {
     private readonly produtoService = inject(ProdutoService);
     private readonly categoriaApi = inject(CategoriaApiService);
     private readonly router     = inject(Router);
+    private readonly route      = inject(ActivatedRoute);
 
     id: number | null = null;
 
@@ -34,7 +35,7 @@ export class ProdutoDetalheComponent implements OnInit {
     ];
 
     ngOnInit(): void {
-       const idParam = inject(ActivatedRoute).snapshot.paramMap.get('id');
+       const idParam = this.route.snapshot.paramMap.get('id');
        this.id = idParam ? Number(idParam) : null;
        this.carregarDados();
     }
@@ -49,7 +50,6 @@ export class ProdutoDetalheComponent implements OnInit {
                 this.produto = produto;
             },
         });
-        console.log(this.produto);
     }
 
     voltar(): void {

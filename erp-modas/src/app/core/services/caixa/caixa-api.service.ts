@@ -40,6 +40,6 @@ export class CaixaApiService {
     }
 
     fecharCaixa(id: number): Observable<CaixaResponseDto> {
-        return this.http.post<CaixaResponseDto>(`${this.url}/${id}/fechar`, {});
+        return this.http.put<CaixaResponseDto>(`${this.url}/${id}/fechar`, {});
     }
 }

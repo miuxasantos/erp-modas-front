@@ -10,7 +10,7 @@ export class Produto {
     precoCusto: number;
     precoVenda: number;
     dataInclusao: Date;
-    dataDesativacao: Date;
+    dataDesativacao: Date | null;
     tecido: string;
     marca: string;
     categoria?: Categoria;
@@ -26,7 +26,7 @@ export class Produto {
         this.precoCusto = dto.precoCusto;
         this.precoVenda = dto.precoVenda;
         this.dataInclusao = new Date(dto.dataInclusao);
-        this.dataDesativacao = new Date(dto.dataDesativacao);
+        this.dataDesativacao = dto.dataDesativacao != null ? new Date(dto.dataDesativacao) : null;;
         this.tecido = dto.tecido;
         this.marca = dto.marca;
         //this.categoria = new Categoria(dto.categoria);

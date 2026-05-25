@@ -72,7 +72,7 @@ export class VendaFormComponent implements OnInit {
 
     // dialog de variações
     dialogVariacaoVisivel = signal(false);
-    variacoesDoProduto: VariacaoProdutoResponseDto[] = [];
+    variacoesDoProduto: VariacaoEnriquecida[] = [];
     produtoSelecionado: ProdutoResponseDto | null = null;
     cores: CorResponseDto[] = [];
     tamanhos: TamanhoResponseDto[] = [];
@@ -103,12 +103,13 @@ export class VendaFormComponent implements OnInit {
         );
     }
 
-    get valorDesconto(): number {
-        return this.form.get('desconto')?.value || 0;
+    get valorTotal(): number {
+        return this.subtotal;;
     }
 
-    get valorTotal(): number {
-        return this.subtotal - this.valorDesconto;
+    get valorDesconto(): number {
+        const desconto = this.form.get('desconto')?.value || 0;
+        return this.subtotal * (desconto / 100);
     }
 
     ngOnInit(): void {
@@ -186,21 +187,27 @@ export class VendaFormComponent implements OnInit {
         this.produtoSelecionado = produto;
         this.produtosFiltrados  = [];
         this.termoBusca.set('');
-
-        // carrega as variações do produto selecionado
+        
+                // carrega as variações do produto selecionado
         this.variacaoApi.getAll(produto.id).subscribe({
             next: variacoes => {
-                this.variacoesDoProduto = variacoes;
-                this.dialogVariacaoVisivel.set(true);
-            },
-        });
+                this.variacoesDoProduto = variacoes.map(variacao => ({
+                    ...variacao,
+                    cor: this.cores.find(c => c.id === variacao.corId)
+                        ?? { id: variacao.corId, nome: '—', codigoHex: '' } as CorResponseDto,
+                    tamanho: this.tamanhos.find(t => t.id === variacao.tamanhoId)
+                        ?? { id: variacao.tamanhoId, tamanho: '—' as any } as TamanhoResponseDto,
+                    })) as VariacaoEnriquecida[];
+                    this.dialogVariacaoVisivel.set(true);
+                },
+            });
     }
 
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     // DIALOG DE VARIAÇÃO
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    selecionarVariacao(variacao: VariacaoProdutoResponseDto): void {
+    selecionarVariacao(variacao: VariacaoEnriquecida): void {
         this.adicionarItemForm(variacao);
         this.dialogVariacaoVisivel.set(false);
         this.variacoesDoProduto  = [];

@@ -12,6 +12,7 @@ import { PageHeaderComponent } from '@shared/components/page-header/page-header.
 import { ContasReceberApiService } from '@core/services/dependentes/contas-receber-api.service';
 import { ContasReceberResponseDto } from '@core/dtos/contasReceber/contas-receber-response.dto';
 import { StatusConta } from '@core/enums/status-conta.enum';
+import { DataPagamentoDto } from '@core/dtos/contasPagar/data-pagamento.dto';
 
 @Component({
     selector: 'app-contas-receber',
@@ -33,6 +34,9 @@ export class ContasReceberComponent implements OnInit {
     dialogBaixaVisivel = signal(false);
     contaSelecionada: ContasReceberResponseDto | null = null;
     processando = signal(false);
+    dtoData: DataPagamentoDto = {
+        dataPagamento: new Date().toISOString().split('T')[0],
+    };
 
     breadcrumbs: MenuItem[] = [
         { label: 'Dashboard', routerLink: '/dashboard' },
@@ -66,7 +70,7 @@ export class ContasReceberComponent implements OnInit {
         this.processando.set(true);
 
         const dto = {
-        dataRecebimento: this.formBaixa.get('dataRecebimento')?.value,
+        dataRecebimento: this.dtoData.dataPagamento,
         statusConta:     StatusConta.PAGO,
         };
 

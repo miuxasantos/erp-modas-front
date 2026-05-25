@@ -27,7 +27,7 @@
 
         <ng-template #body let-conta>
         <tr>
-            <td>{{ conta.venda.cliente.nome }}</td>
+            <td>{{ conta.clienteNome }}</td>
             <td>{{ conta.numeroParcela }}/{{ conta.totalParcelas }}</td>
             <td>{{ conta.dataVencimento  | date:'dd/MM/yyyy' }}</td>
             <td>{{ conta.dataRecebimento ? (conta.dataRecebimento | date:'dd/MM/yyyy') : '—' }}</td>

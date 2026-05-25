@@ -12,6 +12,7 @@ import { PageHeaderComponent } from '@shared/components/page-header/page-header.
 import { ContasPagarApiService } from '@core/services/dependentes/contas-pagar-api.service';
 import { ContasPagarResponseDto } from '@core/dtos/contasPagar/contas-pagar-response.dto';
 import { StatusConta } from '@core/enums/status-conta.enum';
+import { DataPagamentoDto } from '@core/dtos/contasPagar/data-pagamento.dto';
 
 @Component({
     selector: 'app-contas-pagar',
@@ -33,6 +34,10 @@ export class ContasPagarComponent implements OnInit {
     dialogBaixaVisivel = signal(false);
     contaSelecionada: ContasPagarResponseDto | null = null;
     processando = signal(false);
+
+    dtoData: DataPagamentoDto = {
+        dataPagamento: new Date().toISOString().split('T')[0],
+    };
 
     breadcrumbs: MenuItem[] = [
         { label: 'Dashboard', routerLink: '/dashboard' },
@@ -66,7 +71,7 @@ export class ContasPagarComponent implements OnInit {
         this.processando.set(true);
 
         const dto = {
-            dataPagamento: this.formBaixa.get('dataPagamento')?.value ?? '',
+            dataPagamento: this.dtoData.dataPagamento,
             statusConta: StatusConta.PAGO,
         };
 

@@ -60,6 +60,23 @@ export class CaixaAtualComponent implements OnInit {
             next: caixa => {
                 if (caixa?.id) this.carregarMovimentacoes(caixa.id);
             },
+            error: (err) => {
+                this.movimentacoes = [];
+                if (err.status === 500) {
+                    this.messageService.add({
+                        severity: 'info',
+                        summary: 'Caixa',
+                        detail: 'Nenhum caixa aberto no momento'
+                    });
+                    return;
+                }
+
+                this.messageService.add({
+                severity: 'error',
+                summary: 'Erro',
+                detail: 'Erro ao carregar caixa atual'
+                });
+            }
         });
     }
 

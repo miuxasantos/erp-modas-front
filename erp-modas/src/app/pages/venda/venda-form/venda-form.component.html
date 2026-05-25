@@ -46,7 +46,7 @@
                 </div>
 
                 <div class="flex flex-col gap-1">
-                    <label class="text-sm text-gray-600">Desconto (R$)</label>
+                    <label class="text-sm text-gray-600">Desconto (%) </label>
                     <p-inputNumber
                         formControlName="desconto"
                         mode="currency"
@@ -151,7 +151,7 @@
                     <span>{{ subtotal | currency:'BRL' }}</span>
                 </div>
                 <div class="flex gap-8 text-sm text-gray-500">
-                    <span>Desconto</span>
+                    <span>Desconto ({{ form.get('desconto')?.value || 0 }}%)</span>
                     <span class="text-red-500">- {{ valorDesconto | currency:'BRL' }}</span>
                 </div>
                 <div class="flex gap-8 text-lg font-medium text-green-600">
