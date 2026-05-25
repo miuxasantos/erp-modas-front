@@ -11,7 +11,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
-import { ProdutoApiService } from '@core/services/produto-api.service';
+import { ProdutoApiService } from '@core/services/produto/produto-api.service';
 import { VariacaoProdutoApiService } from '@core/services/apoio/variacao-produto-api.service';
 import { CorApiService } from '@core/services/apoio/cor-api.service';
 import { TamanhoApiService } from '@core/services/apoio/tamanho-api.service';
@@ -20,6 +20,8 @@ import { VariacaoProdutoResponseDto } from '@core/dtos/variacaoProduto/variacao-
 import { CorResponseDto } from '@core/dtos/cor/cor-response.dto';
 import { TamanhoResponseDto } from '@core/dtos/tamanho/tamanho-response.dto';
 import { UploadApiService } from '@core/services/upload-api.service';
+import { forkJoin } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 interface VariacaoGrade {
     corId: number;
@@ -58,9 +60,10 @@ export class VariacoesProdutoComponent implements OnInit {
     private readonly uploadApi = inject(UploadApiService);
     private readonly messageService = inject(MessageService);
     private readonly router        = inject(Router);
+    private readonly route         = inject(ActivatedRoute);
     private readonly fb            = inject(FormBuilder);
 
-    id = input.required<number>();
+    id: number | null = null;
 
     produto: ProdutoResponseDto | null = null;
     variacoesCadastradas: VariacaoProdutoResponseDto[] = [];
@@ -87,32 +90,36 @@ export class VariacoesProdutoComponent implements OnInit {
     });
 
     ngOnInit(): void {
+        const idParam = this.route.snapshot.paramMap.get('id');
+        this.id = idParam ? Number(idParam) : null;
         this.carregarDados();
     }
 
     carregarDados(): void {
-        this.produtoApi.getById(this.id()).subscribe({
-        next: produto => {
-                this.produto = produto;
+        forkJoin({
+            produto:   this.produtoApi.getById(this.id!),
+            variacoes: this.variacaoApi.getAll(this.id!),
+            cores:     this.corApi.getAll(),
+            tamanhos:  this.tamanhoApi.getAll(),
+        }).subscribe({
+            next: ({ produto, variacoes, cores, tamanhos }) => {
+                this.produto  = produto;
+                this.cores    = cores;
+                this.tamanhos = tamanhos;
+
                 this.breadcrumbs[2].label = `Variações — ${produto.nome}`;
-                // preenche preços com base no produto
+
                 this.formGrade.patchValue({
-                precoCusto: produto.precoCusto,
-                precoVenda: produto.precoVenda,
+                    precoCusto: produto.precoCusto,
+                    precoVenda: produto.precoVenda,
                 });
+
+                this.variacoesCadastradas = variacoes.map(variacao => ({
+                    ...variacao,
+                    cor:     cores.find(c => c.id === variacao.corId)!,
+                    tamanho: tamanhos.find(t => t.id === variacao.tamanhoId)!,
+                }));
             },
-        });
-
-        this.variacaoApi.getAll(this.id()).subscribe({
-        next: variacoes => this.variacoesCadastradas = variacoes,
-        });
-
-        this.corApi.getAll().subscribe({
-        next: cores => this.cores = cores,
-        });
-
-        this.tamanhoApi.getAll().subscribe({
-        next: tamanhos => this.tamanhos = tamanhos,
         });
     }
 
@@ -152,7 +159,7 @@ export class VariacoesProdutoComponent implements OnInit {
         this.salvando.set(true);
 
         const requests = this.gradePreview.map(variacao => ({
-            produtoId:  this.id(),
+            produtoId:  Number(this.id!),
             corId:      variacao.corId,
             tamanhoId:  variacao.tamanhoId,
             sku:        variacao.sku ?? '',
@@ -165,7 +172,7 @@ export class VariacoesProdutoComponent implements OnInit {
         // envia uma por uma — ou adapta para um endpoint de bulk no back
         let concluidos = 0;
         requests.forEach(dto => {
-            this.variacaoApi.create(this.id(), dto).subscribe({
+            this.variacaoApi.create(this.id!, dto).subscribe({
                 next: () => {
                 concluidos++;
                     if (concluidos === requests.length) {
@@ -185,7 +192,7 @@ export class VariacoesProdutoComponent implements OnInit {
     }
 
     excluirVariacao(variacaoId: number): void {
-        this.variacaoApi.delete(this.id(), variacaoId).subscribe({
+        this.variacaoApi.delete(this.id!, variacaoId).subscribe({
         next: () => {
             this.messageService.add({
             severity: 'success',

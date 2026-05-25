@@ -1,5 +1,5 @@
 import { Component, inject, input, OnInit, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService, MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -9,7 +9,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectModule } from 'primeng/select';
 import { CheckboxModule } from 'primeng/checkbox';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
-import { ProdutoApiService } from '@core/services/produto-api.service';
+import { ProdutoApiService } from '@core/services/produto/produto-api.service';
 import { CategoriaApiService } from '@core/services/categoria-api.service';
 import { CategoriaResponseDto } from '@core/dtos/categoria/categoria-response.dto';
 import { UploadApiService } from '@core/services/upload-api.service';
@@ -35,8 +35,9 @@ export class ProdutoFormComponent implements OnInit {
   private readonly messageService = inject(MessageService);
   private readonly router        = inject(Router);
   private readonly fb            = inject(FormBuilder);
+  private readonly route         = inject(ActivatedRoute);
 
-  id = input<number>();
+  id: number | null = null;
   isEdicao = false;
   salvando = signal(false);
   imagemPreview = signal<string | null>(null);
@@ -63,18 +64,26 @@ export class ProdutoFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.isEdicao = !!this.id();
+    const idParam = this.route.snapshot.paramMap.get('id');
+
+    console.log(idParam);
+
+    this.id = idParam ? Number(idParam) : null;
+
+    this.isEdicao = this.id !== null;
+
     this.categoriaApi.getAll().subscribe({
       next: categorias => this.categorias = categorias,
     });
 
-    if (this.isEdicao) {
+    if (this.id !== null) {
       this.breadcrumbs[2].label = 'Editar Produto';
-      this.produtoApi.getById(this.id()!).subscribe({
+
+      this.produtoApi.getById(this.id).subscribe({
         next: produto => {
           this.form.patchValue({
             ...produto,
-            categoriaId: produto.categoria.id,
+            categoriaId: produto.categoriaId,
           });
         },
       });
@@ -106,7 +115,7 @@ export class ProdutoFormComponent implements OnInit {
     const dto = this.form.getRawValue() as any;
 
     const request$ = this.isEdicao
-      ? this.produtoApi.update(this.id()!, dto)
+      ? this.produtoApi.update(this.id!, dto)
       : this.produtoApi.create(dto);
 
     request$.subscribe({

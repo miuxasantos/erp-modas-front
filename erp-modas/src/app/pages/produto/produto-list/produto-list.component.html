@@ -1,4 +1,4 @@
-<div clas="p-4">
+<div class="p-4">
     <app-page-header
         titulo="Produtos"
         [breadcrumbs]="breadcrumbs"
@@ -44,7 +44,7 @@
                             [text]="true"
                             [rounded]="true"
                             severity="info"
-                            pTooltio="Ver detalhe"
+                            pTooltip="Ver detalhe"
                             (onClick)="verDetalhe(produto.id)"
                         />
                         <p-button
@@ -53,7 +53,7 @@
                             [rounded]="true"
                             severity="secondary"
                             pTooltip="Editar"
-                            (onClick)="editar(produto)"
+                            (onClick)="editar(produto.id)"
                         />
                         <p-button
                             icon="pi pi-trash"

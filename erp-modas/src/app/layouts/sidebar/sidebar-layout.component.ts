@@ -2,6 +2,7 @@ import { Component, input, output } from "@angular/core";
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { ButtonModule } from "primeng/button";
 import { DividerModule } from "primeng/divider";
+import { NgClass } from "@angular/common";
 
 interface NavItem {
     label: string;
@@ -16,7 +17,7 @@ interface NavGroup {
 
 @Component({
     selector: 'app-sidebar',
-    imports: [ButtonModule, DividerModule, RouterLink, RouterLinkActive],
+    imports: [ButtonModule, NgClass, DividerModule, RouterLink, RouterLinkActive],
     templateUrl: "./sidebar-layout.component.html",
 })
 
@@ -58,7 +59,7 @@ export class SidebarComponent {
                 { label: 'Usuários', icon: 'pi pi-user', route: '/usuarios'},
                 //{ label: 'Auditoria', icon: 'pi pi-history', route: '/auditoria'},
                 { label: 'Tamanhos', icon: 'pi pi-sort-alt', route: '/tamanhos'},
-                { label: 'Administrador', icon: 'pi pi-home', route: '/dashboard'},
+                //{ label: 'Administrador', icon: 'pi pi-home', route: '/dashboard'},
             ]
         }
     ]

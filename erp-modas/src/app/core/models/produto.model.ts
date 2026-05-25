@@ -1,6 +1,5 @@
 import { ProdutoResponseDto } from "../dtos/produto/produto-response.dto";
 import { Categoria } from "./categoria.model";
-import { Compra } from "./compra.model";
 
 export class Produto {
     id: number;
@@ -14,7 +13,8 @@ export class Produto {
     dataDesativacao: Date;
     tecido: string;
     marca: string;
-    categoria: Categoria;
+    categoria?: Categoria;
+    categoriaId: number;
     imagem: string;
 
     constructor (dto: ProdutoResponseDto) {
@@ -29,7 +29,23 @@ export class Produto {
         this.dataDesativacao = new Date(dto.dataDesativacao);
         this.tecido = dto.tecido;
         this.marca = dto.marca;
-        this.categoria = new Categoria(dto.categoria);
+        //this.categoria = new Categoria(dto.categoria);
+        this.categoriaId = dto.categoriaId;
         this.imagem = dto.imagem;
+    }
+
+    get margemLucro(): number {
+        if (!this.precoVenda || this.precoVenda === 0) return 0;
+        return ((this.precoVenda - this.precoCusto) / this.precoCusto) * 100;
+    }
+
+    get margemLucroFormatada(): string {
+        return `${this.margemLucro.toFixed(2)}%`;
+    }
+
+    get margemLucroSeverity(): string {
+        if (this.margemLucro >= 40) return 'text-green-600';
+        if (this.margemLucro >= 20) return 'text-yellow-500';
+        return 'text-red-500';
     }
 }

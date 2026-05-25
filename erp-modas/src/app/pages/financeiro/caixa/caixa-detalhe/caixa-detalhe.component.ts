@@ -13,6 +13,7 @@ import { MovimentacoesCaixaApiService } from '@core/services/dependentes/movimen
 import { Caixa } from '@core/models/caixa.model';
 import { MovimentacoesCaixaResponseDto } from '@core/dtos/movimentacoesCaixa/movimentacoes-caixa-response.dto';
 import { TipoMovCaixa } from '@core/enums/tipo-mov-caixa.enum';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-caixa-detalhe',
@@ -24,8 +25,9 @@ export class CaixaDetalheComponent implements OnInit {
     private readonly caixaService = inject(CaixaService);
     private readonly movimentacaoApi = inject(MovimentacoesCaixaApiService);
     private readonly router = inject(Router);
+    private readonly route = inject(ActivatedRoute);
 
-    id = input.required<number>();
+    id: number | null = null;
     caixa: Caixa | null = null;
     movimentacoes: MovimentacoesCaixaResponseDto[] = [];
 
@@ -38,7 +40,14 @@ export class CaixaDetalheComponent implements OnInit {
     ];
 
     ngOnInit(): void {
-        this.caixaService.getById(this.id()).subscribe({
+        const idParam = this.route.snapshot.paramMap.get('id');
+        this.id = idParam ? Number(idParam) : null;
+
+        this.carregarDados();
+    }
+
+    carregarDados(): void {
+        this.caixaService.getById(this.id!).subscribe({
             next: caixa => {
                 this.caixa = caixa;
                 this.movimentacaoApi.getByCaixa(caixa.id).subscribe({

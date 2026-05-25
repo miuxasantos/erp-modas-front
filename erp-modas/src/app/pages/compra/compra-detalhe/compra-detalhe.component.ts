@@ -10,6 +10,7 @@ import { StatusConta } from '@core/enums/status-conta.enum';
 import { MenuItem } from 'primeng/api';
 import { CompraApiService } from '@core/services/compra/compra-api.service';
 import { CompraResponseDto } from '@core/dtos/compra/compra-response.dto';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-compra-detalhe',
@@ -23,8 +24,9 @@ import { CompraResponseDto } from '@core/dtos/compra/compra-response.dto';
 export class CompraDetalheComponent implements OnInit {
     private readonly compraApi = inject(CompraApiService);
     private readonly router = inject(Router);
+    private readonly route = inject(ActivatedRoute);
 
-    id = input.required<number>();
+    id: number | null = null;
     compra: CompraResponseDto | null = null;
 
     breadcrumbs: MenuItem[] = [
@@ -34,9 +36,9 @@ export class CompraDetalheComponent implements OnInit {
     ];
 
     ngOnInit(): void {
-        this.compraApi.getById(this.id()).subscribe({
-            next: compra => this.compra = compra,
-        });
+        const idParam = this.route.snapshot.paramMap.get('id');
+        this.id = idParam ? Number(idParam) : null;
+        this.carregarCompra();
     }
 
     getStatusSeverity(status: StatusConta): 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast' {
@@ -49,8 +51,14 @@ export class CompraDetalheComponent implements OnInit {
         return map[status] ?? 'info';
     }
 
+    carregarCompra(): void {
+        this.compraApi.getById(this.id!).subscribe({
+            next: compra => this.compra = compra,
+        });
+    }
+
     editar(): void {
-        this.router.navigate(['/compras', this.id(), 'editar']);
+        this.router.navigate(['/compras', this.id!, 'editar']);
     }
 
     voltar(): void {

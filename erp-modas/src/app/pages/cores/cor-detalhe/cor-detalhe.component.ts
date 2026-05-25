@@ -6,6 +6,7 @@ import { PageHeaderComponent } from '@shared/components/page-header/page-header.
 import { MenuItem } from 'primeng/api';
 import { CorApiService } from '@core/services/apoio/cor-api.service';
 import { CorResponseDto } from '@core/dtos/cor/cor-response.dto';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-cor-detalhe',
@@ -16,8 +17,9 @@ import { CorResponseDto } from '@core/dtos/cor/cor-response.dto';
 export class CorDetalheComponent implements OnInit {
     private readonly corApi = inject(CorApiService);
     private readonly router     = inject(Router);
+    private readonly route = inject(ActivatedRoute);
 
-    id = input.required<number>();
+    id: number | null = null;
 
     cor: CorResponseDto | null = null;
 
@@ -28,11 +30,17 @@ export class CorDetalheComponent implements OnInit {
     ];
 
     ngOnInit(): void {
-        this.corApi.getById(this.id()).subscribe({
+        const idParam = this.route.snapshot.paramMap.get('id');
+        this.id = idParam ? Number(idParam) : null;
+
+        this.carregarDados();
+    }
+
+    carregarDados(): void {
+        this.corApi.getById(this.id!).subscribe({
         next: cor => this.cor = cor,
         });
     }
-
     voltar(): void {
         this.router.navigate(['/cores']);
     }

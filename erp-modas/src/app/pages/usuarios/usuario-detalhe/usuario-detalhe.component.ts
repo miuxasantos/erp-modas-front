@@ -6,6 +6,7 @@ import { PageHeaderComponent } from '@shared/components/page-header/page-header.
 import { MenuItem } from 'primeng/api';
 import { UsuarioApiService } from '@core/services/usuario-api.service';
 import { UsuarioResponseDto } from '@core/dtos/usuario/usuario-response.dto';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-usuario-detalhe',
@@ -16,8 +17,9 @@ import { UsuarioResponseDto } from '@core/dtos/usuario/usuario-response.dto';
 export class UsuarioDetalheComponent implements OnInit {
     private readonly usuarioApi = inject(UsuarioApiService);
     private readonly router     = inject(Router);
+    private readonly route      = inject(ActivatedRoute);
 
-    id = input.required<number>();
+    id: number | null = null;
 
     usuario: UsuarioResponseDto | null = null;
 
@@ -28,11 +30,18 @@ export class UsuarioDetalheComponent implements OnInit {
     ];
 
     ngOnInit(): void {
-        this.usuarioApi.getById(this.id()).subscribe({
-        next: usuario => this.usuario = usuario,
-        });
+        const idParam = this.route.snapshot.paramMap.get('id');
+        this.id = idParam ? Number(idParam) : null;
+
+        this.carregarDados();
     }
 
+    carregarDados(): void {
+        this.usuarioApi.getById(this.id!).subscribe({
+            next: usuario => this.usuario = usuario,
+        });
+    }
+    
     voltar(): void {
         this.router.navigate(['/usuarios']);
     }

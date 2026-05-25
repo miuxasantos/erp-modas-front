@@ -3,6 +3,7 @@ import { RouterOutlet } from "@angular/router";
 import { SidebarComponent } from "../sidebar/sidebar-layout.component";
 import { TopbarComponent } from "../topbar/topbar.component";
 import { FooterComponent } from "../footer/footer-layout.component";
+import { NgClass } from "@angular/common";
 
 @Component({
     selector: 'app-main-layout',

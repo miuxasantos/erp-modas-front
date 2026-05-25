@@ -9,18 +9,20 @@ import { PageHeaderComponent } from '@shared/components/page-header/page-header.
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { CompraApiService } from '@core/services/compra/compra-api.service';
 import { CompraResponseDto } from '@core/dtos/compra/compra-response.dto';
+import { ConfirmDialog } from "primeng/confirmdialog";
 
 @Component({
     selector: 'app-compra-list',
     imports: [
-        TableModule,
-        ButtonModule,
-        TagModule,
-        TooltipModule,
-        PageHeaderComponent,
-        CurrencyPipe,
-        DatePipe,
-    ],
+    TableModule,
+    ButtonModule,
+    TagModule,
+    TooltipModule,
+    PageHeaderComponent,
+    CurrencyPipe,
+    DatePipe,
+    ConfirmDialog
+],
     templateUrl: './compra-list.component.html',
 })
 

@@ -14,5 +14,6 @@ export interface ProdutoResponseDto {
     tecido: string;
     marca: string;
     categoria: CategoriaResponseDto;
+    categoriaId: number;
     imagem: string;
 }

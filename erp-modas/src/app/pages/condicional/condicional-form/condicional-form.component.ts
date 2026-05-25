@@ -15,11 +15,12 @@ import { SelectModule } from 'primeng/select';
 import { TagModule } from 'primeng/tag';
 import { ClienteApiService } from '@core/services/cliente-api.service';
 import { CondicionalApiService } from '@core/services/condicional/condicional-api.service';
-import { ProdutoApiService } from '@core/services/produto-api.service';
+import { ProdutoApiService } from '@core/services/produto/produto-api.service';
 import { VariacaoProdutoApiService } from '@core/services/apoio/variacao-produto-api.service';
 import { ProdutoResponseDto } from '@core/dtos/produto/produto-response.dto';
 import { ClienteResponseDto } from '@core/dtos/cliente/cliente-response.dto';
 import { VariacaoProdutoResponseDto } from '@core/dtos/variacaoProduto/variacao-produto-response.dto';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-condicional-form',
@@ -41,8 +42,9 @@ export class CondicionalFormComponent implements OnInit {
     private readonly messageService = inject(MessageService);
     private readonly router = inject(Router);
     private readonly fb = inject(FormBuilder);
+    private readonly route = inject(ActivatedRoute);
 
-    id = input<number>();
+    id: number | null = null;
     isEdicao = false;
     salvando = signal(false);
 
@@ -78,12 +80,15 @@ export class CondicionalFormComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.isEdicao = !!this.id();
+        const idParam = this.route.snapshot.paramMap.get('id');
+        this.id = idParam ? Number(idParam) : null;
+
+        this.isEdicao = this.id !== null;
         this.carregarDados();
 
         if (this.isEdicao) {
-        this.breadcrumbs[2].label = 'Editar Condicional';
-        this.carregarCondicional();
+            this.breadcrumbs[2].label = 'Editar Condicional';
+            this.carregarCondicional();
         }
     }
 
@@ -97,7 +102,7 @@ export class CondicionalFormComponent implements OnInit {
     }
 
     carregarCondicional(): void {
-        this.condicionalApi.getById(this.id()!).subscribe({
+        this.condicionalApi.getById(this.id!).subscribe({
         next: condicional => {
             this.form.patchValue({
                 clienteId: condicional.cliente.id,
@@ -208,7 +213,7 @@ export class CondicionalFormComponent implements OnInit {
         };
 
         const request$ = this.isEdicao
-        ? this.condicionalApi.update(this.id()!, dto as any)
+        ? this.condicionalApi.update(this.id!, dto as any)
         : this.condicionalApi.create(dto as any);
 
         request$.subscribe({

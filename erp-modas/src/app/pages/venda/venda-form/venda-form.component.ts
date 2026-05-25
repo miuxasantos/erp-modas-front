@@ -16,12 +16,23 @@ import { PageHeaderComponent } from '@shared/components/page-header/page-header.
 import { SelectModule } from 'primeng/select';
 import { VendaApiService } from '@core/services/venda/venda-api.service';
 import { ClienteApiService } from '@core/services/cliente-api.service';
-import { ProdutoApiService } from '@core/services/produto-api.service';
+import { ProdutoApiService } from '@core/services/produto/produto-api.service';
 import { VariacaoProdutoApiService } from '@core/services/apoio/variacao-produto-api.service';
 import { ClienteResponseDto } from '@core/dtos/cliente/cliente-response.dto';
 import { ProdutoResponseDto } from '@core/dtos/produto/produto-response.dto';
 import { VariacaoProdutoResponseDto } from '@core/dtos/variacaoProduto/variacao-produto-response.dto';
 import { TagModule } from 'primeng/tag';
+import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
+import { TamanhoApiService } from '@core/services/apoio/tamanho-api.service';
+import { CorApiService } from '@core/services/apoio/cor-api.service';
+import { TamanhoResponseDto } from '@core/dtos/tamanho/tamanho-response.dto';
+import { CorResponseDto } from '@core/dtos/cor/cor-response.dto';
+
+interface VariacaoEnriquecida extends Omit<VariacaoProdutoResponseDto, 'cor' | 'tamanho'> {
+    cor: CorResponseDto;
+    tamanho: TamanhoResponseDto;
+}
 
 @Component({
     selector: 'app-venda-form',
@@ -38,12 +49,15 @@ export class VendaFormComponent implements OnInit {
     private readonly vendaApi = inject(VendaApiService);
     private readonly clienteApi = inject(ClienteApiService);
     private readonly produtoApi = inject(ProdutoApiService);
+    private readonly corApi = inject(CorApiService);
+    private readonly tamanhoApi = inject(TamanhoApiService);
     private readonly variacaoApi = inject(VariacaoProdutoApiService);
     private readonly messageService = inject(MessageService);
     private readonly router = inject(Router);
+    private readonly route = inject(ActivatedRoute);
     private readonly fb = inject(FormBuilder);
 
-    id = input<number>();
+    id: number | null = null;
     isEdicao = false;
     salvando = signal(false);
 
@@ -60,6 +74,8 @@ export class VendaFormComponent implements OnInit {
     dialogVariacaoVisivel = signal(false);
     variacoesDoProduto: VariacaoProdutoResponseDto[] = [];
     produtoSelecionado: ProdutoResponseDto | null = null;
+    cores: CorResponseDto[] = [];
+    tamanhos: TamanhoResponseDto[] = [];
 
     breadcrumbs: MenuItem[] = [
         { label: 'Dashboard', routerLink: '/dashboard' },
@@ -96,38 +112,54 @@ export class VendaFormComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.isEdicao = !!this.id();
-        this.carregarDados();
+        const idParam = this.route.snapshot.paramMap.get('id');
+        this.id = idParam ? Number(idParam) : null;
 
-        if (this.isEdicao) {
-        this.breadcrumbs[2].label = 'Editar Venda';
-        this.carregarVenda();
-        }
+        this.carregarDados();
     }
 
     carregarDados(): void {
-        this.clienteApi.getAll().subscribe({
-        next: clientes => this.clientes = clientes,
-        });
-        this.produtoApi.getAll().subscribe({
-        next: produtos => this.todosProdutos = produtos,
-        });
-    }
-
-    carregarVenda(): void {
-        this.vendaApi.getById(this.id()!).subscribe({
-        next: venda => {
-            this.form.patchValue({
-            clienteId:      venda.cliente.id,
-            dataVenda:      new Date(venda.dataVenda),
-            formaPagamento: venda.formaPagamento,
-            numeroParcelas: venda.numeroParcelas,
-            desconto:       venda.desconto,
-            observacoes:    venda.observacoes,
+        if (this.isEdicao) {
+            forkJoin({
+                clientes: this.clienteApi.getAll(),
+                produtos: this.produtoApi.getAll(),
+                cores: this.corApi.getAll(),
+                tamanhos: this.tamanhoApi.getAll(),
+                venda: this.vendaApi.getById(this.id!),
+            }).subscribe({
+                next: ({ clientes, produtos, cores, tamanhos, venda }) => {
+                    this.clientes   = clientes;
+                    this.todosProdutos  = produtos;
+                    this.cores          = cores;
+                    this.tamanhos       = tamanhos;
+        
+                    this.form.patchValue({
+                        clienteId:   venda.cliente.id,
+                        dataVenda:    new Date(venda.dataVenda),
+                        formaPagamento: venda.formaPagamento,
+                        numeroParcelas: venda.numeroParcelas,
+                        desconto:           venda.desconto,
+                        observacoes:    venda.observacoes,
+                    });
+        
+                    venda.itensVenda.forEach(item => this.adicionarItemForm(item));
+                },
             });
-            venda.itensVenda.forEach(item => this.adicionarItemForm(item));
-        },
-        });
+        } else {
+            forkJoin({
+                clientes: this.clienteApi.getAll(),
+                produtos:     this.produtoApi.getAll(),
+                cores: this.corApi.getAll(),
+                tamanhos: this.tamanhoApi.getAll(),
+            }).subscribe({
+                next: ({ clientes, produtos, cores, tamanhos }) => {
+                    this.clientes = clientes;
+                    this.todosProdutos = produtos;
+                    this.cores = cores;
+                    this.tamanhos = tamanhos;
+                },
+            });
+        }
     }
 
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -231,7 +263,7 @@ export class VendaFormComponent implements OnInit {
         };
 
         const request$ = this.isEdicao
-        ? this.vendaApi.update(this.id()!, dto as any)
+        ? this.vendaApi.update(this.id!, dto as any)
         : this.vendaApi.create(dto as any);
 
         request$.subscribe({

@@ -6,6 +6,7 @@ import { ClienteApiService } from '@core/services/cliente-api.service';
 import { ClienteResponseDto } from '@core/dtos/cliente/cliente-response.dto';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { MenuItem } from 'primeng/api';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-cliente-detalhe',
@@ -16,8 +17,9 @@ import { MenuItem } from 'primeng/api';
 export class ClienteDetalheComponent implements OnInit {
     private readonly clienteApi = inject(ClienteApiService);
     private readonly router     = inject(Router);
+    private readonly route      = inject(ActivatedRoute);
 
-    id = input.required<number>();
+    id: number | null = null;
 
     cliente: ClienteResponseDto | null = null;
 
@@ -28,7 +30,13 @@ export class ClienteDetalheComponent implements OnInit {
     ];
 
     ngOnInit(): void {
-        this.clienteApi.getById(this.id()).subscribe({
+        const idParam = this.route.snapshot.paramMap.get('id');
+        this.id = idParam ? Number(idParam) : null;
+        this.carregarDados();
+    }
+
+    carregarDados(): void {
+        this.clienteApi.getById(this.id!).subscribe({
         next: cliente => this.cliente = cliente,
         });
     }

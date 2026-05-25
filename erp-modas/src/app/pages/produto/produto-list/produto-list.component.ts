@@ -1,15 +1,16 @@
 import { Component, inject, OnInit, signal } from "@angular/core";
 import { PageHeaderComponent } from "@shared/components/page-header/page-header.component";
 import { ButtonModule } from "primeng/button";
-import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { TableModule } from "primeng/table";
 import { TagModule } from "primeng/tag"
 import { ConfirmationService, MenuItem, MessageService } from "primeng/api";
 import { Router } from "@angular/router";
 import { TooltipModule } from "primeng/tooltip";
 import { CurrencyPipe } from "@angular/common";
-import { ProdutoApiService } from "@core/services/produto-api.service";
+import { ProdutoApiService } from "@core/services/produto/produto-api.service";
 import { ProdutoResponseDto } from "@core/dtos/produto/produto-response.dto";
+import { forkJoin } from "rxjs";
+import { CategoriaApiService } from "@core/services/categoria-api.service";
 
 @Component({
     selector: 'app-produto-list',
@@ -26,10 +27,10 @@ import { ProdutoResponseDto } from "@core/dtos/produto/produto-response.dto";
 
 export class ProdutoListComponent implements OnInit {
     private readonly produtoApi = inject(ProdutoApiService);
+    private readonly categoriaApi = inject(CategoriaApiService);
     private readonly confirmationService = inject(ConfirmationService);
     private readonly messageService = inject(MessageService);
     private readonly router = inject(Router);
-    private readonly fb = inject(FormBuilder);
 
     produtos: ProdutoResponseDto[] = [];
     dialogVisivel = signal(false);
@@ -46,8 +47,18 @@ export class ProdutoListComponent implements OnInit {
     }
 
     carregar(): void {
-        this.produtoApi.getAll().subscribe({
-            next: produtos => this.produtos = produtos,
+        forkJoin({
+            produtos: this.produtoApi.getAll(),
+            categorias: this.categoriaApi.getAll(),
+        }).subscribe({
+            next: ({ produtos, categorias }) => {
+                 console.log('PRODUTOS', produtos);
+        console.log('CATEGORIAS', categorias);
+                this.produtos = produtos.map(produto => ({
+                    ...produto,
+                    categoria: categorias.find(c => c.id === produto.categoriaId)!,
+                }));
+            },
         });
     }
 
@@ -68,6 +79,7 @@ export class ProdutoListComponent implements OnInit {
     }
 
     confirmarExclusao(id: number): void {
+        console.log('confirmarExclusao chamado', id); 
         this.confirmationService.confirm({
             message: 'Tem certeza que deseja excluir este produto?',
             header: 'Confirmar exclusão',

@@ -3,6 +3,7 @@ import { CompraResponseDto } from "../compra/compra-response.dto";
 
 export interface ContasPagarResponseDto {
     id: number;
+    fornecedorNome: string;
     dataLancamento: string;
     dataVencimento: string;
     dataPagamento: string;

@@ -15,7 +15,7 @@
     >
         <ng-template #header>
         <tr>
-            <th>Cliente</th>
+            <th>Fornecedor</th>
             <th>Parcela</th>
             <th pSortableColumn="dataVencimento">Vencimento <p-sortIcon field="dataVencimento" /></th>
             <th>Pagamento</th>
@@ -27,7 +27,7 @@
 
         <ng-template #body let-conta>
         <tr>
-            <td>{{ conta.compra }}</td>
+            <td>{{ conta.fornecedorNome }}</td>
             <td>{{ conta.numeroParcela }}/{{ conta.totalParcelas }}</td>
             <td>{{ conta.dataVencimento  | date:'dd/MM/yyyy' }}</td>
             <td>{{ conta.dataPagamento ? (conta.dataPagamento | date:'dd/MM/yyyy') : '—' }}</td>
@@ -84,7 +84,7 @@
             <p class="text-sm text-gray-500 mb-2">Resumo da parcela</p>
             <div class="flex justify-between text-sm mb-1">
             <span class="text-gray-500">Fornecedor</span>
-                <span class="font-medium"></span>
+                <span class="font-medium">{{ contaSelecionada.fornecedorNome }}</span>
             </div>
             <div class="flex justify-between text-sm mb-1">
             <span class="text-gray-500">Parcela</span>

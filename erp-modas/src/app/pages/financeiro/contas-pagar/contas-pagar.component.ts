@@ -41,7 +41,7 @@ export class ContasPagarComponent implements OnInit {
     ];
 
     formBaixa = this.fb.group({
-        dataPagamento: [new Date(), Validators.required],
+        dataPagamento: [new Date().toISOString().split('T')[0], Validators.required],
         valor: [0, [Validators.required, Validators.min(0.01)]],
     });
 
@@ -51,7 +51,7 @@ export class ContasPagarComponent implements OnInit {
 
     carregar(): void {
         this.contasPagarApi.getAll().subscribe({
-        next: contas => this.contas = contas,
+        next: contas => {console.log('contas:', contas), this.contas = contas},
         });
     }
 
@@ -66,8 +66,8 @@ export class ContasPagarComponent implements OnInit {
         this.processando.set(true);
 
         const dto = {
-            dataPagamento: this.formBaixa.get('dataPagamento')?.value,
-            statusConta:     StatusConta.PAGO,
+            dataPagamento: this.formBaixa.get('dataPagamento')?.value ?? '',
+            statusConta: StatusConta.PAGO,
         };
 
         this.contasPagarApi.pagar(this.contaSelecionada.id, dto as any).subscribe({

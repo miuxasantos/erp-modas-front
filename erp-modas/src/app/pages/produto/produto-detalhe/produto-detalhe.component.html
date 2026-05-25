@@ -27,7 +27,7 @@
                     </div>
                     <div>
                         <p class="text-xs text-gray-400">Categoria</p>
-                        <p class="text-sm font-medium">{{ produto.categoria}}</p>
+                        <p class="text-sm font-medium">{{ produto.categoria?.nome }}</p>
                     </div>
                     <div>
                         <p class="text-xs text-gray-400">Marca</p>
@@ -53,7 +53,9 @@
                     </div>
                     <div>
                         <p class="text-xs text-gray-400">Data de Desativação</p>
-                        <p class="text-sm font-medium">{{ produto.dataDesativacao || null }}</p>
+                        <p class="text-sm font-medium">{{ produto?.dataDesativacao
+                            ? (produto?.dataDesativacao | date:'dd/MM/yyyy')
+                            : '-' }}</p>
                     </div>
                     <div>
                             <p class="text-xs text-gray-400">Ativo</p>
@@ -69,7 +71,7 @@
                     </div>
                     <div>
                         <p class="text-xs text-gray-400">Margem de Lucro</p>
-                        <p class="text-sm font-medium"></p>
+                        <p class="text-sm font-medium">{{ produto.margemLucroFormatada }}</p>
                     </div>
                 </div>
             </p-card>
