@@ -1,6 +1,5 @@
 import { FormaPagamento } from "../../enums/forma-pagamento.enum";
-import { ContasReceberResponseDto } from "../contasReceber/contas-receber-response.dto";
-import { ItemVendaResponseDto } from "../itemVenda/item-venda-response.dto";
+import { ItemVendaRequestDto } from "../itemVenda/item-venda-request.dto";
 
 export interface VendaRequestDto {
     clienteId: number;
@@ -9,6 +8,6 @@ export interface VendaRequestDto {
     formaPagamento: FormaPagamento;
     numeroParcelas: number;
     valorTotal: number;
-    itensVenda: ItemVendaResponseDto[];
+    itensVenda: ItemVendaRequestDto[];
     desconto: number;
 }

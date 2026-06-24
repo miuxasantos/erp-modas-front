@@ -1,6 +1,7 @@
 import { StatusConta } from "../../enums/status-conta.enum";
 
 export interface ContasReceberRequestDto {
+    clienteNome: string;
     dataVencimento: string;
     dataRecebimento: string;
     valor: number;

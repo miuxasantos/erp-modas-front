@@ -6,13 +6,10 @@ export interface VariacaoProdutoResponseDto {
     id: number;
     sku: string;
     estoque: number;
-    produtoId: number;
     produto: ProdutoResponseDto;
     precoCusto: number;
     precoVenda: number;
     imagemEsp: string;
-    corId: number;
     cor: CorResponseDto;
-    tamanhoId: number;
     tamanho: TamanhoResponseDto;
 }

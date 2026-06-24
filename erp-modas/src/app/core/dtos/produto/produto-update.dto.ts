@@ -1,6 +1,5 @@
 export interface ProdutoUpdateDto {
     nome?: string;
-    codigo?: number;
     descricao?: string;
     ativo?: boolean;
     precoCusto?: number;

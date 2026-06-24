@@ -1,3 +1,3 @@
-export interface DataPagamentoDto {
-    dataPagamento: string;
+export interface DataRecebimentoDto {
+    dataRecebimento: string;
 }
