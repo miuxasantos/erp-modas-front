@@ -1,5 +1,5 @@
 import { FormaPagamento } from "../../enums/forma-pagamento.enum";
-import { ItemVendaRequestDto } from "../itemVenda/item-venda-request.dto";
+import { ItemVendaRequestDto } from "../dependentes/itemVenda/item-venda-request.dto";
 
 export interface VendaRequestDto {
     clienteId: number;

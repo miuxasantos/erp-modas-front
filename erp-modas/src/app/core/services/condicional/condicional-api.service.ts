@@ -3,7 +3,7 @@ import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
 import { CondicionalResponseDto } from "@core/dtos/condicional/condicional-response.dto";
-import { ItemCondicionalResponseDto } from "@core/dtos/itemCondicional/item-condicional-response.dto";
+import { ItemCondicionalResponseDto } from "@core/dtos/dependentes/itemCondicional/item-condicional-response.dto";
 import { CondicionalRequestDto } from "@core/dtos/condicional/condicional-request.dto";
 import { CondicionalUpdateDto } from "@core/dtos/condicional/condicional-update.dto";
 

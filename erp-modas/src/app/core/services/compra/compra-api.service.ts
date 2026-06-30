@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import { CompraResponseDto } from "@core/dtos/compra/compra-response.dto";
 import { CompraRequestDto } from "@core/dtos/compra/compra-request.dto";
 import { CompraUpdateDto } from "@core/dtos/compra/compra-update.dto";
-import { ItemCompraResponseDto } from "@core/dtos/itemCompra/item-compra-response.dto";
+import { ItemCompraResponseDto } from "@core/dtos/dependentes/itemCompra/item-compra-response.dto";
 
 @Injectable({ providedIn: 'root' })
 export class CompraApiService {

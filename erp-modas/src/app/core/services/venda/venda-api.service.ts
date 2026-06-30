@@ -3,7 +3,7 @@ import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
 import { VendaResponseDto } from "@core/dtos/venda/venda-response.dto";
-import { ItemVendaResponseDto } from "@core/dtos/itemVenda/item-venda-response.dto";
+import { ItemVendaResponseDto } from "@core/dtos/dependentes/itemVenda/item-venda-response.dto";
 import { VendaRequestDto } from "@core/dtos/venda/venda-request.dto";
 import { VendaUpdateDto } from "@core/dtos/venda/venda-update.dto";
 

@@ -10,9 +10,9 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { ContasReceberApiService } from '@core/services/dependentes/contas-receber-api.service';
-import { ContasReceberResponseDto } from '@core/dtos/contasReceber/contas-receber-response.dto';
+import { ContasReceberResponseDto } from '@core/dtos/dependentes/contasReceber/contas-receber-response.dto';
 import { StatusConta } from '@core/enums/status-conta.enum';
-import { DataPagamentoDto } from '@core/dtos/contasPagar/data-pagamento.dto';
+import { DataPagamentoDto } from '@core/dtos/dependentes/contasPagar/data-pagamento.dto';
 
 @Component({
     selector: 'app-contas-receber',

@@ -2,9 +2,9 @@ import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
-import { VariacaoProdutoUpdateDto } from "@core/dtos/variacaoProduto/variacao-produto-update.dto";
-import { VariacaoProdutoResponseDto } from "@core/dtos/variacaoProduto/variacao-produto-response.dto";
-import { VariacaoProdutoRequestDto } from "@core/dtos/variacaoProduto/variacao-produto-request.dto";
+import { VariacaoProdutoUpdateDto } from "@core/dtos/apoio/variacaoProduto/variacao-produto-update.dto";
+import { VariacaoProdutoResponseDto } from "@core/dtos/apoio/variacaoProduto/variacao-produto-response.dto";
+import { VariacaoProdutoRequestDto } from "@core/dtos/apoio/variacaoProduto/variacao-produto-request.dto";
 
 @Injectable({ providedIn: 'root' })
 export class VariacaoProdutoApiService {

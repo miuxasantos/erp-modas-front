@@ -1,4 +1,4 @@
-import { StatusConta } from "../../enums/status-conta.enum";
+import { StatusConta } from "../../../enums/status-conta.enum";
 
 export interface ContasPagarRequestDto {
     fornecedorNome: string;

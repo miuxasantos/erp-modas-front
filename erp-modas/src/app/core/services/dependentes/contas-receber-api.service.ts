@@ -2,8 +2,8 @@ import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
-import { ContasReceberResponseDto } from "@core/dtos/contasReceber/contas-receber-response.dto";
-import { DataPagamentoDto } from "@core/dtos/contasPagar/data-pagamento.dto";
+import { ContasReceberResponseDto } from "@core/dtos/dependentes/contasReceber/contas-receber-response.dto";
+import { DataPagamentoDto } from "@core/dtos/dependentes/contasPagar/data-pagamento.dto";
 
 @Injectable({ providedIn: 'root' })
 export class ContasReceberApiService {

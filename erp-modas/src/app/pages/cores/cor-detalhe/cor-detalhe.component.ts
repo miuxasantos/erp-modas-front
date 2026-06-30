@@ -5,7 +5,7 @@ import { CardModule } from 'primeng/card';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { MenuItem } from 'primeng/api';
 import { CorApiService } from '@core/services/apoio/cor-api.service';
-import { CorResponseDto } from '@core/dtos/cor/cor-response.dto';
+import { CorResponseDto } from '@core/dtos/apoio/cor/cor-response.dto';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

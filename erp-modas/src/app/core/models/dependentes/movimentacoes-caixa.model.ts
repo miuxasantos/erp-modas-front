@@ -1,4 +1,4 @@
-import { MovimentacoesCaixaResponseDto } from "../../dtos/movimentacoesCaixa/movimentacoes-caixa-response.dto";
+import { MovimentacoesCaixaResponseDto } from "../../dtos/dependentes/movimentacoesCaixa/movimentacoes-caixa-response.dto";
 import { OrigemMov } from "../../enums/origem-mov.enum";
 import { TipoMovCaixa } from "../../enums/tipo-mov-caixa.enum";
 

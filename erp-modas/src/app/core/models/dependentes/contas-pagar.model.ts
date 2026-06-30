@@ -1,4 +1,4 @@
-import { ContasPagarResponseDto } from "../../dtos/contasPagar/contas-pagar-response.dto";
+import { ContasPagarResponseDto } from "../../dtos/dependentes/contasPagar/contas-pagar-response.dto";
 import { StatusConta } from "../../enums/status-conta.enum";
 
 export class ContasPagar {

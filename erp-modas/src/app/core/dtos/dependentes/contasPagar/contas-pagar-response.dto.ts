@@ -1,5 +1,5 @@
-import { StatusConta } from "../../enums/status-conta.enum";
-import { CompraResponseDto } from "../compra/compra-response.dto";
+import { StatusConta } from "../../../enums/status-conta.enum";
+import { CompraResponseDto } from "../../compra/compra-response.dto";
 
 export interface ContasPagarResponseDto {
     id: number;

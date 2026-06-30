@@ -1,5 +1,5 @@
 import { CorResponseDto } from "../cor/cor-response.dto";
-import { ProdutoResponseDto } from "../produto/produto-response.dto";
+import { ProdutoResponseDto } from "../../produto/produto-response.dto";
 import { TamanhoResponseDto } from "../tamanho/tamanho-response.dto";
 
 export interface VariacaoProdutoResponseDto {

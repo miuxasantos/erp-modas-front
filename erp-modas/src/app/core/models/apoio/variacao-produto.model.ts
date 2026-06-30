@@ -1,4 +1,4 @@
-import { VariacaoProdutoResponseDto } from "../../dtos/variacaoProduto/variacao-produto-response.dto";
+import { VariacaoProdutoResponseDto } from "../../dtos/apoio/variacaoProduto/variacao-produto-response.dto";
 import { Cor } from "./cor.model";
 import { Produto } from "../produto.model";
 import { Tamanho } from "./tamanho.model";

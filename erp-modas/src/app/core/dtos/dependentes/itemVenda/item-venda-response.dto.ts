@@ -1,4 +1,4 @@
-import { VariacaoProdutoResponseDto } from "../variacaoProduto/variacao-produto-response.dto";
+import { VariacaoProdutoResponseDto } from "../../apoio/variacaoProduto/variacao-produto-response.dto";
 
 export interface ItemVendaResponseDto {
     id: number;

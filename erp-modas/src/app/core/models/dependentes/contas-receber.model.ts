@@ -1,4 +1,4 @@
-import { ContasReceberResponseDto } from "../../dtos/contasReceber/contas-receber-response.dto";
+import { ContasReceberResponseDto } from "../../dtos/dependentes/contasReceber/contas-receber-response.dto";
 import { StatusConta } from "../../enums/status-conta.enum";
 
 export class ContasReceber {

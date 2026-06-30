@@ -1,5 +1,5 @@
 import { FormaPagamento } from "../../enums/forma-pagamento.enum";
-import { ItemCompraRequestDto } from "../itemCompra/item-compra-request.dto";
+import { ItemCompraRequestDto } from "../dependentes/itemCompra/item-compra-request.dto";
 
 export interface CompraRequestDto {
     fornecedorId: number;

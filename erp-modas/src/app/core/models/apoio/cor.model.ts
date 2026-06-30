@@ -1,4 +1,4 @@
-import { CorResponseDto } from "../../dtos/cor/cor-response.dto";
+import { CorResponseDto } from "../../dtos/apoio/cor/cor-response.dto";
 
 export class Cor {
     id: number;

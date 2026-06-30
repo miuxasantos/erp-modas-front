@@ -1,4 +1,4 @@
-import { TamanhoResponseDto } from "../../dtos/tamanho/tamanho-response.dto";
+import { TamanhoResponseDto } from "../../dtos/apoio/tamanho/tamanho-response.dto";
 import { TamanhoEnum } from "../../enums/tamanho.enum";
 
 export class Tamanho {

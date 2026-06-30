@@ -13,7 +13,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { CaixaService } from '@core/services/caixa/caixa.service';
 import { MovimentacoesCaixaApiService } from '@core/services/dependentes/movimentacoes-caixa-api.service';
-import { MovimentacoesCaixaResponseDto } from '@core/dtos/movimentacoesCaixa/movimentacoes-caixa-response.dto';
+import { MovimentacoesCaixaResponseDto } from '@core/dtos/dependentes/movimentacoesCaixa/movimentacoes-caixa-response.dto';
 import { TipoMovCaixa } from '@core/enums/tipo-mov-caixa.enum';
 
 @Component({

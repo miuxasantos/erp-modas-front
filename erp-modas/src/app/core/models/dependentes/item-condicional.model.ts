@@ -1,4 +1,4 @@
-import { ItemCondicionalResponseDto } from "../../dtos/itemCondicional/item-condicional-response.dto";
+import { ItemCondicionalResponseDto } from "../../dtos/dependentes/itemCondicional/item-condicional-response.dto";
 import { VariacaoProduto } from "../apoio/variacao-produto.model";
 
 export class ItemCondicional {

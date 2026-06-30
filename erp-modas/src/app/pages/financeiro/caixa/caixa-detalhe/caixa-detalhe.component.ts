@@ -11,7 +11,7 @@ import { MenuItem } from 'primeng/api';
 import { CaixaService } from '@core/services/caixa/caixa.service';
 import { MovimentacoesCaixaApiService } from '@core/services/dependentes/movimentacoes-caixa-api.service';
 import { Caixa } from '@core/models/caixa.model';
-import { MovimentacoesCaixaResponseDto } from '@core/dtos/movimentacoesCaixa/movimentacoes-caixa-response.dto';
+import { MovimentacoesCaixaResponseDto } from '@core/dtos/dependentes/movimentacoesCaixa/movimentacoes-caixa-response.dto';
 import { TipoMovCaixa } from '@core/enums/tipo-mov-caixa.enum';
 import { ActivatedRoute } from '@angular/router';
 

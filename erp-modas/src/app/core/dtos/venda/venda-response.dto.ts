@@ -1,7 +1,7 @@
 import { FormaPagamento } from "../../enums/forma-pagamento.enum";
 import { ClienteResponseDto } from "../cliente/cliente-response.dto";
-import { ContasReceberResponseDto } from "../contasReceber/contas-receber-response.dto";
-import { ItemVendaResponseDto } from "../itemVenda/item-venda-response.dto";
+import { ContasReceberResponseDto } from "../dependentes/contasReceber/contas-receber-response.dto";
+import { ItemVendaResponseDto } from "../dependentes/itemVenda/item-venda-response.dto";
 
 export interface VendaResponseDto {
     id: number;

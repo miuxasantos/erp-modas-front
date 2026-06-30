@@ -1,4 +1,4 @@
-import { ItemVendaResponseDto } from "../../dtos/itemVenda/item-venda-response.dto";
+import { ItemVendaResponseDto } from "../../dtos/dependentes/itemVenda/item-venda-response.dto";
 import { VariacaoProduto } from "../apoio/variacao-produto.model";
 
 export class ItemVenda {

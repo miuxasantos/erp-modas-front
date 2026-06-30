@@ -2,8 +2,8 @@ import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
-import { MovimentacoesCaixaResponseDto } from "@core/dtos/movimentacoesCaixa/movimentacoes-caixa-response.dto";
-import { MovimentacoesCaixaRequestDto } from "@core/dtos/movimentacoesCaixa/movimentacoes-caixa-request.dto";
+import { MovimentacoesCaixaResponseDto } from "@core/dtos/dependentes/movimentacoesCaixa/movimentacoes-caixa-response.dto";
+import { MovimentacoesCaixaRequestDto } from "@core/dtos/dependentes/movimentacoesCaixa/movimentacoes-caixa-request.dto";
 import { MovimentacoesCaixaUpdateDto } from "@core/dtos/movimentacoesCaixa/movimentacoes-caixa-update.dto";
 
 @Injectable({ providedIn: 'root' })

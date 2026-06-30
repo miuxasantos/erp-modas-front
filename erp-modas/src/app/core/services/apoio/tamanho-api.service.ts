@@ -2,9 +2,9 @@ import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
-import { TamanhoResponseDto } from "@core/dtos/tamanho/tamanho-response.dto";
-import { TamanhoRequestDto } from "@core/dtos/tamanho/tamanho-request.dto";
-import { TamanhoUpdateDto } from "@core/dtos/tamanho/tamanho-update.dto";
+import { TamanhoResponseDto } from "@core/dtos/apoio/tamanho/tamanho-response.dto";
+import { TamanhoRequestDto } from "@core/dtos/apoio/tamanho/tamanho-request.dto";
+import { TamanhoUpdateDto } from "@core/dtos/apoio/tamanho/tamanho-update.dto";
 
 @Injectable({ providedIn: 'root' })
 export class TamanhoApiService {

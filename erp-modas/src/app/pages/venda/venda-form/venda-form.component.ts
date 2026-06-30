@@ -20,14 +20,14 @@ import { ProdutoApiService } from '@core/services/produto/produto-api.service';
 import { VariacaoProdutoApiService } from '@core/services/apoio/variacao-produto-api.service';
 import { ClienteResponseDto } from '@core/dtos/cliente/cliente-response.dto';
 import { ProdutoResponseDto } from '@core/dtos/produto/produto-response.dto';
-import { VariacaoProdutoResponseDto } from '@core/dtos/variacaoProduto/variacao-produto-response.dto';
+import { VariacaoProdutoResponseDto } from '@core/dtos/apoio/variacaoProduto/variacao-produto-response.dto';
 import { TagModule } from 'primeng/tag';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { TamanhoApiService } from '@core/services/apoio/tamanho-api.service';
 import { CorApiService } from '@core/services/apoio/cor-api.service';
-import { TamanhoResponseDto } from '@core/dtos/tamanho/tamanho-response.dto';
-import { CorResponseDto } from '@core/dtos/cor/cor-response.dto';
+import { TamanhoResponseDto } from '@core/dtos/apoio/tamanho/tamanho-response.dto';
+import { CorResponseDto } from '@core/dtos/apoio/cor/cor-response.dto';
 
 interface VariacaoEnriquecida extends Omit<VariacaoProdutoResponseDto, 'cor' | 'tamanho'> {
     cor: CorResponseDto;

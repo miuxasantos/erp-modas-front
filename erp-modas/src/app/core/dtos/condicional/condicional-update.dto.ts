@@ -1,4 +1,4 @@
-import { ItemCondicionalResponseDto } from "../itemCondicional/item-condicional-response.dto";
+import { ItemCondicionalResponseDto } from "../dependentes/itemCondicional/item-condicional-response.dto";
 
 export interface CondicionalUpdateDto {
     clienteId?: number;

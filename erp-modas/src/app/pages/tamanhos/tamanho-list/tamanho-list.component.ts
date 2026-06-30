@@ -5,7 +5,7 @@ import { InputTextModule } from "primeng/inputtext";
 import { TagModule } from "primeng/tag"
 import { MenuItem } from "primeng/api";
 import { TamanhoApiService } from "@core/services/apoio/tamanho-api.service";
-import { TamanhoResponseDto } from "@core/dtos/tamanho/tamanho-response.dto";
+import { TamanhoResponseDto } from "@core/dtos/apoio/tamanho/tamanho-response.dto";
 
 @Component({
     selector: 'app-tamanho-list',

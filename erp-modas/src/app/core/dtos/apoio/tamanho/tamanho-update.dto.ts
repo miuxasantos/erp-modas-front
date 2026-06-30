@@ -1,4 +1,4 @@
-import { TamanhoEnum } from "../../enums/tamanho.enum";
+import { TamanhoEnum } from "../../../enums/tamanho.enum";
 
 export interface TamanhoUpdateDto {
     tamanho?: TamanhoEnum;

@@ -9,7 +9,7 @@ import { TagModule } from "primeng/tag"
 import { ConfirmationService, MenuItem, MessageService } from "primeng/api";
 import { Router } from "@angular/router";
 import { CorApiService } from "@core/services/apoio/cor-api.service";
-import { CorResponseDto } from "@core/dtos/cor/cor-response.dto";
+import { CorResponseDto } from "@core/dtos/apoio/cor/cor-response.dto";
 
 @Component({
     selector: 'app-cor-list',
