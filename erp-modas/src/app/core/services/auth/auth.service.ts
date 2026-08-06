@@ -5,6 +5,7 @@ import { map, Observable, tap } from "rxjs";
 import { AuthApiService } from "./auth-api.service";
 import { Router } from "@angular/router";
 import { Usuario } from "@core/models/usuario.model";
+import { Cargo } from "@core/enums/cargo.enum";
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -19,6 +20,17 @@ export class AuthService {
     readonly usuario = this._usuario.asReadonly();
     readonly logado = computed(() => !!this._usuario());
 
+    // roles
+
+    readonly isProprietario = computed(() => this._usuario()?.cargo === Cargo.PROPRIETARIO);
+    readonly isVendedor = computed(() => this._usuario()?.cargo === Cargo.VENDEDOR);
+
+    readonly gerenciarUsuarios = computed(() => this.isProprietario());
+    readonly gerenciarFinanceiro = computed(() => this.isProprietario());
+    readonly gerenciarProdutos = computed(() => this.isProprietario() || this.isVendedor());
+    readonly abrirCaixa = computed(() => this.isProprietario() || this.isVendedor());
+    readonly fecharCaixa = computed(() => this.isProprietario() || this.isVendedor());
+
     login(dto: LoginRequestDto): Observable<void> {
         return this.api.login(dto).pipe(
             tap(response => {
@@ -28,14 +40,14 @@ export class AuthService {
                 this.router.navigate(['/dashboard']);
             }),
             map(() => void 0)
-        );
+        );  
     }
 
     logout(): void {
-        localStorage.removeItem(this.TOKEN_KEY);
-        localStorage.removeItem(this.USUARIO_KEY);
-        this._usuario.set(null);
-        this.router.navigate(['/login']);
+        this.api.logout().subscribe({
+            complete: () => this.limparEDirecionar(),
+            error: () => this.limparEDirecionar()
+        });
     }
 
     getToken(): string | null {
@@ -51,6 +63,13 @@ export class AuthService {
         if(!raw) return null;
         const dto = JSON.parse(raw) as UsuarioResponseDto;
         return new Usuario(dto); 
+    }
+
+    private limparEDirecionar(): void {
+        localStorage.removeItem(this.TOKEN_KEY);
+        localStorage.removeItem(this.USUARIO_KEY);
+        this._usuario.set(null);
+        this.router.navigate(['/login']);
     }
 
 }

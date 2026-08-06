@@ -3,7 +3,7 @@ import { UsuarioResponseDto } from "../usuario/usuario-response.dto";
 
 export interface AuditoriaResponseDto {
     id: number;
-    usuario: UsuarioResponseDto;
+    usuarioId: number;
     tipoAcaoAud: TipoAcaoAud;
     entidade: string;
     entidadeId: number;

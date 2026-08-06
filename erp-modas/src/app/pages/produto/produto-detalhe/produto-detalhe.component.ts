@@ -20,7 +20,6 @@ import { ActivatedRoute } from '@angular/router';
 
 export class ProdutoDetalheComponent implements OnInit {
     private readonly produtoService = inject(ProdutoService);
-    private readonly categoriaApi = inject(CategoriaApiService);
     private readonly router     = inject(Router);
     private readonly route      = inject(ActivatedRoute);
 
@@ -41,12 +40,8 @@ export class ProdutoDetalheComponent implements OnInit {
     }
 
     carregarDados(): void {
-         forkJoin({
-            produto:    this.produtoService.getById(this.id!),
-            categorias: this.categoriaApi.getAll(),
-        }).subscribe({
-            next: ({ produto, categorias }) => {
-                produto.categoria = categorias.find(c => c.id === produto.categoriaId);
+        this.produtoService.getById(this.id!).subscribe({
+            next: (produto) => {
                 this.produto = produto;
             },
         });

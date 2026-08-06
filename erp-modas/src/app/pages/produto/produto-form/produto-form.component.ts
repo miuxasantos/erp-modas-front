@@ -13,6 +13,11 @@ import { ProdutoApiService } from '@core/services/produto/produto-api.service';
 import { CategoriaApiService } from '@core/services/categoria-api.service';
 import { CategoriaResponseDto } from '@core/dtos/categoria/categoria-response.dto';
 import { UploadApiService } from '@core/services/upload-api.service';
+import { forkJoin } from 'rxjs';
+import { TecidoApiService } from '@core/services/apoio/tecido-api.service';
+import { MarcaApiService } from '@core/services/marca-api.service';
+import { TecidoResponseDto } from '@core/dtos/apoio/tecido/tecido-response.dto';
+import { MarcaResponseDto } from '@core/dtos/marca/marca-response.dto';
 
 @Component({
   selector: 'app-produto-form',
@@ -31,6 +36,8 @@ import { UploadApiService } from '@core/services/upload-api.service';
 export class ProdutoFormComponent implements OnInit {
   private readonly produtoApi    = inject(ProdutoApiService);
   private readonly categoriaApi  = inject(CategoriaApiService);
+  private readonly marcaApi      = inject(MarcaApiService);
+  private readonly tecidoApi     = inject(TecidoApiService);
   private readonly uploadApi = inject(UploadApiService);
   private readonly messageService = inject(MessageService);
   private readonly router        = inject(Router);
@@ -43,6 +50,8 @@ export class ProdutoFormComponent implements OnInit {
   imagemPreview = signal<string | null>(null);
   uploading = signal(false);
   categorias: CategoriaResponseDto[] = [];
+  marcas: MarcaResponseDto[] = [];
+  tecidos: TecidoResponseDto[] = [];
 
   breadcrumbs: MenuItem[] = [
     { label: 'Dashboard', routerLink: '/dashboard' },
@@ -54,8 +63,8 @@ export class ProdutoFormComponent implements OnInit {
     nome: new FormControl<string>('', Validators.required),
     codigo: new FormControl<number | null>(null),
     descricao: [''],
-    marca: ['', Validators.required],
-    tecido: [''],
+    marcaId: new FormControl<number | null>(null),
+    tecidoId: new FormControl<number | null>(null),
     precoCusto: [0, Validators.required],
     precoVenda: [0, Validators.required],
     categoriaId: new FormControl<number | null>(null, Validators.required),
@@ -65,26 +74,46 @@ export class ProdutoFormComponent implements OnInit {
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
-
-    console.log(idParam);
-
     this.id = idParam ? Number(idParam) : null;
-
     this.isEdicao = this.id !== null;
 
-    this.categoriaApi.getAll().subscribe({
-      next: categorias => this.categorias = categorias,
-    });
+    forkJoin({
+      categorias: this.categoriaApi.getAll(),
+      marcas: this.marcaApi.getAll(),
+      tecidos: this.tecidoApi.getAll(),
+    }).subscribe(({ categorias, marcas, tecidos }) => {
+      this.categorias = categorias;
+      this.marcas = marcas;
+      this.tecidos = tecidos;
 
+      if (this.id !== null) {
+        this.carregarProduto(this.id);
+      }
+    });
+  }
+
+  carregarProduto(id: number): void {
     if (this.id !== null) {
       this.breadcrumbs[2].label = 'Editar Produto';
 
       this.produtoApi.getById(this.id).subscribe({
         next: produto => {
           this.form.patchValue({
-            ...produto,
-            categoriaId: produto.categoriaId,
+            nome: produto.nome,
+            codigo: produto.codigo,
+            descricao: produto.descricao,
+            ativo: produto.ativo,
+            precoCusto: produto.precoCusto,
+            precoVenda: produto.precoVenda,
+            tecidoId: produto.tecido?.id ?? null,
+            marcaId: produto.marca?.id ?? null,
+            categoriaId: produto.categoria?.id ?? null,
+            imagem: produto.imagem ?? '',
           });
+          
+          if(produto.imagem) {
+            this.imagemPreview.set(produto.imagem);
+          }
         },
       });
     }

@@ -11,6 +11,8 @@ import { ProdutoApiService } from "@core/services/produto/produto-api.service";
 import { ProdutoResponseDto } from "@core/dtos/produto/produto-response.dto";
 import { forkJoin } from "rxjs";
 import { CategoriaApiService } from "@core/services/categoria-api.service";
+import { TecidoApiService } from "@core/services/apoio/tecido-api.service";
+import { MarcaApiService } from "@core/services/marca-api.service";
 
 @Component({
     selector: 'app-produto-list',
@@ -27,7 +29,6 @@ import { CategoriaApiService } from "@core/services/categoria-api.service";
 
 export class ProdutoListComponent implements OnInit {
     private readonly produtoApi = inject(ProdutoApiService);
-    private readonly categoriaApi = inject(CategoriaApiService);
     private readonly confirmationService = inject(ConfirmationService);
     private readonly messageService = inject(MessageService);
     private readonly router = inject(Router);
@@ -47,17 +48,9 @@ export class ProdutoListComponent implements OnInit {
     }
 
     carregar(): void {
-        forkJoin({
-            produtos: this.produtoApi.getAll(),
-            categorias: this.categoriaApi.getAll(),
-        }).subscribe({
-            next: ({ produtos, categorias }) => {
-                 console.log('PRODUTOS', produtos);
-        console.log('CATEGORIAS', categorias);
-                this.produtos = produtos.map(produto => ({
-                    ...produto,
-                    categoria: categorias.find(c => c.id === produto.categoriaId)!,
-                }));
+        this.produtoApi.getAll().subscribe({
+            next: (produtos) => {
+                this.produtos = produtos;
             },
         });
     }

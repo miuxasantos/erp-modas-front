@@ -1,6 +1,5 @@
 export interface VariacaoProdutoUpdateDto {
     sku?: string;
-    estoque?: number;
     produtoId?: number;
     precoCusto?: number;
     precoVenda?: number;

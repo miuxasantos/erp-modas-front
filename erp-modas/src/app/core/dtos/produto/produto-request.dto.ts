@@ -6,8 +6,8 @@ export interface ProdutoRequestDto {
     precoCusto: number;
     precoVenda: number;
     dataInclusao: string;
-    tecido: string;
-    marca: string;
+    tecidoId: number;
+    marcaId: number;
     categoriaId: number;
     imagem: string;
 }

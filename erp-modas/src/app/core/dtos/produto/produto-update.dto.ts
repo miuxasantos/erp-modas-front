@@ -4,8 +4,8 @@ export interface ProdutoUpdateDto {
     ativo?: boolean;
     precoCusto?: number;
     precoVenda?: number;
-    tecido?: string;
-    marca?: string;
+    tecidoId?: number;
+    marcaId?: number;
     categoriaId?: number;
     imagem?: string;
 }

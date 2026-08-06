@@ -1,5 +1,7 @@
 import { ProdutoResponseDto } from "../dtos/produto/produto-response.dto";
+import { Tecido } from "./apoio/tecido.model";
 import { Categoria } from "./categoria.model";
+import { Marca } from "./marca.model";
 
 export class Produto {
     id: number;
@@ -11,10 +13,9 @@ export class Produto {
     precoVenda: number;
     dataInclusao: Date;
     dataDesativacao: Date | null;
-    tecido: string;
-    marca: string;
+    tecido: Tecido;
+    marca: Marca;
     categoria?: Categoria;
-    categoriaId: number;
     imagem: string;
 
     constructor (dto: ProdutoResponseDto) {
@@ -27,10 +28,9 @@ export class Produto {
         this.precoVenda = dto.precoVenda;
         this.dataInclusao = new Date(dto.dataInclusao);
         this.dataDesativacao = dto.dataDesativacao != null ? new Date(dto.dataDesativacao) : null;;
-        this.tecido = dto.tecido;
-        this.marca = dto.marca;
-        //this.categoria = new Categoria(dto.categoria);
-        this.categoriaId = dto.categoriaId;
+        this.tecido = new Tecido(dto.tecido);
+        this.marca = new Marca(dto.marca);
+        this.categoria = new Categoria(dto.categoria);
         this.imagem = dto.imagem;
     }
 

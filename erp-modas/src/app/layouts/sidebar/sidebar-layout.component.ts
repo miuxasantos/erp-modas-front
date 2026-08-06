@@ -59,7 +59,19 @@ export class SidebarComponent {
                 { label: 'Usuários', icon: 'pi pi-user', route: '/usuarios'},
                 //{ label: 'Auditoria', icon: 'pi pi-history', route: '/auditoria'},
                 { label: 'Tamanhos', icon: 'pi pi-sort-alt', route: '/tamanhos'},
-                //{ label: 'Administrador', icon: 'pi pi-home', route: '/dashboard'},
+                { label: 'Administrador', icon: 'pi pi-home', route: '/dashboard'},
+            ]
+        },
+        {
+            label: 'Acesso',
+            items: [
+                { label: 'Login', icon: 'pi pi-sign-in', route: '/login'},
+            ]
+        },
+        {
+            label: 'Relatórios',
+            items: [
+                { label: 'Vendas', icon: 'pi pi-chart-line', route: '/relatorios/vendas'},
             ]
         }
     ]
