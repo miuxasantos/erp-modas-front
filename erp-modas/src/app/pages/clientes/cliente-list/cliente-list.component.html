@@ -42,6 +42,7 @@
                             (onClick)="verDetalhe(cliente.id)"
                         />
                         <p-button
+                            *temPermissao="'isProprietario'"
                             icon="pi pi-pencil"
                             [text]="true"
                             [rounded]="true"
@@ -50,6 +51,7 @@
                             (onClick)="abrirEdicao(cliente)"
                         />
                         <p-button
+                            *temPermissao="'isProprietario'"
                             icon="pi pi-trash"
                             [text]="true"
                             [rounded]="true"

@@ -9,8 +9,8 @@ import { TagModule } from "primeng/tag"
 import { ClienteApiService } from "@core/services/cliente-api.service";
 import { ConfirmationService, MenuItem, MessageService } from "primeng/api";
 import { Router } from "@angular/router";
-import { ClienteRequestDto } from "@core/dtos/cliente/cliente-request.dto";
 import { ClienteResponseDto } from "@core/dtos/cliente/cliente-response.dto";
+import { TemPermissaoDirective } from "@core/directives/tem-permissao.directive";
 
 @Component({
     selector: 'app-cliente-list',
@@ -22,6 +22,7 @@ import { ClienteResponseDto } from "@core/dtos/cliente/cliente-response.dto";
         InputTextModule,
         TagModule,
         PageHeaderComponent,
+        TemPermissaoDirective
     ],
     templateUrl: './cliente-list.component.html'
 })

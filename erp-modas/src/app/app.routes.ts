@@ -1,10 +1,11 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { adminGuard } from '@core/guards/admin.guard';
 
 export const routes: Routes = [
     {
         path: '',
-        // canActivate: [authGuard],
+        canActivate: [authGuard],
         loadComponent: () =>
             import('./layouts/main-layout/main-layout.component')
                 .then(c => c.MainLayoutComponent),
@@ -35,6 +36,7 @@ export const routes: Routes = [
             },
             {
                 path: 'usuarios',
+                canActivate: [adminGuard],
                 loadChildren: () =>
                     import('./pages/usuarios/usuario.routes')
                         .then(m => m.usuariosRoutes)
@@ -71,6 +73,7 @@ export const routes: Routes = [
             },
             {
                 path: 'financeiro',
+                canActivate: [adminGuard],
                 loadChildren: () =>
                     import('./pages/financeiro/financeiro.routes')
                         .then(m => m.financeiroRoutes)

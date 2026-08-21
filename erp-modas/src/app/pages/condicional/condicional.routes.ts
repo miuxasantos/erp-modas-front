@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { adminGuard } from '@core/guards/admin.guard';
 
 export const condicionaisRoutes: Routes = [
     {
@@ -21,6 +22,7 @@ export const condicionaisRoutes: Routes = [
     },
     {
         path: ':id/editar',
+        canActivate: [adminGuard],
         loadComponent: () =>
         import('./condicional-form/condicional-form.component')
             .then(c => c.CondicionalFormComponent),

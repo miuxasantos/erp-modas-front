@@ -43,6 +43,7 @@
                     (onClick)="verDetalhe(compra.id)"
                     />
                     <p-button
+                    *temPermissao="'isProprietario'"
                     icon="pi pi-pencil"
                     [text]="true"
                     [rounded]="true"
@@ -51,6 +52,7 @@
                     (onClick)="editar(compra.id)"
                     />
                     <p-button
+                    *temPermissao="'isProprietario'"
                     icon="pi pi-trash"
                     [text]="true"
                     [rounded]="true"

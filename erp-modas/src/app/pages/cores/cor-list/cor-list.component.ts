@@ -10,6 +10,7 @@ import { ConfirmationService, MenuItem, MessageService } from "primeng/api";
 import { Router } from "@angular/router";
 import { CorApiService } from "@core/services/apoio/cor-api.service";
 import { CorResponseDto } from "@core/dtos/apoio/cor/cor-response.dto";
+import { TemPermissaoDirective } from "@core/directives/tem-permissao.directive";
 
 @Component({
     selector: 'app-cor-list',
@@ -21,6 +22,7 @@ import { CorResponseDto } from "@core/dtos/apoio/cor/cor-response.dto";
         InputTextModule,
         TagModule,
         PageHeaderComponent,
+        TemPermissaoDirective
     ],
     templateUrl: './cor-list.component.html'
 })

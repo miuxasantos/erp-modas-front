@@ -14,6 +14,7 @@ import { Cargo } from "@core/enums/cargo.enum";
 import { enumToOptions } from "@core/utils/enum-options.utils";
 import { SelectModule } from "primeng/select";
 import { ToggleSwitchModule } from "primeng/toggleswitch";
+import { TemPermissaoDirective } from "@core/directives/tem-permissao.directive";
 
 @Component({
     selector: 'app-usuario-list',

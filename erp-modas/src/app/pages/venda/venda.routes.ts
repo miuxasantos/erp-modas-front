@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { adminGuard } from '@core/guards/admin.guard';
 
 export const vendasRoutes: Routes = [
     {
@@ -21,6 +22,7 @@ export const vendasRoutes: Routes = [
     },
     {
         path: ':id/editar',
+        canActivate: [adminGuard],
         loadComponent: () =>
         import('./venda-form/venda-form.component')
             .then(c => c.VendaFormComponent),

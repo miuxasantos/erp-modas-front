@@ -22,6 +22,7 @@ import { TamanhoResponseDto } from '@core/dtos/apoio/tamanho/tamanho-response.dt
 import { UploadApiService } from '@core/services/upload-api.service';
 import { forkJoin } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { TemPermissaoDirective } from '@core/directives/tem-permissao.directive';
 
 interface VariacaoGrade {
     corId: number;
@@ -116,8 +117,8 @@ export class VariacoesProdutoComponent implements OnInit {
 
                 this.variacoesCadastradas = variacoes.map(variacao => ({
                     ...variacao,
-                    cor:     cores.find(c => c.id === variacao.corId)!,
-                    tamanho: tamanhos.find(t => t.id === variacao.tamanhoId)!,
+                    cor:     cores.find(c => c.id === variacao.cor.id)!,
+                    tamanho: tamanhos.find(t => t.id === variacao.tamanho.id)!,
                 }));
             },
         });

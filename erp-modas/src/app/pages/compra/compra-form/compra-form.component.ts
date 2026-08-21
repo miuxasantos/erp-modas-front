@@ -27,6 +27,7 @@ import { forkJoin } from 'rxjs';
 import { CorResponseDto } from '@core/dtos/apoio/cor/cor-response.dto';
 import { TamanhoResponseDto } from '@core/dtos/apoio/tamanho/tamanho-response.dto';
 import { ActivatedRoute } from '@angular/router';
+import { TemPermissaoDirective } from '@core/directives/tem-permissao.directive';
 
 interface VariacaoEnriquecida extends Omit<VariacaoProdutoResponseDto, 'cor' | 'tamanho'> {
     cor: CorResponseDto;
@@ -186,10 +187,10 @@ export class CompraFormComponent implements OnInit {
             next: variacoes => {
                 this.variacoesDoProduto = variacoes.map(variacao => ({
                     ...variacao,
-                    cor: this.cores.find(c => c.id === variacao.corId)
-                        ?? { id: variacao.corId, nome: '—', codigoHex: '' } as CorResponseDto,
-                    tamanho: this.tamanhos.find(t => t.id === variacao.tamanhoId)
-                        ?? { id: variacao.tamanhoId, tamanho: '—' as any } as TamanhoResponseDto,
+                    cor: this.cores.find(c => c.id === variacao.cor.id)
+                        ?? { id: variacao.cor.id, nome: '—', codigoHex: '' } as CorResponseDto,
+                    tamanho: this.tamanhos.find(t => t.id === variacao.tamanho.id)
+                        ?? { id: variacao.tamanho.id, tamanho: '—' as any } as TamanhoResponseDto,
                 })) as VariacaoEnriquecida[];
                 this.dialogVariacaoVisivel.set(true);
             },

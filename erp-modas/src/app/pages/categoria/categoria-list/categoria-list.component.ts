@@ -10,6 +10,7 @@ import { ConfirmationService, MenuItem, MessageService } from "primeng/api";
 import { Router } from "@angular/router";
 import { CategoriaApiService } from "@core/services/categoria-api.service";
 import { CategoriaResponseDto } from "@core/dtos/categoria/categoria-response.dto";
+import { TemPermissaoDirective } from "@core/directives/tem-permissao.directive";
 
 @Component({
     selector: 'app-categoria-list',
@@ -21,6 +22,7 @@ import { CategoriaResponseDto } from "@core/dtos/categoria/categoria-response.dt
         InputTextModule,
         TagModule,
         PageHeaderComponent,
+        TemPermissaoDirective
     ],
     templateUrl: './categoria-list.component.html'
 })

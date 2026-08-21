@@ -10,6 +10,7 @@ import { ConfirmationService, MenuItem, MessageService } from "primeng/api";
 import { Router } from "@angular/router";
 import { FornecedorApiService } from "@core/services/fornecedor-api.service";
 import { FornecedorResponseDto } from "@core/dtos/fornecedor/fornecedor-response.dto";
+import { TemPermissaoDirective } from "@core/directives/tem-permissao.directive";
 
 @Component({
     selector: 'app-fornecedor-list',
@@ -21,6 +22,7 @@ import { FornecedorResponseDto } from "@core/dtos/fornecedor/fornecedor-response
         InputTextModule,
         TagModule,
         PageHeaderComponent,
+        TemPermissaoDirective
     ],
     templateUrl: './fornecedor-list.component.html'
 })

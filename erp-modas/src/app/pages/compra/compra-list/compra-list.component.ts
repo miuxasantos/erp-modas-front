@@ -10,6 +10,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { CompraApiService } from '@core/services/compra/compra-api.service';
 import { CompraResponseDto } from '@core/dtos/compra/compra-response.dto';
 import { ConfirmDialog } from "primeng/confirmdialog";
+import { TemPermissaoDirective } from '@core/directives/tem-permissao.directive';
 
 @Component({
     selector: 'app-compra-list',
@@ -21,7 +22,8 @@ import { ConfirmDialog } from "primeng/confirmdialog";
     PageHeaderComponent,
     CurrencyPipe,
     DatePipe,
-    ConfirmDialog
+    ConfirmDialog,
+    TemPermissaoDirective
 ],
     templateUrl: './compra-list.component.html',
 })

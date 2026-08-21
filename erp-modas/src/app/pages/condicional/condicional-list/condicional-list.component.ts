@@ -9,6 +9,7 @@ import { PageHeaderComponent } from '@shared/components/page-header/page-header.
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { CondicionalApiService } from '@core/services/condicional/condicional-api.service';
 import { CondicionalResponseDto } from '@core/dtos/condicional/condicional-response.dto';
+import { TemPermissaoDirective } from '@core/directives/tem-permissao.directive';
 
 @Component({
     selector: 'app-condicional-list',
@@ -20,6 +21,7 @@ import { CondicionalResponseDto } from '@core/dtos/condicional/condicional-respo
         PageHeaderComponent,
         CurrencyPipe,
         DatePipe,
+        TemPermissaoDirective
     ],
     templateUrl: './condicional-list.component.html',
 })

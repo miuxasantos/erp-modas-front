@@ -1,5 +1,6 @@
 // pages/produtos/produtos.routes.ts
 import { Routes } from '@angular/router';
+import { adminGuard } from '@core/guards/admin.guard';
 
 export const produtosRoutes: Routes = [
     {
@@ -22,6 +23,7 @@ export const produtosRoutes: Routes = [
     },
     {
         path: ':id/editar',
+        canActivate: [adminGuard],
         loadComponent: () =>
         import('./produto-form/produto-form.component')
             .then(c => c.ProdutoFormComponent),

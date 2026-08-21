@@ -13,6 +13,7 @@ import { forkJoin } from "rxjs";
 import { CategoriaApiService } from "@core/services/categoria-api.service";
 import { TecidoApiService } from "@core/services/apoio/tecido-api.service";
 import { MarcaApiService } from "@core/services/marca-api.service";
+import { TemPermissaoDirective } from "@core/directives/tem-permissao.directive";
 
 @Component({
     selector: 'app-produto-list',
@@ -23,6 +24,7 @@ import { MarcaApiService } from "@core/services/marca-api.service";
         TooltipModule,
         CurrencyPipe,
         PageHeaderComponent,
+        TemPermissaoDirective
     ],
     templateUrl: './produto-list.component.html'
 })

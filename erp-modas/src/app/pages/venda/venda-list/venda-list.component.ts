@@ -9,6 +9,7 @@ import { VendaResponseDto } from '@core/dtos/venda/venda-response.dto';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { VendaApiService } from '@core/services/venda/venda-api.service';
+import { TemPermissaoDirective } from '@core/directives/tem-permissao.directive';
 
 @Component({
     selector: 'app-venda-list',
@@ -20,6 +21,7 @@ import { VendaApiService } from '@core/services/venda/venda-api.service';
         PageHeaderComponent,
         CurrencyPipe,
         DatePipe,
+        TemPermissaoDirective
     ],
     templateUrl: './venda-list.component.html',
 })
