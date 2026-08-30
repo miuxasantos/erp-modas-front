@@ -1,0 +1,122 @@
+<!-- pages/catalogo/catalogo-list/catalogo-list.component.html -->
+<div class="px-6 py-8 max-w-7xl mx-auto">
+
+  <!-- Cabeçalho -->
+  <div class="text-center mb-8">
+    <h1 class="text-3xl font-light tracking-widest text-pink-900 mb-2">CATÁLOGO</h1>
+    <p class="text-gray-500 text-sm">Confira nossas peças disponíveis</p>
+  </div>
+
+  <!-- Filtros -->
+  <div class="flex flex-wrap items-end gap-4 mb-8">
+    <div class="flex-1 min-w-[200px]">
+      <label class="text-xs text-gray-500 mb-1 block">Buscar</label>
+      <input
+        pInputText
+        [(ngModel)]="busca"
+        placeholder="Nome do produto..."
+        class="w-full"
+        (keyup.enter)="filtrar()"
+      />
+    </div>
+
+    <div class="w-48">
+      <label class="text-xs text-gray-500 mb-1 block">Categoria</label>
+      <p-select
+        [(ngModel)]="categoriaSelecionada"
+        [options]="categorias()"
+        optionLabel="nome"
+        optionValue="id"
+        placeholder="Todas"
+        [showClear]="true"
+        class="w-full"
+        (onChange)="filtrar()"
+      />
+    </div>
+
+    <p-button
+      icon="pi pi-search"
+      label="Buscar"
+      (onClick)="filtrar()"
+      [outlined]="true"
+      severity="secondary"
+    />
+
+    @if (temFiltroAtivo()) {
+      <p-button
+        icon="pi pi-times"
+        label="Limpar"
+        (onClick)="limparFiltros()"
+        [text]="true"
+        severity="secondary"
+      />
+    }
+  </div>
+
+  <!-- Resultado vazio -->
+  @if (!carregando() && produtos().length === 0) {
+    <div class="text-center py-16 text-gray-400">
+      <i class="pi pi-inbox text-4xl mb-4"></i>
+      <p class="text-lg">Nenhum produto encontrado</p>
+      @if (temFiltroAtivo()) {
+        <p class="text-sm mt-2">Tente alterar os filtros de busca</p>
+      }
+    </div>
+  }
+
+  <!-- Grid de produtos -->
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    @for (produto of produtos(); track produto.id) {
+      <div
+        class="group cursor-pointer"
+        (click)="verDetalhe(produto.id)"
+      >
+        <!-- Imagem -->
+        <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
+          <img
+            [src]="produto.imagem | imagemUrl:'thumb'"
+            [alt]="produto.nome"
+            loading="lazy"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+
+        <!-- Info -->
+        <div class="space-y-1">
+          <h3 class="text-sm font-medium text-gray-800 group-hover:text-pink-700 transition-colors">
+            {{ produto.nome }}
+          </h3>
+          <p class="text-sm font-semibold text-pink-800">
+            {{ produto.precoVenda | currency:'BRL' }}
+          </p>
+
+          <!-- Cores disponíveis como bolinhas -->
+          @if (produto.variacoes.length > 0) {
+            <div class="flex gap-1 pt-1">
+              @for (cor of coresUnicas(produto); track cor) {
+                <span class="text-xs text-gray-400">{{ cor }}</span>
+                @if (!$last) {
+                  <span class="text-xs text-gray-300">·</span>
+                }
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Paginação -->
+  @if (totalElements() > size) {
+    <div class="mt-10 flex justify-center">
+      <p-paginator
+        [rows]="size"
+        [totalRecords]="totalElements()"
+        [first]="page * size"
+        (onPageChange)="onPageChange($event)"
+        [rowsPerPageOptions]="[12, 20, 40]"
+      />
+    </div>
+  }
+
+</div>

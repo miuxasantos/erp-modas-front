@@ -4,6 +4,17 @@ import { adminGuard } from '@core/guards/admin.guard';
 
 export const routes: Routes = [
     {
+        path: 'catalogo',
+        loadComponent: () =>
+            import('./layouts/public/public-layout.component')
+                .then(c => c.PublicLayoutComponent),
+        children: [
+            {
+                path: '',
+            }
+        ]
+    },
+    {
         path: '',
         canActivate: [authGuard],
         loadComponent: () =>

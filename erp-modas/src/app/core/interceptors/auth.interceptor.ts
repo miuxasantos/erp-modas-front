@@ -10,6 +10,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const token = authService.getToken();
 
+  if(req.url.includes('/catalogo') || req.url.includes('/publico/')) {
+    return next(req);
+  }
   const requisicao = token ? req.clone({
     setHeaders: { Authorization: `Bearer ${token}` }
   }) : req;
