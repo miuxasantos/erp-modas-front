@@ -1,4 +1,4 @@
-import { Directive, effect, inject, Input, TemplateRef, ViewContainerRef } from "@angular/core";
+import { Directive, effect, signal, inject, Input, TemplateRef, ViewContainerRef } from "@angular/core";
 import { AuthService } from "@core/services/auth/auth.service";
 
 type Permissao = 'isProprietario' | 'isVendedor' | 'gerenciarUsuarios' | 'gerenciarFinanceiro' | 
@@ -9,21 +9,29 @@ export class TemPermissaoDirective {
     private readonly auth = inject(AuthService);
     private readonly templateRef = inject(TemplateRef<any>);
     private readonly viewContainer = inject(ViewContainerRef);
+    private readonly permissaoAtual = signal<Permissao | null>(null);
     private renderizado = false;
 
     @Input() set temPermissao(permissao: Permissao) {
-
-        effect(() => {
-            const permitido = this.auth[permissao]();
-
-            if(permitido && !this.renderizado) {
-                this.viewContainer.createEmbeddedView(this.templateRef);
-                this.renderizado = true;
-            } else if(!permitido && this.renderizado) {
-                this.viewContainer.clear();
-                this.renderizado = false;
-            }
-        });
+        this.permissaoAtual.set(permissao);
     }
+    
+    private readonly verificarPermissao = effect(() => {
+    const permissao = this.permissaoAtual();
+
+    if (!permissao) {
+      return;
+    }
+
+    const permitido = this.auth[permissao]();
+
+    if (permitido && !this.renderizado) {
+      this.viewContainer.createEmbeddedView(this.templateRef);
+      this.renderizado = true;
+    } else if (!permitido && this.renderizado) {
+      this.viewContainer.clear();
+      this.renderizado = false;
+    }
+  });
 
 }

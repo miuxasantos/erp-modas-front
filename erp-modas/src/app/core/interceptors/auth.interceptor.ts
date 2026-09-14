@@ -23,7 +23,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         localStorage.removeItem('auth_token');
         localStorage.removeItem('auth_usuario');
         authService.logout();
-        router.navigate(['/login']);
+        router.navigate(['/auth/login']);
       }
       
       return throwError(() => error);

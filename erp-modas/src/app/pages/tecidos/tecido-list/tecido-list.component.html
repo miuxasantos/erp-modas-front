@@ -1,0 +1,141 @@
+<div class="p-4">
+    <app-page-header
+        titulo="Tecidos"
+        [breadcrumbs]="breadcrumbs"
+        botaoLabel="Novo Tecido"
+        botaoIcone="pi pi-plus"
+        (botaoClick)="abrirNovo()"
+    />
+
+    <p-table
+        [value]="tecidos"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [globalFilterFields]="['nome', 'gramatura', 'caimento', 'elasticidade']"
+        stripedRows
+    >
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="nome">Nome <p-sortIcon field="nome"/></th>
+                <th pSortableColumn="gramatura">Gramatura (g/m²) <p-sortIcon field="gramatura"/></th>
+                <th pSortableColumn="caimento">Caimento <p-sortIcon field="caimento"/></th>
+                <th pSortableColumn="elasticidade">Elasticidade <p-sortIcon field="elasticidade"/></th>
+                <th style="width: 120px">Ações</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-tecido>
+            <tr>
+                <td>{{ tecido.nome}}</td>
+                <td>{{ tecido.gramatura }}</td>
+                <td>{{ tecido.caimento }}</td>
+                <td>{{ tecido.elasticidade }}</td>
+                <td>
+                    <div class="flex gap-1">
+                        <p-button
+                            icon="pi pi-eye"
+                            [text]="true"
+                            [rounded]="true"
+                            severity="info"
+                            pTooltip="Ver detalhe"
+                            (onClick)="verDetalhe(tecido.id)"
+                        />
+                        <p-button
+                            *temPermissao="'isProprietario'"
+                            icon="pi pi-pencil"
+                            [text]="true"
+                            [rounded]="true"
+                            severity="secondary"
+                            pTooltip="Editar"
+                            (onClick)="abrirEdicao(tecido)"
+                        />
+                        <p-button
+                            *temPermissao="'isProprietario'"
+                            icon="pi pi-trash"
+                            [text]="true"
+                            [rounded]="true"
+                            severity="danger"
+                            pTooltip="Excluir"
+                            (onClick)="confirmarExclusao(tecido.id)"
+                        />
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #empty>
+            <tr>
+                <td colspan="5" class="text-center py-8 text-gray-400">
+                Nenhum tecido encontrado
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+
+    <p-dialog
+        [header]="tecidoEditando ? 'Editar Tecido' : 'Novo Tecido'"
+        [visible]="dialogVisivel()"
+        (visibleChange)="fecharDialog()"
+        [modal]="true"
+        [style]="{ width: '500px' }"
+        [draggable]="false"
+    >
+
+    <form [formGroup]="form" class="flex flex-col gap-4 pt-2">
+
+        <div class="flex flex-col gap-1">
+            <label class="text-sm text-gray-600">Nome *</label>
+            <input pInputText formControlName="nome" placeholder="Nome do tecido" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="text-sm text-gray-600">Gramatura</label>
+            <input pInputText formControlName="gramatura" placeholder="Gramatura do tecido" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="text-sm text-gray-600">Caimento</label>
+            <p-select
+            formControlName="caimento"
+            [options]="caimentos"
+            placeholder="Selecione o caimento"
+            appendTo="body"
+            class="w-full"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="text-sm text-gray-600">Elasticidade</label>
+            <p-select
+            formControlName="elasticidade"
+            [options]="elasticidades"
+            placeholder="Selecione a elasticidade"
+            appendTo="body"
+            class="w-full"
+          />
+        </div>
+        
+
+    </form>
+
+    <ng-template #footer>
+        <p-button
+            label="Cancelar"
+            [text]="true"
+            severity="secondary"
+            (onClick)="fecharDialog()"
+        />
+        <p-button
+            [label]="tecidoEditando ? 'Salvar alterações' : 'Criar tecido'"
+            icon="pi pi-check"
+            [loading]="salvando()"
+            [disabled]="form.invalid"
+            (onClick)="salvar()"
+        />
+    </ng-template>
+
+  </p-dialog>
+
+</div>

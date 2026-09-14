@@ -1,32 +1,26 @@
 <!-- layout/public-layout/footer/footer-public.component.html -->
-<footer class="bg-pink-900 text-pink-200">
+<footer class="bg-pink-900 text-pink-200 max-h-100">
 
-  <div class="px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+  <div class="px-8 py-4 grid grid-cols-1 md:grid-cols-4 gap-8">
 
     <div class="md:col-span-2">
       <p class="text-lg font-semibold tracking-widest text-pink-100 mb-3">
-        ÉLARA MODAS
+        Shirleys Modas
       </p>
       <p class="text-sm text-pink-300 leading-relaxed">
-        Moda feminina com elegância e sofisticação para todas as ocasiões.
-        Peças selecionadas com cuidado e carinho para você.
+        Rua Manoel Ribas, 779 - Centro, Paranavaí
+        <br />
+        CEP: 87701-000
+        <br />
+        Próximo ao Shopping Premiere
       </p>
-    </div>
-
-    <div>
-      <p class="text-sm font-medium text-pink-100 mb-3">Navegação</p>
-      <div class="flex flex-col gap-2">
-        <a routerLink="/"         class="text-sm text-pink-300 hover:text-pink-100 transition-colors">Início</a>
-        <a routerLink="/catalogo" class="text-sm text-pink-300 hover:text-pink-100 transition-colors">Catálogo</a>
-        <a routerLink="/contato"  class="text-sm text-pink-300 hover:text-pink-100 transition-colors">Contato</a>
-      </div>
     </div>
 
     <div>
       <p class="text-sm font-medium text-pink-100 mb-3">Fale conosco</p>
       <div class="flex flex-col gap-2">
         <a
-          href="https://instagram.com"
+          href="https://www.instagram.com/shirleysmodapvai?stkn=eGptczdtMXBxaHQz"
           target="_blank"
           class="text-sm text-pink-300 hover:text-pink-100 transition-colors flex items-center gap-2"
         >
@@ -35,24 +29,32 @@
         </a>
         
         <a
-          href="https://wa.me/5500000000000"
+          href="https://wa.me/5544999154836"
           target="_blank"
           class="text-sm text-pink-300 hover:text-pink-100 transition-colors flex items-center gap-2"
         >
           <i class="pi pi-whatsapp"></i>
           WhatsApp
         </a>
+
+        <a
+          href="mailto:shirleysmodas@gmail.com"
+          class="text-sm text-pink-300 hover:text-pink-100 transition-colors flex items-center gap-2"
+        >
+          <i class="pi pi-envelope"></i>
+          E-mail
+        </a>
       </div>
     </div>
 
   </div>
 
-  <div class="border-t border-pink-800 px-8 py-4 flex items-center justify-between">
+  <div class="px-8 py-2 flex items-center justify-between">
     <p class="text-xs text-pink-400">
-      © {{ ano }} Élara Modas. Todos os direitos reservados.
+      © {{ ano }} Shirleys Modas. Todos os direitos reservados.
     </p>
     <a
-      routerLink="/login"
+      routerLink="/auth/login"
       class="text-xs text-pink-500 hover:text-pink-300 transition-colors"
     >
       Acesso administrativo

@@ -1,4 +1,4 @@
-<div clas="p-4">
+<div class="p-4">
     <app-page-header
         titulo="Fornecedores"
         [breadcrumbs]="breadcrumbs"
@@ -28,7 +28,7 @@
             <tr>
                 <td>{{ fornecedor.nome }}</td>
                 <td>{{ fornecedor.contato }}</td>
-                <td>{{ fornecedor.assessoria }}</td>
+                <td>{{ fornecedor.assessoria?.nome ?? "—" }}</td>
                 <td>
                     <div class="flex gap-1">
                         <p-button
@@ -36,7 +36,7 @@
                             [text]="true"
                             [rounded]="true"
                             severity="info"
-                            pTooltio="Ver detalhe"
+                            pTooltip="Ver detalhe"
                             (onClick)="verDetalhe(fornecedor.id)"
                         />
                         <p-button
@@ -90,12 +90,18 @@
 
             <div class="flex flex-col gap-1">
                 <label class="text-sm text-gray-600">Contato *</label>
-                <input pInputText formControlName="contato" placeholder="Contato" />
+                <p-inputmask formControlName="contato" placeholder="(00) 00000-0000" mask="(99) 99999-9999" [unmask]="true"></p-inputmask>
             </div>
 
             <div class="flex flex-col gap-1">
-                <label class="text-sm text-gray-600">Assessoria *</label>
-                <input pInputText formControlName="assessoria" placeholder="Assessoria" />
+                <label class="text-sm text-gray-600">Assessoria</label>
+                <p-select
+                    formControlName="assessoriaId"
+                    [options]="assessorias"
+                    optionLabel="nome"
+                    optionValue="id"
+                    placeholder="Selecione a assessoria"
+                />
             </div>
         </form>
 

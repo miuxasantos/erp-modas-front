@@ -7,14 +7,13 @@ import { MenuItem } from 'primeng/api';
 import { ProdutoService } from '@core/services/produto/produto.service';
 import { CurrencyPipe } from '@angular/common';
 import { Produto } from '@core/models/produto.model';
-import { forkJoin } from 'rxjs';
 import { DatePipe } from "@angular/common";
-import { CategoriaApiService } from '@core/services/categoria-api.service';
 import { ActivatedRoute } from '@angular/router';
+import { ImagemUrlPipe } from '@core/pipes/imagens-url.pipe';
 
 @Component({
     selector: 'app-produto-detalhe',
-    imports: [ButtonModule, CardModule, CurrencyPipe, DatePipe, PageHeaderComponent],
+    imports: [ButtonModule, CardModule, CurrencyPipe, DatePipe, ImagemUrlPipe, PageHeaderComponent],
     templateUrl: './produto-detalhe.component.html',
 })
 

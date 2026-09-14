@@ -43,6 +43,9 @@ export class SidebarComponent {
                 { label: 'Fornecedores', icon: 'pi pi-home', route: '/fornecedores'},
                 { label: 'Categorias', icon: 'pi pi-list', route: '/categorias'},
                 { label: 'Cores', icon: 'pi pi-palette', route: '/cores'},
+                { label: 'Marcas', icon: 'pi pi-star', route: '/marcas'},
+                { label: 'Tecidos', icon: 'pi pi-th-large', route: '/tecidos'},
+                { label: 'Assessoria', icon: 'pi pi-briefcase', route: '/assessorias'},
             ]
         },
         {
@@ -57,7 +60,7 @@ export class SidebarComponent {
             label: 'Configurações',
             items: [
                 { label: 'Usuários', icon: 'pi pi-user', route: '/usuarios'},
-                //{ label: 'Auditoria', icon: 'pi pi-history', route: '/auditoria'},
+                { label: 'Auditoria', icon: 'pi pi-history', route: '/auditoria'},
                 { label: 'Tamanhos', icon: 'pi pi-sort-alt', route: '/tamanhos'},
                 { label: 'Administrador', icon: 'pi pi-home', route: '/dashboard'},
             ]

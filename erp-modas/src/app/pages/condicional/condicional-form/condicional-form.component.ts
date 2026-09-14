@@ -139,7 +139,7 @@ export class CondicionalFormComponent implements OnInit {
 
         this.produtosFiltrados = this.todosProdutos.filter(p =>
             p.nome.toLowerCase().includes(termo) ||
-            p.marca.toLowerCase().includes(termo) ||
+            p.marca.nome.toLowerCase().includes(termo) ||
             p.codigo.toString().includes(termo)
         );
     }
@@ -153,10 +153,10 @@ export class CondicionalFormComponent implements OnInit {
         next: variacoes => {
             this.variacoesDoProduto = variacoes.map(variacao => ({
                 ...variacao,
-                cor: this.cores.find(c => c.id === variacao.corId)
-                    ?? { id: variacao.corId, nome: '—', codigoHex: '' } as CorResponseDto,
-                tamanho: this.tamanhos.find(t => t.id === variacao.tamanhoId)
-                    ?? { id: variacao.tamanhoId, tamanho: '—' as any } as TamanhoResponseDto,
+                cor: this.cores.find(c => c.id === variacao.cor.id)
+                    ?? { id: variacao.cor.id, nome: '—', codigoHex: '' } as CorResponseDto,
+                tamanho: this.tamanhos.find(t => t.id === variacao.tamanho.id)
+                    ?? { id: variacao.tamanho.id, tamanho: '—' as any } as TamanhoResponseDto,
             })) as VariacaoEnriquecida[];
                 this.dialogVariacaoVisivel.set(true);
         },

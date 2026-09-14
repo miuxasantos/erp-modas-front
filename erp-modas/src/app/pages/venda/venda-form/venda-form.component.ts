@@ -60,6 +60,7 @@ export class VendaFormComponent implements OnInit {
     id: number | null = null;
     isEdicao = false;
     salvando = signal(false);
+    exibirNumeroParcelas = signal(false);
 
     // dados para os dropdowns
     clientes: ClienteResponseDto[] = [];
@@ -87,7 +88,7 @@ export class VendaFormComponent implements OnInit {
         clienteId: new FormControl<number | null>(null, Validators.required),
         dataVenda: [new Date(), Validators.required],
         formaPagamento: new FormControl<FormaPagamento | null>(null,Validators.required),
-        numeroParcelas: new FormControl<number | null>(null, Validators.required),
+        numeroParcelas: [1],
         desconto: new FormControl<number | null>(null),
         observacoes: [''],
         itens: this.fb.array([]),
@@ -104,7 +105,7 @@ export class VendaFormComponent implements OnInit {
     }
 
     get valorTotal(): number {
-        return this.subtotal;;
+        return this.subtotal - this.valorDesconto;
     }
 
     get valorDesconto(): number {
@@ -115,6 +116,35 @@ export class VendaFormComponent implements OnInit {
     ngOnInit(): void {
         const idParam = this.route.snapshot.paramMap.get('id');
         this.id = idParam ? Number(idParam) : null;
+        this.form.get('formaPagamento')?.valueChanges.subscribe(
+            (formaPagamento) => {
+                const controleParcelas = this.form.get('numeroParcelas');
+
+                if (formaPagamento === FormaPagamento.PIX || formaPagamento === FormaPagamento.CARTAO_DEBITO || formaPagamento === FormaPagamento.DINHEIRO || formaPagamento === FormaPagamento.BOLETO) {
+                    controleParcelas?.setValue(1);
+                    controleParcelas?.clearValidators();
+                    controleParcelas?.updateValueAndValidity();
+
+                    this.exibirNumeroParcelas.set(false);
+                } else if (formaPagamento === FormaPagamento.CARTAO_CREDITO) {
+                    controleParcelas?.setValidators([
+                        Validators.required,
+                        Validators.min(1),
+                        Validators.max(12),
+                    ]);
+
+                    controleParcelas?.updateValueAndValidity();
+
+                    this.exibirNumeroParcelas.set(true);
+                } else {
+                    controleParcelas?.setValue(1);
+                    controleParcelas?.clearValidators();
+                    controleParcelas?.updateValueAndValidity();
+
+                    this.exibirNumeroParcelas.set(false);
+                }
+            }
+        );
 
         this.carregarDados();
     }
@@ -178,7 +208,7 @@ export class VendaFormComponent implements OnInit {
 
         this.produtosFiltrados = this.todosProdutos.filter(p =>
             p.nome.toLowerCase().includes(termo) ||
-            p.marca.toLowerCase().includes(termo) ||
+            p.marca.nome.toLowerCase().includes(termo) ||
             p.codigo.toString().includes(termo)
         );
     }
@@ -193,10 +223,10 @@ export class VendaFormComponent implements OnInit {
             next: variacoes => {
                 this.variacoesDoProduto = variacoes.map(variacao => ({
                     ...variacao,
-                    cor: this.cores.find(c => c.id === variacao.corId)
-                        ?? { id: variacao.corId, nome: '—', codigoHex: '' } as CorResponseDto,
-                    tamanho: this.tamanhos.find(t => t.id === variacao.tamanhoId)
-                        ?? { id: variacao.tamanhoId, tamanho: '—' as any } as TamanhoResponseDto,
+                    cor: this.cores.find(c => c.id === variacao.cor.id)
+                        ?? { id: variacao.cor.id, nome: '—', codigoHex: '' } as CorResponseDto,
+                    tamanho: this.tamanhos.find(t => t.id === variacao.tamanho.id)
+                        ?? { id: variacao.tamanho.id, tamanho: '—' as any } as TamanhoResponseDto,
                     })) as VariacaoEnriquecida[];
                     this.dialogVariacaoVisivel.set(true);
                 },

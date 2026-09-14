@@ -1,0 +1,38 @@
+<div class="p-4">
+
+    <app-page-header
+        titulo="Detalhe do Tecido"
+        [breadcrumbs]="breadcrumbs"
+        botaoLabel="Voltar"
+        botaoIcone="pi pi-arrow-left"
+        (botaoClick)="voltar()"
+    />
+
+    @if (tecido) {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <p-card header="Dados">
+                <div class="flex flex-col gap-3">
+                    <div>
+                        <p class="text-xs text-gray-400">Nome</p>
+                        <p class="text-sm font-medium">{{ tecido.nome }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Gramatura</p>
+                        <p class="text-sm font-medium">{{ tecido.gramatura }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Caimento</p>
+                        <p class="text-sm font-medium">{{ tecido.caimento }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Elasticidade</p>
+                        <p class="text-sm font-medium">{{ tecido.elasticidade }}</p>
+                    </div>
+                </div>
+            </p-card>
+
+        </div>
+    }
+
+</div>

@@ -1,5 +1,5 @@
 export enum Elasticidade {
-    BAIXA_ELASTICIDADE = 'Baixa elasticidade',
-    ALTA_ELASTICIDADE = 'Alta elasticidade',
-    MEDIA_ELASTICIDADE = 'Média elasticidade',
+    BAIXA_ELASTICIDADE = 'Baixa Elasticidade',
+    ALTA_ELASTICIDADE = 'Alta Elasticidade',
+    MEDIA_ELASTICIDADE = 'Média Elasticidade',
 }

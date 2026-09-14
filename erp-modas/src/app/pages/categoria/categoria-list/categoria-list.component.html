@@ -1,8 +1,8 @@
-<div clas="p-4">
+<div class="p-4">
     <app-page-header
         titulo="Categorias"
         [breadcrumbs]="breadcrumbs"
-        botaoLabel="Novo Categoria"
+        botaoLabel="Nova Categoria"
         botaoIcone="pi pi-plus"
         (botaoClick)="abrirNovo()"
     />
@@ -32,7 +32,7 @@
                             [text]="true"
                             [rounded]="true"
                             severity="info"
-                            pTooltio="Ver detalhe"
+                            pTooltip="Ver detalhe"
                             (onClick)="verDetalhe(categoria.id)"
                         />
                         <p-button

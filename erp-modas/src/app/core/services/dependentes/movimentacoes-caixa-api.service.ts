@@ -4,7 +4,6 @@ import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
 import { MovimentacoesCaixaResponseDto } from "@core/dtos/dependentes/movimentacoesCaixa/movimentacoes-caixa-response.dto";
 import { MovimentacoesCaixaRequestDto } from "@core/dtos/dependentes/movimentacoesCaixa/movimentacoes-caixa-request.dto";
-import { MovimentacoesCaixaUpdateDto } from "@core/dtos/movimentacoesCaixa/movimentacoes-caixa-update.dto";
 
 @Injectable({ providedIn: 'root' })
 export class MovimentacoesCaixaApiService {
@@ -25,10 +24,6 @@ export class MovimentacoesCaixaApiService {
 
     create(dto: MovimentacoesCaixaRequestDto): Observable<MovimentacoesCaixaResponseDto> {
         return this.http.post<MovimentacoesCaixaResponseDto>(this.url, dto);
-    }
-
-    update(id: number, dto: MovimentacoesCaixaUpdateDto): Observable<MovimentacoesCaixaResponseDto> {
-        return this.http.put<MovimentacoesCaixaResponseDto>(`${this.url}/${id}`, dto);
     }
 
     delete(id: number): Observable<void> {

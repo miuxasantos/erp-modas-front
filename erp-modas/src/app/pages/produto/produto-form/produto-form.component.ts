@@ -130,8 +130,8 @@ export class ProdutoFormComponent implements OnInit {
 
     this.uploading.set(true);
     this.uploadApi.uploadImagem(arquivo).subscribe({
-      next: ({ url }) => {
-        this.form.patchValue({ imagem: url });
+      next: ({ caminho }) => {
+        this.form.patchValue({ imagem: caminho });
         this.uploading.set(false);
       },
       error: () => this.uploading.set(false),

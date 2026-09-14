@@ -218,8 +218,8 @@ export class VariacoesProdutoComponent implements OnInit {
         // upload e salva URL no form
         this.uploadingEsp.set(true);
         this.uploadApi.uploadImagem(arquivo).subscribe({
-            next: ({ url }) => {
-                this.formGrade.patchValue({ imagemEsp: url });
+            next: ({ caminho }) => {
+                this.formGrade.patchValue({ imagemEsp: caminho });
                 this.uploadingEsp.set(false);
             },
         error: () => this.uploadingEsp.set(false),

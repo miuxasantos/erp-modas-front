@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from "@angular/core";
 import { PageHeaderComponent } from "@shared/components/page-header/page-header.component";
 import { ButtonModule } from "primeng/button";
 import { DialogModule } from "primeng/dialog";
+import { InputMaskModule } from 'primeng/inputmask';
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { TableModule } from "primeng/table";
 import { InputTextModule } from "primeng/inputtext";
@@ -19,6 +20,7 @@ import { TemPermissaoDirective } from "@core/directives/tem-permissao.directive"
         TableModule,
         ButtonModule,
         DialogModule,
+        InputMaskModule,
         InputTextModule,
         TagModule,
         PageHeaderComponent,
@@ -47,7 +49,7 @@ export class ClienteListComponent implements OnInit {
     form = this.fb.group({
         nome: ['', Validators.required],
         contato: ['', Validators.required],
-        documento: [''],
+        documento: ['', Validators.required],
         rua: [''],
         numero: [''],
         bairro: [''],

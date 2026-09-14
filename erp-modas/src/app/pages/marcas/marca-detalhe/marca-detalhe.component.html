@@ -1,0 +1,30 @@
+<div class="p-4">
+
+    <app-page-header
+        titulo="Detalhe da Marca"
+        [breadcrumbs]="breadcrumbs"
+        botaoLabel="Voltar"
+        botaoIcone="pi pi-arrow-left"
+        (botaoClick)="voltar()"
+    />
+
+    @if (marca) {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <p-card header="Dados">
+                <div class="flex flex-col gap-3">
+                    <div>
+                        <p class="text-xs text-gray-400">Nome</p>
+                        <p class="text-sm font-medium">{{ marca.nome }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Observações</p>
+                        <p class="text-sm font-medium">{{ marca.observacoes }}</p>
+                    </div>
+                </div>
+            </p-card>
+
+        </div>
+    }
+
+</div>

@@ -11,7 +11,24 @@ export const routes: Routes = [
         children: [
             {
                 path: '',
+                loadChildren: () =>
+                    import('./pages/catalogo/catalogo.routes')
+                    .then(c => c.catalogoRoutes)
             }
+        ]
+    },
+    {
+        path: 'auth',
+        loadComponent: () => 
+            import('./layouts/auth/auth-layout.component')
+                .then(c => c.AuthLayoutComponent),
+        children: [
+            {
+                path: 'login',
+                loadComponent: () =>
+                    import('./pages/auth/login/login-page.component')
+                        .then(c => c.LoginComponent),
+            },
         ]
     },
     {
@@ -21,6 +38,12 @@ export const routes: Routes = [
             import('./layouts/main-layout/main-layout.component')
                 .then(c => c.MainLayoutComponent),
         children: [
+            {
+                path: 'dashboard',
+                loadChildren: () =>
+                    import('./pages/produto/produto.routes')
+                        .then(m => m.produtosRoutes)
+            },
             {
                 path: 'produtos',
                 loadChildren: () =>
@@ -44,6 +67,24 @@ export const routes: Routes = [
                 loadChildren: () =>
                     import('./pages/tamanhos/tamanho.routes')
                         .then(m => m.tamanhosRoutes)
+            },
+            {
+                path: 'tecidos',
+                loadChildren: () =>
+                    import('./pages/tecidos/tecido.routes')
+                        .then(m => m.tecidosRoutes)
+            },
+            {
+                path: 'marcas',
+                loadChildren: () =>
+                    import('./pages/marcas/marca.routes')
+                        .then(m => m.marcasRoutes)
+            },
+            {
+                path: 'assessorias',
+                loadChildren: () =>
+                    import('./pages/assessoria/assessoria.routes')
+                        .then(m => m.assessoriaRoutes)
             },
             {
                 path: 'usuarios',

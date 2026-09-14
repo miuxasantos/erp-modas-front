@@ -8,11 +8,11 @@ export class UploadApiService {
   private readonly http = inject(HttpClient);
   private readonly url  = `${environment.apiUrl}/uploads`;
 
-  uploadImagem(arquivo: File): Observable<{ url: string }> {
+  uploadImagem(arquivo: File): Observable<{ caminho: string }> {
     const formData = new FormData();
     formData.append('arquivo', arquivo);
 
-    return this.http.post<{ url: string }>(
+    return this.http.post<{ caminho: string }>(
       `${this.url}/imagem`,
       formData
     );

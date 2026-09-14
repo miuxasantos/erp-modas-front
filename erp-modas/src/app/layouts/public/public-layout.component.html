@@ -1,7 +1,8 @@
 <div class="min-h-screen flex flex-col">
     <app-navbar-public />
-    <main class="flex-1">
+    <main class="flex-1 min-h-[calc(100vh-64px)]">
         <router-outlet />
     </main>
-    <app-footer-public />
+    <app-footer-public 
+    class="max-h-100"/>
 </div>

@@ -4,7 +4,7 @@ import { Usuario } from "../usuario.model";
 
 export class Auditoria {
     id: number;
-    usuario: Usuario;
+    usuarioId: number;
     tipoAcaoAud: TipoAcaoAud;
     entidade: string;
     entidadeId: number;
@@ -12,7 +12,7 @@ export class Auditoria {
 
     constructor(dto: AuditoriaResponseDto) {
         this.id = dto.id;
-        this.usuario = new Usuario(dto.usuario);
+        this.usuarioId = dto.usuarioId;
         this.tipoAcaoAud = dto.tipoAcaoAud;
         this.entidade = dto.entidade;
         this.entidadeId = dto.entidadeId;

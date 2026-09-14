@@ -1,4 +1,4 @@
-<div clas="p-4">
+<div class="p-4">
     <app-page-header
         titulo="Clientes"
         [breadcrumbs]="breadcrumbs"
@@ -38,7 +38,7 @@
                             [text]="true"
                             [rounded]="true"
                             severity="info"
-                            pTooltio="Ver detalhe"
+                            pTooltip="Ver detalhe"
                             (onClick)="verDetalhe(cliente.id)"
                         />
                         <p-button
@@ -92,12 +92,12 @@
 
             <div class="flex flex-col gap-1">
                 <label class="text-sm text-gray-600">Contato *</label>
-                <input pInputText formControlName="contato" placeholder="Telefone ou email" />
+                <p-inputmask formControlName="contato" placeholder="(00) 00000-0000" mask="(99) 99999-9999" [unmask]="true"></p-inputmask>
             </div>
 
             <div class="flex flex-col gap-1">
                 <label class="text-sm text-gray-600">Documento</label>
-                <input pInputText formControlName="documento" placeholder="CPF ou CNPJ" />
+                <p-inputmask formControlName="documento" placeholder="000.000.000-00" mask="999.999.999-99" [unmask]="true"></p-inputmask>
             </div>
 
             <div class="grid grid-cols-2 gap-3">

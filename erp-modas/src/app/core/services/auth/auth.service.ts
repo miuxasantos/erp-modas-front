@@ -34,9 +34,10 @@ export class AuthService {
     login(dto: LoginRequestDto): Observable<void> {
         return this.api.login(dto).pipe(
             tap(response => {
+                const usuario = response.usuarioResponseDTO;
                 localStorage.setItem(this.TOKEN_KEY, response.token);
-                localStorage.setItem(this.USUARIO_KEY, JSON.stringify(response.usuario));
-                this._usuario.set(new Usuario(response.usuario));
+                localStorage.setItem(this.USUARIO_KEY, JSON.stringify(usuario));
+                this._usuario.set(new Usuario(usuario));
                 this.router.navigate(['/dashboard']);
             }),
             map(() => void 0)
@@ -60,16 +61,29 @@ export class AuthService {
 
     private getUsuarioStorage(): Usuario | null {
         const raw = localStorage.getItem(this.USUARIO_KEY);
-        if(!raw) return null;
-        const dto = JSON.parse(raw) as UsuarioResponseDto;
-        return new Usuario(dto); 
+
+        if (typeof raw !== 'string' || raw.trim().length === 0) {
+            return null;
+        }
+
+        try {
+            const dto = JSON.parse(raw) as UsuarioResponseDto;
+            return new Usuario(dto);
+        } catch (error) {
+            console.error('Erro ao ler usuário salvo:', error);
+
+            localStorage.removeItem(this.USUARIO_KEY);
+            localStorage.removeItem(this.TOKEN_KEY);
+
+            return null;
+        }
     }
 
     private limparEDirecionar(): void {
         localStorage.removeItem(this.TOKEN_KEY);
         localStorage.removeItem(this.USUARIO_KEY);
         this._usuario.set(null);
-        this.router.navigate(['/login']);
+        this.router.navigate(['/auth/login']);
     }
 
 }

@@ -2,8 +2,10 @@ import { Component, inject, OnInit, signal } from "@angular/core";
 import { PageHeaderComponent } from "@shared/components/page-header/page-header.component";
 import { ButtonModule } from "primeng/button";
 import { DialogModule } from "primeng/dialog";
-import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { SelectModule } from 'primeng/select';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
 import { TableModule } from "primeng/table";
+import { InputMaskModule } from 'primeng/inputmask';
 import { InputTextModule } from "primeng/inputtext";
 import { TagModule } from "primeng/tag"
 import { ConfirmationService, MenuItem, MessageService } from "primeng/api";
@@ -11,6 +13,8 @@ import { Router } from "@angular/router";
 import { FornecedorApiService } from "@core/services/fornecedor-api.service";
 import { FornecedorResponseDto } from "@core/dtos/fornecedor/fornecedor-response.dto";
 import { TemPermissaoDirective } from "@core/directives/tem-permissao.directive";
+import { AssessoriaApiService } from "@core/services/assessoria-api.service";
+import { AssessoriaResponseDto } from "@core/dtos/assessoria/assessoria-response.dto";
 
 @Component({
     selector: 'app-fornecedor-list',
@@ -19,7 +23,9 @@ import { TemPermissaoDirective } from "@core/directives/tem-permissao.directive"
         TableModule,
         ButtonModule,
         DialogModule,
+        InputMaskModule,
         InputTextModule,
+        SelectModule,
         TagModule,
         PageHeaderComponent,
         TemPermissaoDirective
@@ -29,6 +35,7 @@ import { TemPermissaoDirective } from "@core/directives/tem-permissao.directive"
 
 export class FornecedorListComponent implements OnInit {
     private readonly fornecedorApi = inject(FornecedorApiService);
+    private readonly assessoriaApi = inject(AssessoriaApiService);
     private readonly confirmationService = inject(ConfirmationService);
     private readonly messageService = inject(MessageService);
     private readonly router = inject(Router);
@@ -38,6 +45,7 @@ export class FornecedorListComponent implements OnInit {
     dialogVisivel = signal(false);
     salvando = signal(false);
     fornecedorEditando: FornecedorResponseDto | null = null;
+    assessorias: AssessoriaResponseDto[] = [];
 
     breadcrumbs: MenuItem[] = [
         {label: 'Dashboard', routerLink: '/dashboard'},
@@ -47,10 +55,15 @@ export class FornecedorListComponent implements OnInit {
     form = this.fb.group({
         nome: ['', Validators.required],
         contato: ['', Validators.required],
-        assessoria: [''],
+        assessoriaId: new FormControl<number | null>(null),
     });
 
     ngOnInit(): void {
+        this.assessoriaApi.getAll().subscribe({
+            next: assessorias => {
+                this.assessorias = assessorias;
+            },
+        });
         this.carregar();
     }
 
@@ -68,7 +81,11 @@ export class FornecedorListComponent implements OnInit {
 
     abrirEdicao(fornecedor: FornecedorResponseDto): void {
         this.fornecedorEditando = fornecedor;
-        this.form.patchValue(fornecedor);
+        this.form.patchValue({
+            nome: fornecedor.nome,
+            contato: fornecedor.contato,
+            assessoriaId: fornecedor.assessoria?.id ?? null,
+        });
         this.dialogVisivel.set(true);
     }
 

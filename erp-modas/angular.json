@@ -67,12 +67,15 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {},
           "configurations": {
             "production": {
-              "buildTarget": "erp-modas:build:production"
+              "buildTarget": "erp-modas:build:production",
+              "proxyConfig": "proxy.config.json"
             },
             "development": {
-              "buildTarget": "erp-modas:build:development"
+              "buildTarget": "erp-modas:build:development",
+              "proxyConfig": "proxy.config.json"
             }
           },
           "defaultConfiguration": "development"
