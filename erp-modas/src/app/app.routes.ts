@@ -125,7 +125,6 @@ export const routes: Routes = [
             },
             {
                 path: 'financeiro',
-                canActivate: [adminGuard],
                 loadChildren: () =>
                     import('./pages/financeiro/financeiro.routes')
                         .then(m => m.financeiroRoutes)

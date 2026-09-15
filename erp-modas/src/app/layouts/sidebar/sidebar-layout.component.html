@@ -15,7 +15,7 @@
   </div>
 
   <nav class="flex-1 overflow-y-auto py-4 px-3">
-    @for (group of navGroups; track group.label) {
+    @for (group of gruposVisiveis(); track group.label) {
 
       <span class="text-xs font-semibold text-gray-400 uppercase px-3 mb-1 block">
         {{ group.label }}

@@ -1,13 +1,15 @@
-import { Component, input, output } from "@angular/core";
+import { Component, input, output, inject, computed } from "@angular/core";
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { ButtonModule } from "primeng/button";
 import { DividerModule } from "primeng/divider";
 import { NgClass } from "@angular/common";
+import { AuthService } from "../../core/services/auth/auth.service";
 
 interface NavItem {
     label: string;
     icon: string;
     route: string;
+    visivel?: () => boolean;
 }
 
 interface NavGroup {
@@ -22,6 +24,7 @@ interface NavGroup {
 })
 
 export class SidebarComponent {
+    private readonly auth = inject(AuthService);
     visivel = input<boolean>(false);
     fechar = output<void>();
 
@@ -52,30 +55,32 @@ export class SidebarComponent {
             label: 'Financeiro',
             items: [
                 { label: 'Caixa', icon: 'pi pi-wallet', route: '/financeiro/caixa'},
-                { label: 'Contas a Pagar', icon: 'pi pi-arrow-down-left', route: '/financeiro/contas-pagar'},
-                { label: 'Contas a Receber', icon: 'pi pi-arrow-up-right', route: '/financeiro/contas-receber'},
+                { label: 'Contas a Pagar', icon: 'pi pi-arrow-down-left', route: '/financeiro/contas-pagar', visivel: () => this.auth.isProprietario()},
+                { label: 'Contas a Receber', icon: 'pi pi-arrow-up-right', route: '/financeiro/contas-receber', visivel: () => this.auth.isProprietario()},
             ]
         },
         {
             label: 'Configurações',
             items: [
-                { label: 'Usuários', icon: 'pi pi-user', route: '/usuarios'},
-                { label: 'Auditoria', icon: 'pi pi-history', route: '/auditoria'},
+                { label: 'Usuários', icon: 'pi pi-user', route: '/usuarios', visivel: () => this.auth.isProprietario()},
+                { label: 'Auditoria', icon: 'pi pi-history', route: '/auditoria', visivel: () => this.auth.isProprietario() },
                 { label: 'Tamanhos', icon: 'pi pi-sort-alt', route: '/tamanhos'},
-                { label: 'Administrador', icon: 'pi pi-home', route: '/dashboard'},
-            ]
-        },
-        {
-            label: 'Acesso',
-            items: [
-                { label: 'Login', icon: 'pi pi-sign-in', route: '/login'},
             ]
         },
         {
             label: 'Relatórios',
             items: [
-                { label: 'Vendas', icon: 'pi pi-chart-line', route: '/relatorios/vendas'},
+                { label: 'Vendas', icon: 'pi pi-chart-line', route: '/relatorios/vendas', visivel: () => this.auth.isProprietario()},
             ]
         }
-    ]
+    ];
+
+    gruposVisiveis = computed(() =>
+        this.navGroups
+        .map(group => ({
+            ...group,
+            items: group.items.filter(item => !item.visivel || item.visivel()),
+        }))
+        .filter(group => group.items.length > 0)
+    );
 }

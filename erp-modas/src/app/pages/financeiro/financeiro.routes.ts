@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { adminGuard } from '@core/guards/admin.guard';
 
 export const financeiroRoutes: Routes = [
     {
@@ -9,12 +10,14 @@ export const financeiroRoutes: Routes = [
     },
     {
         path: 'contas-receber',
+        canActivate: [adminGuard],
         loadComponent: () =>
         import('./contas-receber/contas-receber.component')
             .then(c => c.ContasReceberComponent),
     },
     {
         path: 'contas-pagar',
+        canActivate: [adminGuard],
         loadComponent: () =>
         import('./contas-pagar/contas-pagar.component')
             .then(c => c.ContasPagarComponent),
