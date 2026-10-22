@@ -1,6 +1,7 @@
 <div class="p-4 flex flex-col gap-4">
 
     <app-page-header
+        *temPermissao="'isProprietario'"
         titulo="Caixa"
         [breadcrumbs]="breadcrumbs"
         botaoLabel="Histórico"
@@ -45,6 +46,7 @@
             />
             } @else {
             <p-button
+                *temPermissao="'isProprietario'"
                 label="Fechar Caixa"
                 icon="pi pi-lock"
                 severity="danger"
@@ -57,7 +59,7 @@
 
         <!-- Resumo financeiro — só quando aberto -->
         @if (caixaAberto() && caixaAtual()) {
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-6 border-t border-gray-100">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-6 border-t border-gray-100" *temPermissao="'isProprietario'">
             <div class="text-center">
             <p class="text-xs text-gray-400 mb-1">Saldo Abertura</p>
             <p class="text-lg font-medium text-gray-700">
@@ -88,7 +90,7 @@
 
     <!-- Movimentações do caixa atual -->
     @if (caixaAberto() && movimentacoes.length) {
-        <p-card header="Movimentações de hoje">
+        <p-card header="Movimentações de hoje" *temPermissao="'isProprietario'">
         <p-table [value]="movimentacoes" [paginator]="true" [rows]="10" stripedRows>
             <ng-template #header>
             <tr>

@@ -15,6 +15,8 @@ import { CaixaService } from '@core/services/caixa/caixa.service';
 import { MovimentacoesCaixaApiService } from '@core/services/dependentes/movimentacoes-caixa-api.service';
 import { MovimentacoesCaixaResponseDto } from '@core/dtos/dependentes/movimentacoesCaixa/movimentacoes-caixa-response.dto';
 import { TipoMovCaixa } from '@core/enums/tipo-mov-caixa.enum';
+import { TemPermissaoDirective } from '@core/directives/tem-permissao.directive';
+import { AuthService } from '@core/services/auth/auth.service';
 
 @Component({
     selector: 'app-caixa-atual',
@@ -22,6 +24,7 @@ import { TipoMovCaixa } from '@core/enums/tipo-mov-caixa.enum';
         ReactiveFormsModule, ButtonModule, CardModule,
         DialogModule, InputNumberModule, TableModule,
         TagModule, CurrencyPipe, DatePipe, PageHeaderComponent,
+        TemPermissaoDirective
     ],
     templateUrl: './caixa-atual.component.html',
 })
@@ -31,6 +34,7 @@ export class CaixaAtualComponent implements OnInit {
     private readonly messageService = inject(MessageService);
     private readonly router = inject(Router);
     private readonly fb = inject(FormBuilder);
+    protected readonly auth = inject(AuthService);
 
     caixaAtual = this.caixaService.caixaAtual;
     caixaAberto = this.caixaService.caixaAberto;
@@ -58,11 +62,13 @@ export class CaixaAtualComponent implements OnInit {
     ngOnInit(): void {
         this.caixaService.carregarCaixaAtual().subscribe({
             next: caixa => {
-                if (caixa?.id) this.carregarMovimentacoes(caixa.id);
+                if (caixa?.id && this.auth.isProprietario()) {
+                    this.carregarMovimentacoes(caixa.id);
+                }
             },
             error: (err) => {
                 this.movimentacoes = [];
-                if (err.status === 500) {
+                if (err.status === 404) {
                     this.messageService.add({
                         severity: 'info',
                         summary: 'Caixa',
@@ -70,17 +76,16 @@ export class CaixaAtualComponent implements OnInit {
                     });
                     return;
                 }
-
-                this.messageService.add({
-                severity: 'error',
-                summary: 'Erro',
-                detail: 'Erro ao carregar caixa atual'
-                });
             }
         });
     }
 
     carregarMovimentacoes(caixaId: number): void {
+        if(!this.auth.isProprietario()) {
+            this.movimentacoes = [];
+            return;
+        }
+
         this.movimentacaoApi.getByCaixa(caixaId).subscribe({
         next: movs => this.movimentacoes = movs,
         });
@@ -99,7 +104,9 @@ export class CaixaAtualComponent implements OnInit {
                 });
                 this.dialogAbrirVisivel.set(false);
                 this.formAbrir.reset({ saldoAbertura: 0 });
-                this.carregarMovimentacoes(caixa.id);
+                if(this.auth.isProprietario()) {
+                    this.carregarMovimentacoes(caixa.id);
+                };
                 this.processando.set(false);
             },
             error: () => this.processando.set(false),

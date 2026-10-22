@@ -3,10 +3,20 @@
   <app-page-header
     [titulo]="isEdicao ? 'Editar Produto' : 'Novo Produto'"
     [breadcrumbs]="breadcrumbs"
-    botaoLabel="Cancelar"
+    [botaoLabel]="modoCompra ? 'Voltar para a compra' : 'Cancelar'"
     botaoIcone="pi pi-times"
     (botaoClick)="cancelar()"
   />
+
+  @if (modoCompra) {
+    <div class="flex items-center gap-3 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 mb-4 text-sm text-blue-800">
+      <i class="pi pi-shopping-cart"></i>
+      <span>
+        Cadastrando produto para a compra em andamento. Depois de salvar, você cadastra as variações
+        e volta para a compra com elas já adicionadas.
+      </span>
+    </div>
+  }
 
   <form [formGroup]="form">
     <p-card header="Dados do produto">

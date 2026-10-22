@@ -1,122 +1,276 @@
 <!-- pages/catalogo/catalogo-list/catalogo-list.component.html -->
-<div class="px-6 py-8 max-w-7xl mx-auto">
+<div class="max-w-7xl mx-auto px-4 py-6 md:px-6">
 
-  <!-- Cabeçalho -->
-  <div class="text-center mb-8">
-    <h1 class="text-3xl font-light tracking-widest text-pink-900 mb-2">CATÁLOGO</h1>
-    <p class="text-gray-500 text-sm">Confira nossas peças disponíveis</p>
-  </div>
+  <app-page-header
+    titulo="Catálogo"
+    [breadcrumbs]="breadcrumbs"
+    [botaoVisivel]="false"
+  />
 
   <!-- Filtros -->
-  <div class="flex flex-wrap items-end gap-4 mb-8">
-    <div class="flex-1 min-w-[200px]">
-      <label class="text-xs text-gray-500 mb-1 block">Buscar</label>
-      <input
-        pInputText
-        [(ngModel)]="busca"
-        placeholder="Nome do produto..."
-        class="w-full"
-        (keyup.enter)="filtrar()"
-      />
-    </div>
+  <section class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
 
-    <div class="w-48">
-      <label class="text-xs text-gray-500 mb-1 block">Categoria</label>
-      <p-select
-        [(ngModel)]="categoriaSelecionada"
-        [options]="categorias()"
-        optionLabel="nome"
-        optionValue="id"
-        placeholder="Todas"
-        [showClear]="true"
-        class="w-full"
-        (onChange)="filtrar()"
-      />
-    </div>
+    <!-- Linha 1: busca + botão de filtros (mobile) -->
+    <div class="flex gap-2">
+      <p-iconfield class="flex-1 min-w-0">
+        <p-inputicon styleClass="pi pi-search" />
+        <input
+          pInputText
+          type="search"
+          [(ngModel)]="busca"
+          placeholder="Buscar produtos..."
+          class="w-full"
+          aria-label="Buscar produtos"
+          (keyup.enter)="filtrar()"
+        />
+      </p-iconfield>
 
-    <p-button
-      icon="pi pi-search"
-      label="Buscar"
-      (onClick)="filtrar()"
-      [outlined]="true"
-      severity="secondary"
-    />
-
-    @if (temFiltroAtivo()) {
       <p-button
-        icon="pi pi-times"
-        label="Limpar"
-        (onClick)="limparFiltros()"
-        [text]="true"
+        label="Buscar"
+        icon="pi pi-search"
+        [outlined]="true"
         severity="secondary"
+        styleClass="max-sm:!hidden"
+        (onClick)="filtrar()"
       />
-    }
-  </div>
+
+      <!-- Só no mobile: abre/fecha os selects -->
+      <p-button
+        icon="pi pi-sliders-h"
+        [label]="qtdFiltrosAtivos() ? 'Filtros (' + qtdFiltrosAtivos() + ')' : 'Filtros'"
+        [outlined]="!filtrosAbertos()"
+        severity="secondary"
+        styleClass="md:!hidden whitespace-nowrap"
+        [attr.aria-expanded]="filtrosAbertos()"
+        (onClick)="alternarFiltros()"
+      />
+    </div>
+
+    <!-- Linha 2: selects (recolhidos no mobile) -->
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mt-4"
+      [ngClass]="{ 'max-md:hidden': !filtrosAbertos() }"
+    >
+      <div class="flex flex-col gap-1">
+        <label for="filtro-categoria" class="text-xs text-gray-400">Categoria</label>
+        <p-select
+          inputId="filtro-categoria"
+          [(ngModel)]="categoriaId"
+          [options]="opcoes().categorias"
+          optionLabel="nome"
+          optionValue="id"
+          placeholder="Todas"
+          [showClear]="true"
+          styleClass="w-full"
+          (onChange)="filtrar()"
+        />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="filtro-cor" class="text-xs text-gray-400">Cor</label>
+        <p-select
+          inputId="filtro-cor"
+          [(ngModel)]="corId"
+          [options]="opcoes().cores"
+          optionLabel="nome"
+          optionValue="id"
+          placeholder="Todas"
+          [showClear]="true"
+          [filter]="opcoes().cores.length > 8"
+          filterBy="nome"
+          styleClass="w-full"
+          (onChange)="filtrar()"
+        >
+          <ng-template #item let-cor>
+            <div class="flex items-center gap-2">
+              <span
+                class="w-4 h-4 rounded-full border border-gray-300 shrink-0"
+                [style.background-color]="corCss(cor)"
+              ></span>
+              <span>{{ cor.nome }}</span>
+            </div>
+          </ng-template>
+        </p-select>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="filtro-tamanho" class="text-xs text-gray-400">Tamanho</label>
+        <p-select
+          inputId="filtro-tamanho"
+          [(ngModel)]="tamanhoId"
+          [options]="opcoes().tamanhos"
+          optionLabel="tamanho"
+          optionValue="id"
+          placeholder="Todos"
+          [showClear]="true"
+          styleClass="w-full"
+          (onChange)="filtrar()"
+        />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="filtro-ordem" class="text-xs text-gray-400">Ordenar por</label>
+        <p-select
+          inputId="filtro-ordem"
+          [(ngModel)]="ordenacao"
+          [options]="opcoesOrdenacao"
+          optionLabel="label"
+          optionValue="value"
+          styleClass="w-full"
+          (onChange)="filtrar()"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Resumo do resultado + filtros ativos -->
+  @if (!primeiraCarga()) {
+    <div class="flex flex-wrap items-center gap-2 mb-4 min-h-8">
+      <span class="text-sm text-gray-500 mr-1">
+        {{ totalElements() }} {{ totalElements() === 1 ? 'produto encontrado' : 'produtos encontrados' }}
+      </span>
+
+      @for (chip of chipsAtivos(); track chip.label) {
+        <button
+          type="button"
+          class="inline-flex items-center gap-1.5 text-xs bg-pink-50 text-pink-800 border border-pink-200 rounded-full pl-3 pr-2 py-1 hover:bg-pink-100 transition-colors"
+          [attr.aria-label]="'Remover filtro ' + chip.label"
+          (click)="removerChip(chip.limpar)"
+        >
+          {{ chip.label }}
+          <i class="pi pi-times text-[10px]"></i>
+        </button>
+      }
+
+      @if (temFiltroAtivo()) {
+        <p-button
+          label="Limpar tudo"
+          [text]="true"
+          size="small"
+          severity="secondary"
+          (onClick)="limparFiltros()"
+        />
+      }
+    </div>
+  }
+
+  <!-- Carregamento inicial -->
+  @if (primeiraCarga()) {
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+      @for (s of skeleton; track $index) {
+        <div>
+          <p-skeleton styleClass="!w-full !h-auto aspect-[3/4] mb-3" borderRadius="0.75rem" />
+          <p-skeleton width="80%" height="1rem" styleClass="mb-2" />
+          <p-skeleton width="40%" height="1rem" />
+        </div>
+      }
+    </div>
+  }
 
   <!-- Resultado vazio -->
-  @if (!carregando() && produtos().length === 0) {
-    <div class="text-center py-16 text-gray-400">
+  @else if (!carregando() && produtos().length === 0) {
+    <div class="bg-white border border-gray-200 rounded-xl text-center py-16 px-4 text-gray-400">
       <i class="pi pi-inbox text-4xl mb-4"></i>
-      <p class="text-lg">Nenhum produto encontrado</p>
+      <p class="text-lg text-gray-600">Nenhum produto encontrado</p>
       @if (temFiltroAtivo()) {
-        <p class="text-sm mt-2">Tente alterar os filtros de busca</p>
+        <p class="text-sm mt-2 mb-4">Tente remover algum filtro ou buscar outro termo.</p>
+        <p-button
+          label="Limpar filtros"
+          icon="pi pi-filter-slash"
+          [outlined]="true"
+          severity="secondary"
+          (onClick)="limparFiltros()"
+        />
       }
     </div>
   }
 
   <!-- Grid de produtos -->
-  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    @for (produto of produtos(); track produto.id) {
-      <div
-        class="group cursor-pointer"
-        (click)="verDetalhe(produto.id)"
-      >
-        <!-- Imagem -->
-        <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
-          <img
-            [src]="produto.imagem | imagemUrl:'thumb'"
-            [alt]="produto.nome"
-            loading="lazy"
-            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-        </div>
+  @else {
+    <div
+      class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 transition-opacity"
+      [class.opacity-50]="carregando()"
+      [attr.aria-busy]="carregando()"
+    >
+      @for (produto of produtos(); track produto.id) {
+        <a
+          [routerLink]="['/catalogo', produto.id]"
+          [state]="estadoNavegacao()"
+          class="group flex flex-col bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md hover:border-pink-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+        >
+          <!-- Imagem -->
+          <div class="relative aspect-[3/4] bg-gray-100 overflow-hidden">
+            @if (produto.imagem) {
+              <img
+                [src]="produto.imagem | imagemUrl:'thumb'"
+                [alt]="produto.nome"
+                loading="lazy"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                [class.opacity-60]="esgotado(produto)"
+                (error)="onImagemErro($event, produto)"
+              />
+            } @else {
+              <div class="w-full h-full flex items-center justify-center text-gray-300">
+                <i class="pi pi-image text-4xl"></i>
+              </div>
+            }
 
-        <!-- Info -->
-        <div class="space-y-1">
-          <h3 class="text-sm font-medium text-gray-800 group-hover:text-pink-700 transition-colors">
-            {{ produto.nome }}
-          </h3>
-          <p class="text-sm font-semibold text-pink-800">
-            {{ produto.precoVenda | currency:'BRL' }}
-          </p>
+            @if (esgotado(produto)) {
+              <p-tag value="Esgotado" severity="secondary" styleClass="absolute top-2 left-2" />
+            }
+          </div>
 
-          <!-- Cores disponíveis como bolinhas -->
-          @if (produto.variacoes.length > 0) {
-            <div class="flex gap-1 pt-1">
-              @for (cor of coresUnicas(produto); track cor) {
-                <span class="text-xs text-gray-400">{{ cor }}</span>
-                @if (!$last) {
-                  <span class="text-xs text-gray-300">·</span>
-                }
+          <!-- Info -->
+          <div class="flex flex-col gap-1 p-3 flex-1">
+            @if (produto.categoria) {
+              <span class="text-[11px] uppercase tracking-wide text-gray-400 truncate">
+                {{ produto.categoria.nome }}
+              </span>
+            }
+
+            <h3 class="text-sm font-medium text-gray-800 line-clamp-2 group-hover:text-pink-700 transition-colors">
+              {{ produto.nome }}
+            </h3>
+
+            <div class="mt-auto pt-1 flex items-center justify-between gap-2">
+              <span class="text-sm md:text-base font-semibold text-pink-800">
+                {{ produto.precoVenda | currency:'BRL' }}
+              </span>
+
+              <!-- Bolinhas de cor -->
+              @if (coresVisiveis(produto).length > 0) {
+                <div class="flex items-center -space-x-1 shrink-0">
+                  @for (cor of coresVisiveis(produto); track cor.id) {
+                    <span
+                      class="w-3.5 h-3.5 rounded-full border border-white ring-1 ring-gray-300"
+                      [style.background-color]="corCss(cor)"
+                      [title]="cor.nome"
+                    ></span>
+                  }
+                  @if (coresExcedentes(produto) > 0) {
+                    <span class="pl-2 text-[11px] text-gray-400">+{{ coresExcedentes(produto) }}</span>
+                  }
+                </div>
               }
             </div>
-          }
-        </div>
+          </div>
+        </a>
+      }
+    </div>
+
+    <!-- Paginação -->
+    @if (totalElements() > size()) {
+      <div class="mt-8 flex justify-center">
+        <p-paginator
+          [rows]="size()"
+          [totalRecords]="totalElements()"
+          [first]="page() * size()"
+          [rowsPerPageOptions]="[12, 20, 40]"
+          [pageLinkSize]="3"
+          (onPageChange)="onPageChange($event)"
+        />
       </div>
     }
-  </div>
-
-  <!-- Paginação -->
-  @if (totalElements() > size) {
-    <div class="mt-10 flex justify-center">
-      <p-paginator
-        [rows]="size"
-        [totalRecords]="totalElements()"
-        [first]="page * size"
-        (onPageChange)="onPageChange($event)"
-        [rowsPerPageOptions]="[12, 20, 40]"
-      />
-    </div>
   }
 
 </div>

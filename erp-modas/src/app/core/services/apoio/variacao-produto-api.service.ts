@@ -1,10 +1,11 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpContext } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
 import { VariacaoProdutoUpdateDto } from "@core/dtos/apoio/variacaoProduto/variacao-produto-update.dto";
 import { VariacaoProdutoResponseDto } from "@core/dtos/apoio/variacaoProduto/variacao-produto-response.dto";
 import { VariacaoProdutoRequestDto } from "@core/dtos/apoio/variacaoProduto/variacao-produto-request.dto";
+import { STATUS_TELA } from "@core/interceptors/http-context.interceptor";
 
 @Injectable({ providedIn: 'root' })
 export class VariacaoProdutoApiService {
@@ -19,8 +20,9 @@ export class VariacaoProdutoApiService {
         return this.http.get<VariacaoProdutoResponseDto>(`${this.url}/${produtoId}/variacoes/${variacaoId}`);
     }
 
-    create(produtoId: number, dto: VariacaoProdutoRequestDto): Observable<VariacaoProdutoResponseDto> {
-        return this.http.post<VariacaoProdutoResponseDto>(`${this.url}/${produtoId}/variacoes`, dto);
+    create(produtoId: number, dto: VariacaoProdutoRequestDto, opcoes: { statusTela?: number[] } = {},): Observable<VariacaoProdutoResponseDto> {
+        const context = new HttpContext().set(STATUS_TELA, opcoes.statusTela ?? []);
+        return this.http.post<VariacaoProdutoResponseDto>(`${this.url}/${produtoId}/variacoes`, dto, { context });
     }
 
     update(produtoId: number, variacaoId: number, dto: VariacaoProdutoUpdateDto): Observable<VariacaoProdutoResponseDto> {

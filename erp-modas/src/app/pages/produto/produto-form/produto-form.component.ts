@@ -18,6 +18,7 @@ import { TecidoApiService } from '@core/services/apoio/tecido-api.service';
 import { MarcaApiService } from '@core/services/marca-api.service';
 import { TecidoResponseDto } from '@core/dtos/apoio/tecido/tecido-response.dto';
 import { MarcaResponseDto } from '@core/dtos/marca/marca-response.dto';
+import { CompraFluxoService } from '@core/services/compra/compra-fluxo.service';
 
 @Component({
   selector: 'app-produto-form',
@@ -43,9 +44,11 @@ export class ProdutoFormComponent implements OnInit {
   private readonly router        = inject(Router);
   private readonly fb            = inject(FormBuilder);
   private readonly route         = inject(ActivatedRoute);
+  private readonly compraFluxo = inject(CompraFluxoService);
 
   id: number | null = null;
   isEdicao = false;
+  modoCompra = false;
   salvando = signal(false);
   imagemPreview = signal<string | null>(null);
   uploading = signal(false);
@@ -76,6 +79,11 @@ export class ProdutoFormComponent implements OnInit {
     const idParam = this.route.snapshot.paramMap.get('id');
     this.id = idParam ? Number(idParam) : null;
     this.isEdicao = this.id !== null;
+
+    this.modoCompra =
+    !this.isEdicao &&
+    this.route.snapshot.queryParamMap.get('origem') === 'compra' &&
+    this.compraFluxo.ativo();
 
     forkJoin({
       categorias: this.categoriaApi.getAll(),
@@ -157,7 +165,10 @@ export class ProdutoFormComponent implements OnInit {
             : 'Produto criado! Agora cadastre as variações.',
         });
         // após criar, já redireciona para a tela de variações
-        this.router.navigate(['/produtos', produto.id, 'variacoes']);
+        this.router.navigate(
+          ['/produtos', produto.id, 'variacoes'],
+          this.modoCompra ? { queryParams: { origem: 'compra' } } : {},
+        );
         this.salvando.set(false);
       },
       error: () => this.salvando.set(false),
@@ -165,6 +176,10 @@ export class ProdutoFormComponent implements OnInit {
   }
 
   cancelar(): void {
+    if (this.modoCompra) {
+      this.compraFluxo.voltarParaCompra();
+      return;
+    }
     this.router.navigate(['/produtos']);
   }
 }

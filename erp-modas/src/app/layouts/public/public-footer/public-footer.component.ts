@@ -1,6 +1,7 @@
 // layout/public-layout/footer/footer-public.component.ts
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { LOJA, linkWhatsapp } from '@core/const/public.constant';
 
 @Component({
   selector: 'app-footer-public',
@@ -9,4 +10,6 @@ import { RouterLink } from '@angular/router';
 })
 export class FooterPublicComponent {
   ano = new Date().getFullYear();
+  readonly loja = LOJA;
+  readonly whatsapp = linkWhatsapp();
 }

@@ -63,7 +63,16 @@
         <p-card header="Itens da compra">
 
             <div class="flex flex-col gap-1 mb-4">
-                <label class="text-sm text-gray-600">Buscar produto</label>
+                <div class="flex items-center justify-between">
+                    <label class="text-sm text-gray-600">Buscar produto</label>
+                    <p-button
+                        label="Novo produto"
+                        icon="pi pi-plus"
+                        size="small"
+                        [text]="true"
+                        (onClick)="cadastrarNovoProduto()"
+                    />
+                </div>
                 <div class="relative">
                 <input
                     pInputText
@@ -208,10 +217,10 @@
                 </td>
                 <td>{{ variacao.precoCusto | currency:'BRL' }}</td>
                 <td>
+                    <!-- na compra, estoque 0 é justamente o caso de repor: não bloqueia -->
                     <p-button
                     label="Selecionar"
                     size="small"
-                    [disabled]="variacao.estoque === 0"
                     (onClick)="selecionarVariacao(variacao)"
                     />
                 </td>
@@ -226,6 +235,16 @@
                 </tr>
             </ng-template>
         </p-table>
+
+        <ng-template #footer>
+            <p-button
+                label="Nova variação"
+                icon="pi pi-plus"
+                severity="secondary"
+                [text]="true"
+                (onClick)="cadastrarNovaVariacao()"
+            />
+        </ng-template>
     </p-dialog>
 
 </div>

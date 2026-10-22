@@ -1,0 +1,220 @@
+<!-- pages/catalogo/catalogo-detalhe/catalogo-detalhe.component.html -->
+<div class="max-w-7xl mx-auto px-4 py-6 md:px-6">
+
+  <app-page-header
+    titulo="Detalhes do produto"
+    [breadcrumbs]="breadcrumbs()"
+    botaoLabel="Voltar"
+    botaoIcone="pi pi-arrow-left"
+    (botaoClick)="voltar()"
+  />
+
+  <!-- Carregando -->
+  @if (carregando()) {
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10">
+      <p-skeleton class="!w-full !h-auto aspect-[3/4]" borderRadius="0.75rem" />
+      <div class="flex flex-col gap-3">
+        <p-skeleton width="30%" height="0.875rem" />
+        <p-skeleton width="80%" height="2rem" />
+        <p-skeleton width="40%" height="2rem" styleClass="mb-4" />
+        <p-skeleton width="100%" height="6rem" />
+        <p-skeleton width="100%" height="3rem" />
+      </div>
+    </div>
+  }
+
+  <!-- Não encontrado (inexistente ou inativo) -->
+  @else if (naoEncontrado() || !produto()) {
+    <div class="bg-white border border-gray-200 rounded-xl text-center py-16 px-4 text-gray-400">
+      <i class="pi pi-search text-4xl mb-4"></i>
+      <p class="text-lg text-gray-600">Produto não encontrado</p>
+      <p class="text-sm mt-2 mb-4">Ele pode ter saído do catálogo.</p>
+      <p-button
+        label="Ver catálogo"
+        icon="pi pi-th-large"
+        [outlined]="true"
+        severity="secondary"
+        routerLink="/catalogo"
+      />
+    </div>
+  }
+
+  @else {
+    @let p = produto()!;
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10 items-start">
+
+      <!-- Galeria -->
+      <section class="flex flex-col gap-3 md:sticky md:top-20" aria-label="Fotos do produto">
+        <div class="aspect-[3/4] bg-white border border-gray-200 rounded-xl overflow-hidden">
+          @if (imagemAtiva()) {
+            <img
+              [src]="imagemAtiva() | imagemUrl"
+              [alt]="p.nome"
+              class="w-full h-full object-contain"
+            />
+          } @else {
+            <div class="w-full h-full flex items-center justify-center text-gray-300">
+              <i class="pi pi-image text-6xl"></i>
+            </div>
+          }
+        </div>
+
+        @if (imagens().length > 1) {
+          <div class="flex gap-2 overflow-x-auto pb-1">
+            @for (img of imagens(); track img) {
+              <button
+                type="button"
+                class="shrink-0 w-16 sm:w-20 aspect-[3/4] rounded-lg overflow-hidden border-2 transition-colors"
+                [class]="img === imagemAtiva() ? 'border-pink-600' : 'border-transparent hover:border-gray-300'"
+                [attr.aria-label]="'Ver foto ' + ($index + 1)"
+                [attr.aria-pressed]="img === imagemAtiva()"
+                (click)="imagemAtiva.set(img)"
+              >
+                <img [src]="img | imagemUrl:'thumb'" alt="" class="w-full h-full object-cover" loading="lazy" />
+              </button>
+            }
+          </div>
+        }
+      </section>
+
+      <!-- Informações -->
+      <div class="flex flex-col gap-4">
+
+        <p-card>
+          <div class="flex flex-col gap-5">
+
+            <!-- Título e preço -->
+            <div class="flex flex-col gap-1">
+              @if (p.categoria) {
+                <a
+                  [routerLink]="['/catalogo']"
+                  [queryParams]="{ categoriaId: p.categoria.id }"
+                  class="text-xs uppercase tracking-wide text-gray-400 hover:text-pink-700 w-fit"
+                >
+                  {{ p.categoria.nome }}
+                </a>
+              }
+              <h2 class="text-2xl font-bold text-gray-800 leading-tight">{{ p.nome }}</h2>
+              <div class="flex flex-wrap items-center gap-3 mt-1">
+                <span class="text-2xl font-semibold text-pink-800">{{ p.precoVenda | currency:'BRL' }}</span>
+                @if (p.variacoes.length > 0) {
+                  <p-tag
+                    [value]="temEstoque() ? 'Disponível' : 'Esgotado'"
+                    [severity]="temEstoque() ? 'success' : 'secondary'"
+                  />
+                }
+              </div>
+            </div>
+
+            <!-- Cores -->
+            @if (cores().length > 0) {
+              <div class="flex flex-col gap-2">
+                <p class="text-xs text-gray-400">
+                  Cor: <span class="text-sm font-medium text-gray-800">{{ corSelecionada()?.nome ?? 'selecione' }}</span>
+                </p>
+                <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="Cor">
+                  @for (cor of cores(); track cor.id) {
+                    <button
+                      type="button"
+                      role="radio"
+                      class="w-9 h-9 rounded-full border border-gray-300 transition ring-offset-2"
+                      [class]="corSelecionada()?.id === cor.id ? 'ring-2 ring-pink-600' : 'hover:ring-2 hover:ring-gray-300'"
+                      [style.background-color]="corCss(cor)"
+                      [title]="cor.nome"
+                      [attr.aria-label]="cor.nome"
+                      [attr.aria-checked]="corSelecionada()?.id === cor.id"
+                      (click)="selecionarCor(cor)"
+                    ></button>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- Tamanhos -->
+            @if (tamanhos().length > 0) {
+              <div class="flex flex-col gap-2">
+                <p class="text-xs text-gray-400">Tamanho</p>
+                <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="Tamanho">
+                  @for (op of tamanhos(); track op.tamanho.id) {
+                    <button
+                      type="button"
+                      role="radio"
+                      class="min-w-12 h-10 px-3 rounded-lg border text-sm font-medium transition-colors"
+                      [class]="tamanhoSelecionado()?.id === op.tamanho.id
+                        ? (op.disponivel ? 'bg-pink-700 border-pink-700 text-white' : 'bg-pink-50 border-pink-700 text-pink-800 line-through')
+                        : op.disponivel
+                          ? 'bg-white border-gray-300 text-gray-700 hover:border-pink-400'
+                          : 'bg-gray-50 border-gray-200 text-gray-400 line-through'"
+                      [attr.aria-checked]="tamanhoSelecionado()?.id === op.tamanho.id"
+                      [attr.aria-label]="op.tamanho.tamanho + (op.disponivel ? '' : ' (indisponível)')"
+                      (click)="selecionarTamanho(op.tamanho)"
+                    >
+                      {{ op.tamanho.tamanho }}
+                    </button>
+                  }
+                </div>
+
+                @if (tamanhoDisponivel() === true) {
+                  <p class="text-sm text-green-700 flex items-center gap-2">
+                    <i class="pi pi-check-circle"></i> Disponível na loja
+                  </p>
+                } @else if (tamanhoDisponivel() === false) {
+                  <p class="text-sm text-gray-500 flex items-center gap-2">
+                    <i class="pi pi-info-circle"></i> Indisponível no momento — consulte reposição
+                  </p>
+                }
+              </div>
+            }
+
+            <!-- Contato -->
+            <div class="flex flex-col gap-2">
+              <a
+                [href]="linkWhatsapp()"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center justify-center gap-2 w-full h-12 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium transition-colors"
+              >
+                <i class="pi pi-whatsapp text-lg"></i>
+                {{ tamanhoDisponivel() === false ? 'Consultar reposição' : 'Tenho interesse' }}
+              </a>
+              <p class="text-xs text-gray-400 text-center">
+                A mensagem já vai com {{ resumoMensagem() }}{{ resumoMensagem() === 'o produto' ? '' : ' escolhidos' }}.
+              </p>
+            </div>
+
+          </div>
+        </p-card>
+
+        <!-- Detalhes -->
+        <p-card header="Detalhes">
+          <div class="flex flex-col gap-3">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              @if (p.tecido) {
+                <div>
+                  <p class="text-xs text-gray-400">Tecido</p>
+                  <p class="text-sm font-medium">{{ p.tecido.nome }}</p>
+                </div>
+                @if (p.tecido.caimento) {
+                  <div>
+                    <p class="text-xs text-gray-400">Caimento</p>
+                    <p class="text-sm font-medium">{{ p.tecido.caimento }}</p>
+                  </div>
+                }
+                @if (p.tecido.elasticidade) {
+                  <div>
+                    <p class="text-xs text-gray-400">Elasticidade</p>
+                    <p class="text-sm font-medium">{{ p.tecido.elasticidade }}</p>
+                  </div>
+                }
+              }
+            </div>
+          </div>
+        </p-card>
+
+      </div>
+    </div>
+  }
+
+</div>

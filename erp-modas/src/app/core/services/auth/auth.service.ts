@@ -45,10 +45,22 @@ export class AuthService {
     }
 
     logout(): void {
+        if (!this.getToken()) {
+            this.encerrarSessaoLocal();
+            return;
+        }
+
         this.api.logout().subscribe({
-            complete: () => this.limparEDirecionar(),
-            error: () => this.limparEDirecionar()
+            complete: () => this.encerrarSessaoLocal(),
+            error: () => this.encerrarSessaoLocal(),
         });
+    }
+
+    encerrarSessaoLocal(): void {
+        localStorage.removeItem(this.TOKEN_KEY);
+        localStorage.removeItem(this.USUARIO_KEY);
+        this._usuario.set(null);
+        void this.router.navigate(['/auth/login']);
     }
 
     getToken(): string | null {

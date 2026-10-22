@@ -1,31 +1,40 @@
-// core/interceptors/auth.interceptor.ts
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '@core/services/auth/auth.service';
 import { Router } from '@angular/router';
+import { environment } from '@env/environment';
 import { catchError, throwError } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
-  const router = inject(Router);
+  const apiBase = environment.apiUrl.replace(/\/$/, '');
+  const url = req.url.split('?')[0];
+
+  const isApi = url.startsWith(`${apiBase}/`);
+  const isLogin = url === `${apiBase}/auth/login`;
+  const isLogout = url === `${apiBase}/auth/logout`;
+  const isPublic = url.startsWith(`${apiBase}/publico/`) || url ===(`${apiBase}/catalogo/`)
+  || url.startsWith(`${apiBase}/catalogo/`);
+
+
   const token = authService.getToken();
 
-  if(req.url.includes('/catalogo') || req.url.includes('/publico/')) {
-    return next(req);
-  }
-  const requisicao = token ? req.clone({
+  const requisicao = isApi && token && !isLogin && !isPublic ? req.clone({
     setHeaders: { Authorization: `Bearer ${token}` }
   }) : req;
 
   return next(requisicao).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401) {
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('auth_usuario');
-        authService.logout();
-        router.navigate(['/auth/login']);
+      if (
+        error.status === 401 &&
+        isApi &&
+        !isLogin &&
+        !isLogout &&
+        !isPublic
+      ) {
+        authService.encerrarSessaoLocal();
       }
-      
+
       return throwError(() => error);
     })
   );

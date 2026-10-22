@@ -3,8 +3,8 @@ import { TamanhoResponseDto } from "../apoio/tamanho/tamanho-response.dto";
 
 export interface VariacaoPublicaResponseDto {
     id: number;
-    cor: CorResponseDto;
-    tamanho: TamanhoResponseDto;
+    cor: CorResponseDto | null;
+    tamanho: TamanhoResponseDto | null;
     disponivel: boolean;
-    imagemEsp: string;   
+    imagemEsp: string | null;   
 }

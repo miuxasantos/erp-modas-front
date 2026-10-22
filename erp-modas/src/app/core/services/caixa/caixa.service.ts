@@ -1,11 +1,8 @@
 import { inject, Injectable, signal } from "@angular/core";
-import { CaixaRequestDto } from "@core/dtos/caixa/caixa-request.dto";
-import { CaixaResponseDto } from "@core/dtos/caixa/caixa-response.dto";
 import { StatusCaixa } from "@core/enums/status-caixa.enum";
 import { map, Observable, tap } from "rxjs";
 import { CaixaApiService } from "./caixa-api.service";
 import { Caixa } from "@core/models/caixa.model";
-import { CaixaUpdateDto } from "@core/dtos/caixa/caixa-update.dto";
 
 @Injectable({ providedIn: 'root' })
 export class CaixaService {

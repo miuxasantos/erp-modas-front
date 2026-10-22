@@ -7,4 +7,10 @@ export const catalogoRoutes: Routes = [
             import('./catalogo-list/catalogo-list.component')
                 .then(c => c.CatalogoListComponent),
     },
+    {
+        path: ':id',
+        loadComponent: () =>
+            import('./catalogo-detalhe/catalogo-detalhe.component')
+                .then(c => c.CatalogoDetalheComponent),
+    }
 ]

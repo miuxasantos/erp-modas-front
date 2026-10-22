@@ -9,7 +9,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { FormaPagamento } from '@core/enums/forma-pagamento.enum';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { SelectModule } from 'primeng/select';
@@ -27,7 +27,7 @@ import { forkJoin } from 'rxjs';
 import { CorResponseDto } from '@core/dtos/apoio/cor/cor-response.dto';
 import { TamanhoResponseDto } from '@core/dtos/apoio/tamanho/tamanho-response.dto';
 import { ActivatedRoute } from '@angular/router';
-import { TemPermissaoDirective } from '@core/directives/tem-permissao.directive';
+import { CompraFluxoService, FormCompraSalvo, ItemCompraPendente, RascunhoCompra } from '@core/services/compra/compra-fluxo.service';
 
 interface VariacaoEnriquecida extends Omit<VariacaoProdutoResponseDto, 'cor' | 'tamanho'> {
     cor: CorResponseDto;
@@ -57,6 +57,7 @@ export class CompraFormComponent implements OnInit {
     private readonly router = inject(Router);
     private readonly fb = inject(FormBuilder);
     private readonly route = inject(ActivatedRoute);
+    private readonly compraFluxo = inject(CompraFluxoService);
 
     id: number | null = null;
     isEdicao = false;
@@ -75,6 +76,8 @@ export class CompraFormComponent implements OnInit {
     produtoSelecionado: ProdutoResponseDto | null = null;
     cores: CorResponseDto[] = [];
     tamanhos: TamanhoResponseDto[] = [];
+
+    private rascunho: RascunhoCompra | null = null;
 
     breadcrumbs: MenuItem[] = [
         { label: 'Dashboard', routerLink: '/dashboard' },
@@ -141,6 +144,11 @@ export class CompraFormComponent implements OnInit {
         );
 
         this.isEdicao = this.id ? true : false;
+
+        const retomando = this.route.snapshot.queryParamMap.has('retomar');
+        this.rascunho = retomando ? this.compraFluxo.retomar(this.rotaCompra) : null;
+        if (!retomando) this.compraFluxo.descartar();
+
         this.carregarDados();
     }
 
@@ -158,6 +166,12 @@ export class CompraFormComponent implements OnInit {
                     this.todosProdutos  = produtos;
                     this.cores          = cores;
                     this.tamanhos       = tamanhos;
+
+                    if (this.rascunho) {
+                        this.restaurarRascunho(this.rascunho);
+                        return;
+                    }
+
 
                     this.form.patchValue({
                         fornecedorId:   compra.fornecedor.id,
@@ -183,6 +197,8 @@ export class CompraFormComponent implements OnInit {
                     this.todosProdutos = produtos;
                     this.cores = cores;
                     this.tamanhos = tamanhos;
+
+                    if (this.rascunho) this.restaurarRascunho(this.rascunho);
                 },
             });
         }
@@ -237,6 +253,84 @@ export class CompraFormComponent implements OnInit {
         this.dialogVariacaoVisivel.set(false);
         this.variacoesDoProduto  = [];
         this.produtoSelecionado  = null;
+    }
+
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // ATALHO CADASTRO DE PRODUTO
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    private get rotaCompra(): string {
+        return this.isEdicao ?  `/compras/${this.id}/editar` : '/compras/nova';
+    }
+
+    cadastrarNovoProduto(): void {
+        this.compraFluxo.iniciar(this.rotaCompra, this.formParaRascunho());
+        this.router.navigate(['/produtos/novo'], { queryParams: { origem: 'compra' } });
+    }
+
+    cadastrarNovaVariacao(): void {
+        if (!this.produtoSelecionado) return;
+        const produtoId = this.produtoSelecionado.id;
+
+        this.dialogVariacaoVisivel.set(false);
+        this.compraFluxo.iniciar(this.rotaCompra, this.formParaRascunho());
+        this.router.navigate(['/produtos', produtoId, 'variacoes'], { queryParams: { origem: 'compra' } });
+    }
+
+    private formParaRascunho(): FormCompraSalvo {
+        const valor = this.form.getRawValue();
+        return {
+            ...valor,
+            // o FormArray não é tipado cada item tem variacaoProdutoId, nomeProduto, sku,
+            // quantidade e valorUnit (o subTotal é recalculado na volta)
+            itens: valor.itens as ItemCompraPendente[],
+        };
+    }
+
+    private restaurarRascunho(rascunho: RascunhoCompra): void {
+        const salvo = rascunho.form;
+
+        this.form.patchValue({
+            fornecedorId: salvo.fornecedorId,
+            dataChegada: this.paraInputData(salvo.dataChegada) as unknown as Date,
+            formaPagamento: salvo.formaPagamento,
+            numeroParcelas: salvo.numeroParcelas,
+            lote: salvo.lote,
+            observacoes: salvo.observacoes,
+        });
+
+        this.itens.clear();
+        [...salvo.itens, ...rascunho.itensPendentes]
+            .forEach(item => this.adicionarItemForm(this.paraItemForm(item)));
+
+        this.router.navigate([], { relativeTo: this.route, queryParams: {}, replaceUrl: true });
+
+        const novos = rascunho.itensPendentes.length;
+        if(novos) {
+             this.messageService.add({
+                severity: 'success',
+                summary: 'Compra retomada',
+                detail: novos === 1 ? '1 item novo adicionado à compra' : `${novos} itens novos adicionados à compra`,
+            });
+        }
+    } 
+
+    private paraInputData(valor: Date | string | null): string {
+        if (typeof valor === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(valor)) return valor;
+        const data = valor ? new Date(valor) : new Date();
+        const mes = String(data.getMonth() + 1).padStart(2, '0');
+        const dia = String(data.getDate()).padStart(2, '0');
+        return `${data.getFullYear()}-${mes}-${dia}`;
+    }
+
+    private paraItemForm(item: ItemCompraPendente) {
+        return {
+            id:         item.variacaoProdutoId,
+            produto:    { nome: item.nomeProduto },
+            sku:        item.sku,
+            quantidade: item.quantidade,
+            valorUnit:  item.valorUnit,
+        };
     }
 
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

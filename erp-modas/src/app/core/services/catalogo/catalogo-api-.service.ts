@@ -1,15 +1,18 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpParams, HttpContext } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
+import { CatalogoFiltrosDto } from "@core/dtos/catalogo/catalogo-filtros.dto";
 import { CatalogoResponseDto } from "@core/dtos/catalogo/catalogo-response.dto";
 import { PageableDto } from "@core/dtos/catalogo/pageable.dto";
+import { STATUS_TELA } from "@core/interceptors/http-context.interceptor";
 import { environment } from "@env/environment";
-import { first, Observable } from "rxjs";
+import { Observable } from "rxjs";
 
-export interface CatalogoFiltros {
+export interface filtros {
     q?: string;
     categoriaId?: number;
     corId?: number;
     tamanhoId?: number;
+    sort?: string;
 }
 
 @Injectable({ providedIn: 'root'})
@@ -17,7 +20,7 @@ export class CatalogoApiService {
     private readonly http = inject(HttpClient);
     private readonly url = `${environment.apiUrl}/publico/catalogo`;
 
-    listar(page = 0, size = 20, filtros?:CatalogoFiltros): Observable<PageableDto<CatalogoResponseDto>> {
+    listar(page = 0, size = 20, filtros?:filtros): Observable<PageableDto<CatalogoResponseDto>> {
         let params = new HttpParams()
             .set('page', page)
             .set('size', size);
@@ -30,7 +33,12 @@ export class CatalogoApiService {
         return this.http.get<PageableDto<CatalogoResponseDto>>(this.url, {params});
     }
 
+    filtros(): Observable<CatalogoFiltrosDto> {
+        return this.http.get<CatalogoFiltrosDto>(`${this.url}/filtros`);
+    }
+
     buscarPorId(id: number): Observable<CatalogoResponseDto> {
-        return this.http.get<CatalogoResponseDto>(`${this.url}/${id}`);
+        const context = new HttpContext().set(STATUS_TELA, [404]);
+        return this.http.get<CatalogoResponseDto>(`${this.url}/${id}`, { context });
     }
 }

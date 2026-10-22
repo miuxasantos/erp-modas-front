@@ -39,7 +39,9 @@
                     </div>
                     <div>
                         <p class="text-xs text-gray-400 py-2">Imagem</p>
-                        <img class="w-1/2 h-auto rounded-sm " [src]="produto.imagem | imagemUrl" [alt]="produto.nome" />
+                        @if(produto){
+                            <img class="w-1/2 h-auto rounded-sm " [src]="produto.imagem | imagemUrl" [alt]="produto.nome" />
+                        }
                     </div>
 
                 </div>

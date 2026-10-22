@@ -3,10 +3,20 @@
     <app-page-header
         [titulo]="breadcrumbs[2].label || 'Variações'"
         [breadcrumbs]="breadcrumbs"
-        botaoLabel="Voltar para produtos"
+        [botaoLabel]="modoCompra ? 'Voltar para a compra' : 'Voltar para produtos'"
         botaoIcone="pi pi-arrow-left"
         (botaoClick)="voltar()"
     />
+
+    @if (modoCompra) {
+        <div class="flex items-center gap-3 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
+            <i class="pi pi-shopping-cart"></i>
+            <span>
+                Cadastrando variações para a compra em andamento. Ao salvar, elas entram na compra
+                com a quantidade informada — o estoque é atualizado quando a compra for registrada.
+            </span>
+        </div>
+    }
 
     <!-- Gerador de grade -->
     <p-card header="Gerar grade de variações">
@@ -56,10 +66,33 @@
                 />
             </div>
 
-            <div class="flex flex-col gap-1">
-                <label class="text-sm text-gray-600">Estoque inicial</label>
-                <p-inputNumber formControlName="estoqueInicial" [min]="0" />
+            <div class="flex flex-col gap-1 md:col-span-2">
+                <div class="flex items-center gap-2">
+                    <p-checkbox formControlName="produtoDeCompra" [binary]="true" inputId="produtoDeCompra" />
+                    <label for="produtoDeCompra" class="text-sm text-gray-600">Produto proveniente de compra</label>
+                </div>
+                <small class="text-xs text-gray-400">
+                    @if (modoCompra) {
+                        A entrada no estoque será feita pela compra.
+                    } @else if (informaEstoqueInicial) {
+                        Estoque inicial: use só para produtos que já estavam na loja antes do sistema.
+                    } @else {
+                        As variações são criadas com estoque 0 — a entrada acontece ao registrar a compra.
+                    }
+                </small>
             </div>
+
+            @if (exibeQuantidade) {
+                <div class="flex flex-col gap-1">
+                    <label class="text-sm text-gray-600">
+                        {{ modoCompra ? 'Quantidade comprada por variação' : 'Estoque inicial por variação' }}
+                    </label>
+                    <p-inputNumber formControlName="quantidadePadrao" [min]="0" />
+                    <small class="text-xs text-gray-400">
+                        Preenche todas as variações ao gerar a grade — depois é possível ajustar cada uma
+                    </small>
+                </div>
+            }
 
             <div class="flex flex-col gap-2 md:col-span-2">
                 <label class="text-sm text-gray-600">Imagem específica da variação</label>
@@ -104,9 +137,23 @@
         <!-- Preview da grade gerada -->
         @if (gradePreview.length) {
             <div>
-            <p class="text-sm text-gray-500 mb-2">
-                {{ gradePreview.length }} variações serão criadas:
-            </p>
+            <div class="flex items-center justify-between mb-2">
+                <p class="text-sm text-gray-500">
+                    {{ gradePreview.length }} variações serão criadas
+                    @if (exibeQuantidade) {
+                        · {{ totalPecas }} {{ modoCompra ? 'peças na compra' : 'peças em estoque' }}
+                    }
+                </p>
+                @if (exibeQuantidade) {
+                    <p-button
+                        label="Aplicar quantidade padrão a todas"
+                        icon="pi pi-replay"
+                        size="small"
+                        [text]="true"
+                        (onClick)="aplicarQuantidadePadrao()"
+                    />
+                }
+            </div>
 
             <p-table [value]="gradePreview">
                 <ng-template #header>
@@ -114,7 +161,9 @@
                     <th>SKU</th>
                     <th>Cor</th>
                     <th>Tamanho</th>
-                    <th>Estoque</th>
+                    @if (exibeQuantidade) {
+                        <th style="width: 10rem">{{ rotuloQuantidade }}</th>
+                    }
                     <th>Preço venda</th>
                 </tr>
                 </ng-template>
@@ -123,7 +172,19 @@
                     <td><code>{{ variacao.sku }}</code></td>
                     <td>{{ variacao.corNome }}</td>
                     <td>{{ variacao.tamanhoNome }}</td>
-                    <td>{{ variacao.estoque }}</td>
+                    @if (exibeQuantidade) {
+                        <td>
+                            <p-inputNumber
+                                [(ngModel)]="variacao.quantidade"
+                                [min]="0"
+                                [showButtons]="true"
+                                buttonLayout="horizontal"
+                                incrementButtonIcon="pi pi-plus"
+                                decrementButtonIcon="pi pi-minus"
+                                inputStyleClass="w-12 text-center"
+                            />
+                        </td>
+                    }
                     <td>{{ variacao.precoVenda | currency:'BRL' }}</td>
                 </tr>
                 </ng-template>
@@ -131,7 +192,9 @@
 
             <div class="flex justify-end mt-3">
                 <p-button
-                [label]="'Salvar ' + gradePreview.length + ' variações'"
+                [label]="modoCompra
+                    ? 'Salvar ' + gradePreview.length + ' e voltar para a compra'
+                    : 'Salvar ' + gradePreview.length + ' variações'"
                 icon="pi pi-check"
                 [loading]="salvando()"
                 (onClick)="salvarGrade()"
@@ -148,6 +211,7 @@
         <p-table [value]="variacoesCadastradas">
         <ng-template #header>
             <tr>
+            <th style="width: 64px">Imagem</th>
             <th>SKU</th>
             <th>Cor</th>
             <th>Tamanho</th>
@@ -159,6 +223,21 @@
 
         <ng-template #body let-variacao>
             <tr>
+            <td>
+                <!-- sem imagem específica, a variação usa a imagem do produto -->
+                @if (variacao.imagemEsp || produto?.imagem; as imagem) {
+                    <img
+                    [src]="imagem | imagemUrl:'thumb'"
+                    [alt]="variacao.sku"
+                    loading="lazy"
+                    class="w-10 h-12 object-cover rounded border border-gray-200"
+                    />
+                } @else {
+                    <div class="w-10 h-12 rounded bg-gray-100 flex items-center justify-center text-gray-400">
+                        <i class="pi pi-image"></i>
+                    </div>
+                }
+            </td>
             <td><code>{{ variacao.sku }}</code></td>
             <td>{{ variacao.cor.nome }}</td>
             <td>{{ variacao.tamanho.tamanho }}</td>
@@ -169,7 +248,6 @@
                 />
             </td>
             <td>{{ variacao.precoVenda | currency:'BRL' }}</td>
-            <td>{{ variacao.imagemEsp }}</td>
             <td>
                 <p-button
                 icon="pi pi-trash"
@@ -185,7 +263,7 @@
 
         <ng-template #empty>
             <tr>
-            <td colspan="6" class="text-center py-8 text-gray-400">
+            <td colspan="7" class="text-center py-8 text-gray-400">
                 Nenhuma variação cadastrada — use o gerador acima
             </td>
             </tr>
