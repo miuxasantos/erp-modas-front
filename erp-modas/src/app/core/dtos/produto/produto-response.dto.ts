@@ -15,5 +15,6 @@ export interface ProdutoResponseDto {
     tecido: TecidoResponseDto;
     marca: MarcaResponseDto;
     categoria: CategoriaResponseDto;
+    noCatalogo: boolean;
     imagem: string;
 }

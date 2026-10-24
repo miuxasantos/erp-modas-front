@@ -70,7 +70,14 @@ export class SidebarComponent {
         {
             label: 'Relatórios',
             items: [
-                { label: 'Vendas', icon: 'pi pi-chart-line', route: '/relatorios/vendas', visivel: () => this.auth.isProprietario()},
+                { label: 'Vendas', icon: 'pi pi-chart-line', route: '/relatorios/vendas', visivel: () => this.auth.isProprietario() },
+                { label: 'Vendas agrupadas', icon: 'pi pi-chart-bar', route: '/relatorios/vendas-agrupadas', visivel: () => this.auth.isProprietario() },
+                { label: 'Compras', icon: 'pi pi-truck', route: '/relatorios/compras', visivel: () => this.auth.isProprietario() },
+                { label: 'Compras c/ mais produtos', icon: 'pi pi-box', route: '/relatorios/compras-mais-produtos', visivel: () => this.auth.isProprietario() },
+                { label: 'Fornecedores', icon: 'pi pi-building', route: '/relatorios/fornecedores', visivel: () => this.auth.isProprietario() },
+                { label: 'Estoque', icon: 'pi pi-warehouse', route: '/relatorios/estoque', visivel: () => this.auth.isProprietario() },
+                { label: 'Financeiro', icon: 'pi pi-wallet', route: '/relatorios/financeiro', visivel: () => this.auth.isProprietario() },
+                { label: 'Fiscal mensal', icon: 'pi pi-calculator', route: '/relatorios/fiscal', visivel: () => this.auth.isProprietario() },
             ]
         }
     ];

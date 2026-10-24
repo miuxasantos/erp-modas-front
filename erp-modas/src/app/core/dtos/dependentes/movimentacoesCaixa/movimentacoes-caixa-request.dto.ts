@@ -1,3 +1,4 @@
+import { FormaPagamento } from "@core/enums/forma-pagamento.enum";
 import { OrigemMov } from "../../../enums/origem-mov.enum";
 import { TipoMovCaixa } from "../../../enums/tipo-mov-caixa.enum";
 
@@ -7,5 +8,6 @@ export interface MovimentacoesCaixaRequestDto {
     valor: number;
     descricao: string;
     origemMov: OrigemMov;
-    origemId: number;
+    origemId: number | null;
+    formaPagamento: FormaPagamento;
 }

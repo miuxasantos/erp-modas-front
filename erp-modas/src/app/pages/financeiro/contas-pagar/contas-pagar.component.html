@@ -1,75 +1,3 @@
-<div class="p-4">
-
-    <app-page-header
-        titulo="Contas a Pagar"
-        [breadcrumbs]="breadcrumbs"
-        [botaoVisivel]="false"
-    />
-
-    <p-table
-        [value]="contas"
-        [paginator]="true"
-        [rows]="10"
-        [rowsPerPageOptions]="[10, 25, 50]"
-        stripedRows
-    >
-        <ng-template #header>
-        <tr>
-            <th>Fornecedor</th>
-            <th>Parcela</th>
-            <th pSortableColumn="dataVencimento">Vencimento <p-sortIcon field="dataVencimento" /></th>
-            <th>Pagamento</th>
-            <th pSortableColumn="valor">Valor <p-sortIcon field="valor" /></th>
-            <th>Status</th>
-            <th style="width: 120px">Ações</th>
-        </tr>
-        </ng-template>
-
-        <ng-template #body let-conta>
-        <tr>
-            <td>{{ conta.fornecedorNome }}</td>
-            <td>{{ conta.numeroParcela }}/{{ conta.totalParcelas }}</td>
-            <td>{{ conta.dataVencimento  | date:'dd/MM/yyyy' }}</td>
-            <td>{{ conta.dataPagamento ? (conta.dataPagamento | date:'dd/MM/yyyy') : '—' }}</td>
-            <td>{{ conta.valor | currency:'BRL' }}</td>
-            <td>
-            <p-tag
-                [value]="conta.statusConta"
-                [severity]="getStatusSeverity(conta.statusConta)"
-            />
-            </td>
-            <td>
-            <div class="flex gap-1">
-                @if (isPendente(conta.statusConta)) {
-                <p-button
-                    icon="pi pi-check"
-                    [text]="true" [rounded]="true"
-                    severity="success"
-                    pTooltip="Registrar pagamento"
-                    (onClick)="abrirBaixa(conta)"
-                />
-                }
-                <p-button
-                icon="pi pi-trash"
-                [text]="true" [rounded]="true"
-                severity="danger"
-                pTooltip="Excluir"
-                (onClick)="confirmarExclusao(conta.id)"
-                />
-            </div>
-            </td>
-        </tr>
-        </ng-template>
-
-        <ng-template #empty>
-        <tr>
-            <td colspan="7" class="text-center py-8 text-gray-400">
-            Nenhuma conta a pagar encontrada
-            </td>
-        </tr>
-        </ng-template>
-    </p-table>
-
     <!-- Dialog registrar baixa -->
     <p-dialog
         header="Registrar Pagamento"
@@ -90,26 +18,26 @@
             <span class="text-gray-500">Parcela</span>
             <span>{{ contaSelecionada.numeroParcela }}/{{ contaSelecionada.totalParcelas }}</span>
             </div>
-            <div class="flex justify-between text-sm">
+            <div class="flex justify-between text-sm mb-1">
             <span class="text-gray-500">Vencimento</span>
             <span>{{ contaSelecionada.dataVencimento | date:'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="flex justify-between text-sm mb-1">
+            <span class="text-gray-500">Forma de pagamento</span>
+            <span>{{ contaSelecionada.formaPagamento ?? '—' }}</span>
+            </div>
+            <div class="flex justify-between text-sm">
+            <span class="text-gray-500">Valor</span>
+            <span class="font-semibold">{{ contaSelecionada.valor | currency:'BRL' }}</span>
             </div>
         </div>
         }
 
         <form [formGroup]="formBaixa" class="flex flex-col gap-4">
         <div class="flex flex-col gap-1">
-            <label class="text-sm text-gray-600">Data do Pagamento</label>
-            <input pInputText type="date" formControlName="dataPagamento" />
-        </div>
-        <div class="flex flex-col gap-1">
-            <label class="text-sm text-gray-600">Valor pago (R$)</label>
-            <p-inputNumber
-            formControlName="valor"
-            mode="currency"
-            currency="BRL"
-            locale="pt-BR"
-            />
+            <label for="dataPagamento" class="text-sm text-gray-600">Data do Pagamento</label>
+            <input pInputText id="dataPagamento" type="date" formControlName="dataPagamento" [max]="hoje" />
+            <small class="text-gray-400">Hoje por padrão. Altere se o dinheiro saiu em outro dia.</small>
         </div>
         </form>
 
@@ -121,7 +49,7 @@
             (onClick)="dialogBaixaVisivel.set(false)"
         />
         <p-button
-            label="Confirmar recebimento"
+            label="Confirmar pagamento"
             icon="pi pi-check"
             severity="success"
             [loading]="processando()"
@@ -130,5 +58,3 @@
         />
         </ng-template>
     </p-dialog>
-
-</div>

@@ -1,5 +1,5 @@
+import { FormaPagamento } from "@core/enums/forma-pagamento.enum";
 import { StatusConta } from "../../../enums/status-conta.enum";
-import { CompraResponseDto } from "../../compra/compra-response.dto";
 
 export interface ContasPagarResponseDto {
     id: number;
@@ -12,4 +12,5 @@ export interface ContasPagarResponseDto {
     totalParcelas: number;
     observacoes: string;
     statusConta: StatusConta;
+    formaPagamento: FormaPagamento | null;
 }

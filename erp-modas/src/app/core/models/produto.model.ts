@@ -16,6 +16,7 @@ export class Produto {
     tecido: Tecido;
     marca: Marca;
     categoria?: Categoria;
+    noCatalogo: boolean;
     imagem: string;
 
     constructor (dto: ProdutoResponseDto) {
@@ -31,6 +32,7 @@ export class Produto {
         this.tecido = new Tecido(dto.tecido);
         this.marca = new Marca(dto.marca);
         this.categoria = new Categoria(dto.categoria);
+        this.noCatalogo = dto.noCatalogo ?? false;
         this.imagem = dto.imagem;
     }
 

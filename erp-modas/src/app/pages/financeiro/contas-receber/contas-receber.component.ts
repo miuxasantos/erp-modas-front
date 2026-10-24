@@ -5,21 +5,22 @@ import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { InputNumberModule } from 'primeng/inputnumber';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { ContasReceberApiService } from '@core/services/dependentes/contas-receber-api.service';
 import { ContasReceberResponseDto } from '@core/dtos/dependentes/contasReceber/contas-receber-response.dto';
 import { StatusConta } from '@core/enums/status-conta.enum';
-import { DataPagamentoDto } from '@core/dtos/dependentes/contasPagar/data-pagamento.dto';
+import { dataLocalISO } from '@core/utils/data.utils';
+import { DataRecebimentoDto } from '@core/dtos/dependentes/contasReceber/data-recebimento.dto';
 
 @Component({
     selector: 'app-contas-receber',
     imports: [
         ReactiveFormsModule, TableModule, ButtonModule,
-        TagModule, TooltipModule, DialogModule,
-        InputNumberModule, CurrencyPipe, DatePipe,
+        TagModule, TooltipModule, DialogModule, InputTextModule,
+        CurrencyPipe, DatePipe,
         PageHeaderComponent,
     ],
     templateUrl: './contas-receber.component.html',
@@ -34,9 +35,9 @@ export class ContasReceberComponent implements OnInit {
     dialogBaixaVisivel = signal(false);
     contaSelecionada: ContasReceberResponseDto | null = null;
     processando = signal(false);
-    dtoData: DataPagamentoDto = {
-        dataPagamento: new Date().toISOString().split('T')[0],
-    };
+
+    // Limite do campo de data (atualizado ao abrir o diálogo)
+    hoje = dataLocalISO();
 
     breadcrumbs: MenuItem[] = [
         { label: 'Dashboard', routerLink: '/dashboard' },
@@ -44,9 +45,10 @@ export class ContasReceberComponent implements OnInit {
         { label: 'Contas a Receber' },
     ];
 
+    // Na baixa só se escolhe a data (começa em hoje, não pode ser futura).
+    // Valor e forma de pagamento são os da venda/compra e aparecem só para conferência.
     formBaixa = this.fb.group({
-        dataRecebimento: [new Date(), Validators.required],
-        valor: [0, [Validators.required, Validators.min(0.01)]],
+        dataRecebimento: [dataLocalISO(), Validators.required],
     });
 
     ngOnInit(): void {
@@ -65,7 +67,8 @@ export class ContasReceberComponent implements OnInit {
 
     abrirBaixa(conta: ContasReceberResponseDto): void {
         this.contaSelecionada = conta;
-        this.formBaixa.patchValue({ valor: conta.valor });
+        this.hoje = dataLocalISO();
+        this.formBaixa.patchValue({ dataRecebimento: this.hoje });
         this.dialogBaixaVisivel.set(true);
     }
 
@@ -73,12 +76,11 @@ export class ContasReceberComponent implements OnInit {
         if (this.formBaixa.invalid || !this.contaSelecionada) return;
         this.processando.set(true);
 
-        const dto = {
-        dataRecebimento: this.dtoData.dataPagamento,
-        statusConta:     StatusConta.PAGO,
+        const dto: DataRecebimentoDto = {
+            dataRecebimento: this.formBaixa.getRawValue().dataRecebimento!,
         };
 
-        this.contasReceberApi.receber(this.contaSelecionada.id, dto as any).subscribe({
+        this.contasReceberApi.receber(this.contaSelecionada.id, dto).subscribe({
         next: () => {
             this.messageService.add({
             severity: 'success',

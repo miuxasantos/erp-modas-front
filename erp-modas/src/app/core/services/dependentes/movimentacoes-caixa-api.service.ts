@@ -22,8 +22,8 @@ export class MovimentacoesCaixaApiService {
         return this.http.get<MovimentacoesCaixaResponseDto[]>(`${this.url}/caixa/${caixaId}`);
     }
 
-    create(dto: MovimentacoesCaixaRequestDto): Observable<MovimentacoesCaixaResponseDto> {
-        return this.http.post<MovimentacoesCaixaResponseDto>(this.url, dto);
+    create(caixaId: number, dto: MovimentacoesCaixaRequestDto): Observable<MovimentacoesCaixaResponseDto> {
+        return this.http.post<MovimentacoesCaixaResponseDto>(`${this.url}/caixa/${caixaId}`, dto);
     }
 
     delete(id: number): Observable<void> {

@@ -1,0 +1,219 @@
+<div class="p-4">
+
+    <app-page-header
+        titulo="Relatório de Estoque"
+        [breadcrumbs]="breadcrumbs"
+        [botaoVisivel]="false"
+    />
+
+    <!-- ━━━━━━━━━━ FILTROS ━━━━━━━━━━ -->
+    <form
+        [formGroup]="form"
+        (ngSubmit)="gerar()"
+        class="bg-white rounded-lg border border-gray-200 p-4 mb-6 flex flex-wrap items-center gap-4"
+    >
+        <div class="flex items-center gap-2">
+            <p-checkbox formControlName="apenasAtivos" [binary]="true" inputId="apenasAtivos" />
+            <label for="apenasAtivos" class="text-sm text-gray-600">Somente produtos ativos</label>
+        </div>
+
+        <p-button
+            type="submit"
+            label="Gerar"
+            icon="pi pi-search"
+            [loading]="carregando()"
+        />
+
+        <div class="ml-auto">
+            <app-botao-exportar
+                [desabilitado]="!geral()"
+                [carregando]="exportando()"
+                (exportar)="exportar($event)"
+            />
+        </div>
+    </form>
+
+    @if (geral(); as geral) {
+
+        <!-- ━━━━━━━━━━ RESUMO ━━━━━━━━━━ -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-lg border border-gray-200 p-4">
+                <p class="text-sm text-gray-500">Produtos</p>
+                <p class="text-2xl font-bold text-gray-800">{{ geral.quantidadeProdutos }}</p>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-200 p-4">
+                <p class="text-sm text-gray-500">Com estoque</p>
+                <p class="text-2xl font-bold text-gray-800">{{ geral.produtosComEstoque }}</p>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-200 p-4">
+                <p class="text-sm text-gray-500">Variações</p>
+                <p class="text-2xl font-bold text-gray-800">{{ geral.quantidadeVariacoes }}</p>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-200 p-4">
+                <p class="text-sm text-gray-500">Variações zeradas</p>
+                <p class="text-2xl font-bold" [class]="geral.variacoesSemEstoque > 0 ? 'text-red-600' : 'text-gray-800'">
+                    {{ geral.variacoesSemEstoque }}
+                </p>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-200 p-4">
+                <p class="text-sm text-gray-500">Unidades</p>
+                <p class="text-2xl font-bold text-gray-800">{{ geral.quantidadeUnidades }}</p>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-200 p-4">
+                <p class="text-sm text-gray-500">Valor de custo</p>
+                <p class="text-2xl font-bold text-gray-800">{{ geral.valorEstoqueCusto | currency:'BRL' }}</p>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-200 p-4">
+                <p class="text-sm text-gray-500">Valor de venda</p>
+                <p class="text-2xl font-bold text-gray-800">{{ geral.valorEstoqueVenda | currency:'BRL' }}</p>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-200 p-4">
+                <p class="text-sm text-gray-500">Margem potencial</p>
+                <p class="text-2xl font-bold text-gray-800">{{ margemPotencial() | currency:'BRL' }}</p>
+            </div>
+        </div>
+
+        <!-- ━━━━━━━━━━ PRODUTOS ━━━━━━━━━━ -->
+        <p-table
+            #tabela
+            [value]="linhas()"
+            dataKey="id"
+            [expandedRowKeys]="expandidos"
+            [globalFilterFields]="['codigo', 'nome', 'categoria']"
+            [paginator]="linhas().length > 25"
+            [rows]="25"
+            [rowsPerPageOptions]="[25, 50, 100]"
+            size="small"
+        >
+            <ng-template #caption>
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <p-iconfield>
+                        <p-inputicon styleClass="pi pi-search" />
+                        <input
+                            pInputText
+                            type="text"
+                            placeholder="Buscar por código, produto ou categoria"
+                            class="w-80"
+                            (input)="tabela.filterGlobal($any($event.target).value, 'contains')"
+                        />
+                    </p-iconfield>
+                    <div class="flex gap-1">
+                        <p-button label="Expandir todos" icon="pi pi-angle-double-down" [text]="true" size="small" (onClick)="expandirTodos()" />
+                        <p-button label="Recolher todos" icon="pi pi-angle-double-up" [text]="true" size="small" (onClick)="recolherTodos()" />
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template #header>
+                <tr>
+                    <th class="w-12"></th>
+                    <th pSortableColumn="codigo">Código <p-sortIcon field="codigo" /></th>
+                    <th pSortableColumn="nome">Produto <p-sortIcon field="nome" /></th>
+                    <th pSortableColumn="categoria">Categoria <p-sortIcon field="categoria" /></th>
+                    <th pSortableColumn="quantidadeVariacoes" class="text-center">Variações <p-sortIcon field="quantidadeVariacoes" /></th>
+                    <th pSortableColumn="quantidadeUnidades" class="text-center">Unidades <p-sortIcon field="quantidadeUnidades" /></th>
+                    <th pSortableColumn="valorEstoqueCusto" class="text-right">Total custo <p-sortIcon field="valorEstoqueCusto" /></th>
+                    <th pSortableColumn="valorEstoqueVenda" class="text-right">Total venda <p-sortIcon field="valorEstoqueVenda" /></th>
+                </tr>
+            </ng-template>
+
+            <ng-template #body let-produto let-expandido="expanded">
+                <tr>
+                    <td>
+                        @if (produto.variacoes.length) {
+                            <p-button
+                                type="button"
+                                [pRowToggler]="produto"
+                                [text]="true"
+                                [rounded]="true"
+                                severity="secondary"
+                                [icon]="expandido ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                            />
+                        }
+                    </td>
+                    <td>{{ produto.codigo }}</td>
+                    <td>
+                        {{ produto.nome }}
+                        @if (!produto.ativo) {
+                            <p-tag value="Inativo" severity="secondary" styleClass="ml-2" />
+                        }
+                    </td>
+                    <td>{{ produto.categoria }}</td>
+                    <td class="text-center">
+                        {{ produto.quantidadeVariacoes }}
+                        @if (produto.variacoesZeradas) {
+                            <span class="text-xs text-red-600">({{ produto.variacoesZeradas }} zerada{{ produto.variacoesZeradas > 1 ? 's' : '' }})</span>
+                        }
+                    </td>
+                    <td class="text-center" [class.text-red-600]="produto.quantidadeUnidades <= 0">
+                        {{ produto.quantidadeUnidades }}
+                    </td>
+                    <td class="text-right">{{ produto.valorEstoqueCusto | currency:'BRL' }}</td>
+                    <td class="text-right">{{ produto.valorEstoqueVenda | currency:'BRL' }}</td>
+                </tr>
+            </ng-template>
+
+            <!-- Variações do produto, mostradas ao clicar na seta -->
+            <ng-template #expandedrow let-produto>
+                <tr>
+                    <td colspan="8" class="!p-0">
+                        <div class="bg-gray-50 px-12 py-3">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="text-left text-gray-500">
+                                        <th class="py-1 font-medium">SKU</th>
+                                        <th class="py-1 font-medium">Cor</th>
+                                        <th class="py-1 font-medium">Tamanho</th>
+                                        <th class="py-1 font-medium text-center">Qtd.</th>
+                                        <th class="py-1 font-medium text-right">Custo un.</th>
+                                        <th class="py-1 font-medium text-right">Venda un.</th>
+                                        <th class="py-1 font-medium text-right">Total custo</th>
+                                        <th class="py-1 font-medium text-right">Total venda</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (variacao of produto.variacoes; track variacao.id) {
+                                        <tr class="border-t border-gray-200" [class.text-red-600]="variacao.quantidade <= 0">
+                                            <td class="py-1">{{ variacao.sku }}</td>
+                                            <td class="py-1">{{ variacao.cor }}</td>
+                                            <td class="py-1">{{ variacao.tamanho }}</td>
+                                            <td class="py-1 text-center">{{ variacao.quantidade }}</td>
+                                            <td class="py-1 text-right">{{ variacao.precoCusto | currency:'BRL' }}</td>
+                                            <td class="py-1 text-right">{{ variacao.precoVenda | currency:'BRL' }}</td>
+                                            <td class="py-1 text-right">{{ variacao.valorEstoqueCusto | currency:'BRL' }}</td>
+                                            <td class="py-1 text-right">{{ variacao.valorEstoqueVenda | currency:'BRL' }}</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template #footer>
+                @if (linhas().length) {
+                    <tr>
+                        <td colspan="4">Total</td>
+                        <td class="text-center">{{ geral.quantidadeVariacoes }}</td>
+                        <td class="text-center">{{ geral.quantidadeUnidades }}</td>
+                        <td class="text-right">{{ geral.valorEstoqueCusto | currency:'BRL' }}</td>
+                        <td class="text-right">{{ geral.valorEstoqueVenda | currency:'BRL' }}</td>
+                    </tr>
+                }
+            </ng-template>
+
+            <ng-template #emptymessage>
+                <tr>
+                    <td colspan="8" class="text-center py-8 text-gray-400">Nenhum produto encontrado</td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <p class="text-xs text-gray-400 mt-2">
+            Os totais consideram todos os produtos do relatório, mesmo quando a busca está filtrando a tabela.
+            Valores em vermelho estão sem estoque.
+        </p>
+    }
+
+</div>

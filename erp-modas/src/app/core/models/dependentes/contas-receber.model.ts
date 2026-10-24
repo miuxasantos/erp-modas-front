@@ -1,3 +1,4 @@
+import { FormaPagamento } from "@core/enums/forma-pagamento.enum";
 import { ContasReceberResponseDto } from "../../dtos/dependentes/contasReceber/contas-receber-response.dto";
 import { StatusConta } from "../../enums/status-conta.enum";
 
@@ -11,6 +12,7 @@ export class ContasReceber {
     totalParcelas: number;
     observacoes: string;
     statusConta: StatusConta;
+    formaPagamento: FormaPagamento;
 
     constructor(dto: ContasReceberResponseDto) {
         this.id = dto.id;
@@ -22,5 +24,6 @@ export class ContasReceber {
         this.totalParcelas = dto.totalParcelas;
         this.observacoes = dto.observacoes;
         this.statusConta = dto.statusConta;
+        this.formaPagamento = dto.formaPagamento;
     }
 }

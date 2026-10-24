@@ -1,0 +1,119 @@
+<div class="p-4">
+
+    <app-page-header
+        titulo="Relatório de Compras"
+        [breadcrumbs]="breadcrumbs"
+        [botaoVisivel]="false"
+    />
+
+    <!-- ━━━━━━━━━━ FILTROS ━━━━━━━━━━ -->
+    <form
+        [formGroup]="form"
+        (ngSubmit)="gerar()"
+        class="bg-white rounded-lg border border-gray-200 p-4 mb-6 flex flex-wrap items-end gap-4"
+    >
+        <div class="flex flex-col gap-1">
+            <label for="inicio" class="text-sm text-gray-600">Data inicial</label>
+            <input pInputText id="inicio" type="date" formControlName="inicio" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label for="fim" class="text-sm text-gray-600">Data final</label>
+            <input pInputText id="fim" type="date" formControlName="fim" />
+        </div>
+
+        <p-button
+            type="submit"
+            label="Gerar"
+            icon="pi pi-search"
+            [loading]="carregando()"
+            [disabled]="form.invalid"
+        />
+
+        <div class="ml-auto">
+            <app-botao-exportar
+                [desabilitado]="!relatorio()"
+                [carregando]="exportando()"
+                (exportar)="exportar($event)"
+            />
+        </div>
+
+        @if (form.hasError('periodoInvalido')) {
+            <small class="w-full text-red-500">
+                A data inicial deve ser anterior ou igual à data final.
+            </small>
+        }
+    </form>
+
+    @if (relatorio(); as relatorio) {
+
+        <!-- ━━━━━━━━━━ RESUMO ━━━━━━━━━━ -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div class="bg-white rounded-lg border border-gray-200 p-4">
+                <p class="text-sm text-gray-500">Compras</p>
+                <p class="text-2xl font-bold text-gray-800">{{ relatorio.quantidadeCompras }}</p>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-200 p-4">
+                <p class="text-sm text-gray-500">Valor total</p>
+                <p class="text-2xl font-bold text-gray-800">{{ relatorio.valorTotal | currency:'BRL' }}</p>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-200 p-4">
+                <p class="text-sm text-gray-500">Ticket médio</p>
+                <p class="text-2xl font-bold text-gray-800">{{ relatorio.ticketMedio | currency:'BRL' }}</p>
+            </div>
+        </div>
+
+        <!-- ━━━━━━━━━━ COMPRAS NO PERÍODO ━━━━━━━━━━ -->
+        <h2 class="text-lg font-semibold text-gray-700 mb-2">Compras no período</h2>
+        <p-table
+            [value]="relatorio.compras"
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[10, 25, 50]"
+            size="small"
+            stripedRows
+        >
+            <ng-template #header>
+                <tr>
+                    <th pSortableColumn="id">Nº <p-sortIcon field="id" /></th>
+                    <th pSortableColumn="lote">Lote <p-sortIcon field="lote" /></th>
+                    <th pSortableColumn="dataChegada">Chegada <p-sortIcon field="dataChegada" /></th>
+                    <th pSortableColumn="fornecedor">Fornecedor <p-sortIcon field="fornecedor" /></th>
+                    <th pSortableColumn="unidadesAdicionadas" class="text-center">Unidades <p-sortIcon field="unidadesAdicionadas" /></th>
+                    <th pSortableColumn="produtosDistintos" class="text-center">Produtos <p-sortIcon field="produtosDistintos" /></th>
+                    <th pSortableColumn="valorTotal" class="text-right">Valor <p-sortIcon field="valorTotal" /></th>
+                </tr>
+            </ng-template>
+
+            <ng-template #body let-compra>
+                <tr>
+                    <td>{{ compra.id }}</td>
+                    <td>{{ compra.lote || '—' }}</td>
+                    <td>{{ compra.dataChegada | date:'dd/MM/yyyy' }}</td>
+                    <td>{{ compra.fornecedor }}</td>
+                    <td class="text-center">{{ compra.unidadesAdicionadas }}</td>
+                    <td class="text-center">{{ compra.produtosDistintos }}</td>
+                    <td class="text-right">{{ compra.valorTotal | currency:'BRL' }}</td>
+                </tr>
+            </ng-template>
+
+            <ng-template #footer>
+                @if (relatorio.compras.length) {
+                    <tr>
+                        <td colspan="4">Total</td>
+                        <td class="text-center">{{ totalUnidades() }}</td>
+                        <td></td>
+                        <td class="text-right">{{ relatorio.valorTotal | currency:'BRL' }}</td>
+                    </tr>
+                }
+            </ng-template>
+
+            <ng-template #emptymessage>
+                <tr>
+                    <td colspan="7" class="text-center py-8 text-gray-400">Nenhuma compra no período</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    }
+
+</div>

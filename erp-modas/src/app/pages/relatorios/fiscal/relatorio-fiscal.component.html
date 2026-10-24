@@ -1,0 +1,199 @@
+<div class="p-4">
+
+    <app-page-header
+        titulo="Relatório Fiscal Mensal"
+        [breadcrumbs]="breadcrumbs"
+        [botaoVisivel]="false"
+    />
+
+    <!-- ━━━━━━━━━━ FILTROS ━━━━━━━━━━ -->
+    <form
+        [formGroup]="form"
+        (ngSubmit)="gerar()"
+        class="bg-white rounded-lg border border-gray-200 p-4 mb-6 flex flex-wrap items-end gap-4"
+    >
+        <p-button
+            type="button"
+            icon="pi pi-chevron-left"
+            [text]="true"
+            severity="secondary"
+            pTooltip="Mês anterior"
+            [disabled]="carregando()"
+            (onClick)="mudarMes(-1)"
+        />
+
+        <div class="flex flex-col gap-1">
+            <label for="mes" class="text-sm text-gray-600">Mês</label>
+            <p-select
+                inputId="mes"
+                formControlName="mes"
+                [options]="opcoesMes"
+                optionLabel="label"
+                optionValue="value"
+                styleClass="w-40"
+            />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label for="ano" class="text-sm text-gray-600">Ano</label>
+            <p-inputNumber
+                inputId="ano"
+                formControlName="ano"
+                [useGrouping]="false"
+                [min]="2000"
+                [max]="2100"
+                inputStyleClass="w-24"
+            />
+        </div>
+
+        <p-button
+            type="button"
+            icon="pi pi-chevron-right"
+            [text]="true"
+            severity="secondary"
+            pTooltip="Próximo mês"
+            [disabled]="carregando()"
+            (onClick)="mudarMes(1)"
+        />
+
+        <p-button
+            type="submit"
+            label="Gerar"
+            icon="pi pi-search"
+            [loading]="carregando()"
+            [disabled]="form.invalid"
+        />
+
+        <div class="ml-auto">
+            <app-botao-exportar
+                [desabilitado]="!relatorio()"
+                [carregando]="exportando()"
+                (exportar)="exportar($event)"
+            />
+        </div>
+    </form>
+
+    @if (relatorio(); as relatorio) {
+        @let totais = relatorio.totaisMes;
+
+        <!-- ━━━━━━━━━━ RESUMO DO MÊS ━━━━━━━━━━ -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div class="bg-white rounded-lg border border-gray-200 p-4">
+                <p class="text-sm text-gray-500">Total de entradas</p>
+                <p class="text-2xl font-bold text-green-700">{{ totais.totalEntradas | currency:'BRL' }}</p>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-200 p-4">
+                <p class="text-sm text-gray-500">Total de saídas</p>
+                <p class="text-2xl font-bold text-red-600">{{ totais.totalSaidas | currency:'BRL' }}</p>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-200 p-4">
+                <p class="text-sm text-gray-500">Saldo do mês</p>
+                <p class="text-2xl font-bold" [class]="totais.saldo < 0 ? 'text-red-600' : 'text-gray-800'">
+                    {{ totais.saldo | currency:'BRL' }}
+                </p>
+            </div>
+        </div>
+
+        <!-- ━━━━━━━━━━ MOVIMENTO DIÁRIO ━━━━━━━━━━ -->
+        <div class="flex flex-wrap items-baseline justify-between gap-2 mb-2">
+            <h2 class="text-lg font-semibold text-gray-700">Movimento diário</h2>
+            <span class="text-sm text-gray-500">Competência: {{ competencia() | date:"MMMM 'de' y" }}</span>
+        </div>
+
+        <!-- 12 colunas: rolagem horizontal em telas menores, com a coluna da data fixa -->
+        <p-table [value]="relatorio.dias" [scrollable]="true" size="small" styleClass="text-sm">
+            <ng-template #header>
+                <tr>
+                    <th rowspan="2" pFrozenColumn class="min-w-24 bg-white">Data</th>
+                    <th colspan="5" class="text-center border-l border-gray-200">Entradas</th>
+                    <th colspan="5" class="text-center border-l border-gray-200">Saídas</th>
+                    <th rowspan="2" class="text-right border-l border-gray-200 min-w-28">Saldo</th>
+                </tr>
+                <tr>
+                    @for (coluna of colunasEntrada; track coluna.campo; let primeira = $first) {
+                        <th class="text-right min-w-28" [class.border-l]="primeira" [class.border-gray-200]="primeira">{{ coluna.rotulo }}</th>
+                    }
+                    @for (coluna of colunasSaida; track coluna.campo; let primeira = $first) {
+                        <th class="text-right min-w-28" [class.border-l]="primeira" [class.border-gray-200]="primeira">{{ coluna.rotulo }}</th>
+                    }
+                </tr>
+            </ng-template>
+
+            <ng-template #body let-dia>
+                <tr [class.text-gray-400]="semMovimento(dia)">
+                    <td pFrozenColumn class="bg-white whitespace-nowrap">
+                        {{ dia.data | date:'dd/MM' }}
+                        <span class="text-xs text-gray-400">{{ dia.data | date:'EEE' }}</span>
+                    </td>
+                    @for (coluna of colunasEntrada; track coluna.campo; let primeira = $first) {
+                        <td class="text-right" [class.font-semibold]="coluna.total" [class.border-l]="primeira" [class.border-gray-200]="primeira">
+                            {{ dia[coluna.campo] ? (dia[coluna.campo] | currency:'BRL') : '–' }}
+                        </td>
+                    }
+                    @for (coluna of colunasSaida; track coluna.campo; let primeira = $first) {
+                        <td class="text-right" [class.font-semibold]="coluna.total" [class.border-l]="primeira" [class.border-gray-200]="primeira">
+                            {{ dia[coluna.campo] ? (dia[coluna.campo] | currency:'BRL') : '–' }}
+                        </td>
+                    }
+                    <td class="text-right font-semibold border-l border-gray-200" [class.text-red-600]="dia.saldo < 0">
+                        {{ dia.saldo ? (dia.saldo | currency:'BRL') : '–' }}
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template #footer>
+                <tr class="font-semibold">
+                    <td pFrozenColumn class="bg-gray-50">Total</td>
+                    @for (coluna of colunasEntrada; track coluna.campo; let primeira = $first) {
+                        <td class="text-right" [class.border-l]="primeira" [class.border-gray-200]="primeira">{{ totais[coluna.campo] | currency:'BRL' }}</td>
+                    }
+                    @for (coluna of colunasSaida; track coluna.campo; let primeira = $first) {
+                        <td class="text-right" [class.border-l]="primeira" [class.border-gray-200]="primeira">{{ totais[coluna.campo] | currency:'BRL' }}</td>
+                    }
+                    <td class="text-right border-l border-gray-200" [class.text-red-600]="totais.saldo < 0">{{ totais.saldo | currency:'BRL' }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <!-- ━━━━━━━━━━ DESPESAS DO MÊS ━━━━━━━━━━ -->
+        <h2 class="text-lg font-semibold text-gray-700 mt-8 mb-2">Despesas do mês</h2>
+        <p-table [value]="relatorio.despesas" size="small" stripedRows>
+            <ng-template #header>
+                <tr>
+                    <th pSortableColumn="data">Data <p-sortIcon field="data" /></th>
+                    <th pSortableColumn="descricao">Descrição <p-sortIcon field="descricao" /></th>
+                    <th pSortableColumn="formaPagamento">Forma de pagamento <p-sortIcon field="formaPagamento" /></th>
+                    <th pSortableColumn="valor" class="text-right">Valor <p-sortIcon field="valor" /></th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-despesa>
+                <tr>
+                    <td>{{ despesa.data | date:'dd/MM/yyyy' }}</td>
+                    <td>{{ despesa.descricao }}</td>
+                    <td>{{ despesa.formaPagamento || '—' }}</td>
+                    <td class="text-right">{{ despesa.valor | currency:'BRL' }}</td>
+                </tr>
+            </ng-template>
+            <ng-template #footer>
+                @if (relatorio.despesas.length) {
+                    <tr>
+                        <td colspan="3">Total</td>
+                        <td class="text-right">{{ totais.totalSaidas | currency:'BRL' }}</td>
+                    </tr>
+                }
+            </ng-template>
+            <ng-template #emptymessage>
+                <tr>
+                    <td colspan="4" class="text-center py-6 text-gray-400">Nenhuma despesa no mês</td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <p class="text-xs text-gray-400 mt-2">
+            Valores pelo dia da venda ou da compra que gerou a conta, com o valor total (parcelas incluídas),
+            confirmados ou não. Contas canceladas não entram. Lançamentos avulsos do caixa entram pela data do lançamento.
+            Cartão inclui crédito e débito; "Outros" inclui boleto.
+        </p>
+    }
+
+</div>

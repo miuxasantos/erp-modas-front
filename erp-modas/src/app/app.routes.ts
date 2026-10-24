@@ -128,6 +128,13 @@ export const routes: Routes = [
                 loadChildren: () =>
                     import('./pages/financeiro/financeiro.routes')
                         .then(m => m.financeiroRoutes)
+            },
+            {
+                path: 'relatorios',
+                canActivate: [adminGuard],
+                loadChildren: () =>
+                    import('./pages/relatorios/relatorios.route')
+                        .then(m => m.relatoriosRoutes)
             }
         ]
     }

@@ -1,0 +1,12 @@
+<!-- shared/components/botao-exportar/botao-exportar.component.html -->
+<p-menu #menu [model]="opcoes" [popup]="true" appendTo="body" />
+
+<p-button
+    label="Exportar"
+    icon="pi pi-download"
+    severity="secondary"
+    [outlined]="true"
+    [disabled]="desabilitado()"
+    [loading]="carregando()"
+    (onClick)="menu.toggle($event)"
+/>

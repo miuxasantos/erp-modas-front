@@ -1,0 +1,132 @@
+<div class="p-4">
+
+    <app-page-header
+        titulo="Compras com Mais Produtos"
+        [breadcrumbs]="breadcrumbs"
+        [botaoVisivel]="false"
+    />
+
+    <!-- ━━━━━━━━━━ FILTROS ━━━━━━━━━━ -->
+    <form
+        [formGroup]="form"
+        (ngSubmit)="gerar()"
+        class="bg-white rounded-lg border border-gray-200 p-4 mb-6 flex flex-wrap items-end gap-4"
+    >
+        <div class="flex flex-col gap-1">
+            <label for="inicio" class="text-sm text-gray-600">Data inicial</label>
+            <input pInputText id="inicio" type="date" formControlName="inicio" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label for="fim" class="text-sm text-gray-600">Data final</label>
+            <input pInputText id="fim" type="date" formControlName="fim" />
+        </div>
+
+        <p-button
+            type="submit"
+            label="Gerar"
+            icon="pi pi-search"
+            [loading]="carregando()"
+            [disabled]="form.invalid"
+        />
+
+        <p-button
+            type="button"
+            label="Todo o histórico"
+            icon="pi pi-calendar-times"
+            [text]="true"
+            severity="secondary"
+            (onClick)="limparPeriodo()"
+        />
+
+        <div class="ml-auto">
+            <app-botao-exportar
+                [desabilitado]="!compras()"
+                [carregando]="exportando()"
+                (exportar)="exportar($event)"
+            />
+        </div>
+
+        @if (form.hasError('periodoInvalido')) {
+            <small class="w-full text-red-500">
+                A data inicial deve ser anterior ou igual à data final.
+            </small>
+        } @else {
+            <small class="w-full text-gray-400">
+                Deixe as datas em branco para considerar todo o histórico.
+            </small>
+        }
+    </form>
+
+    @if (filtrosAplicados(); as filtros) {
+
+        <div class="flex flex-wrap items-baseline justify-between gap-2 mb-2">
+            <h2 class="text-lg font-semibold text-gray-700">Compras ordenadas por unidades</h2>
+            <span class="text-sm text-gray-500">
+                Período:
+                @if (filtros.inicio && filtros.fim) {
+                    {{ filtros.inicio | date:'dd/MM/yyyy' }} a {{ filtros.fim | date:'dd/MM/yyyy' }}
+                } @else if (filtros.inicio) {
+                    a partir de {{ filtros.inicio | date:'dd/MM/yyyy' }}
+                } @else if (filtros.fim) {
+                    até {{ filtros.fim | date:'dd/MM/yyyy' }}
+                } @else {
+                    todo o histórico
+                }
+            </span>
+        </div>
+
+        <p-table
+            [value]="linhas()"
+            [paginator]="linhas().length > 25"
+            [rows]="25"
+            [rowsPerPageOptions]="[25, 50, 100]"
+            size="small"
+            stripedRows
+        >
+            <ng-template #header>
+                <tr>
+                    <th pSortableColumn="posicao" class="w-16 text-center"># <p-sortIcon field="posicao" /></th>
+                    <th pSortableColumn="id">Nº <p-sortIcon field="id" /></th>
+                    <th pSortableColumn="lote">Lote <p-sortIcon field="lote" /></th>
+                    <th pSortableColumn="dataChegada">Chegada <p-sortIcon field="dataChegada" /></th>
+                    <th pSortableColumn="fornecedor">Fornecedor <p-sortIcon field="fornecedor" /></th>
+                    <th pSortableColumn="unidadesAdicionadas" class="text-center">Unidades <p-sortIcon field="unidadesAdicionadas" /></th>
+                    <th pSortableColumn="produtosDistintos" class="text-center">Produtos <p-sortIcon field="produtosDistintos" /></th>
+                    <th pSortableColumn="valorTotal" class="text-right">Valor <p-sortIcon field="valorTotal" /></th>
+                </tr>
+            </ng-template>
+
+            <ng-template #body let-compra>
+                <tr>
+                    <td class="text-center text-gray-500">{{ compra.posicao }}</td>
+                    <td>{{ compra.id }}</td>
+                    <td>{{ compra.lote || '—' }}</td>
+                    <td>{{ compra.dataChegada | date:'dd/MM/yyyy' }}</td>
+                    <td>{{ compra.fornecedor }}</td>
+                    <td class="text-center">{{ compra.unidadesAdicionadas }}</td>
+                    <td class="text-center">{{ compra.produtosDistintos }}</td>
+                    <td class="text-right">{{ compra.valorTotal | currency:'BRL' }}</td>
+                </tr>
+            </ng-template>
+
+            <ng-template #footer>
+                @if (linhas().length) {
+                    <tr>
+                        <td colspan="5">Total</td>
+                        <td class="text-center">{{ totalUnidades() }}</td>
+                        <td></td>
+                        <td class="text-right">{{ totalValor() | currency:'BRL' }}</td>
+                    </tr>
+                }
+            </ng-template>
+
+            <ng-template #emptymessage>
+                <tr>
+                    <td colspan="8" class="text-center py-8 text-gray-400">Nenhuma compra no período</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    }
+
+</div>

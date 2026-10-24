@@ -72,6 +72,7 @@ export class ProdutoFormComponent implements OnInit {
     precoVenda: [0, Validators.required],
     categoriaId: new FormControl<number | null>(null, Validators.required),
     ativo: [true],
+    noCatalogo: [false],
     imagem: [''],
   });
 
@@ -111,6 +112,7 @@ export class ProdutoFormComponent implements OnInit {
             codigo: produto.codigo,
             descricao: produto.descricao,
             ativo: produto.ativo,
+            noCatalogo: produto.noCatalogo,
             precoCusto: produto.precoCusto,
             precoVenda: produto.precoVenda,
             tecidoId: produto.tecido?.id ?? null,

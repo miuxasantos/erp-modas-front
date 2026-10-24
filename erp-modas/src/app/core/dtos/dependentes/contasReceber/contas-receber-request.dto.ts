@@ -1,3 +1,4 @@
+import { FormaPagamento } from "@core/enums/forma-pagamento.enum";
 import { StatusConta } from "../../../enums/status-conta.enum";
 
 export interface ContasReceberRequestDto {
@@ -9,4 +10,5 @@ export interface ContasReceberRequestDto {
     totalParcelas: number;
     observacoes: string;
     statusConta: StatusConta;
+    formaPagamento?: FormaPagamento | null;
 }

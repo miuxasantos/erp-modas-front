@@ -7,5 +7,6 @@ export interface ProdutoUpdateDto {
     tecidoId?: number;
     marcaId?: number;
     categoriaId?: number;
+    noCatalogo?: boolean;
     imagem?: string;
 }

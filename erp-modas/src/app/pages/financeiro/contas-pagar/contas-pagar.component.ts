@@ -5,21 +5,22 @@ import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { InputNumberModule } from 'primeng/inputnumber';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { ContasPagarApiService } from '@core/services/dependentes/contas-pagar-api.service';
 import { ContasPagarResponseDto } from '@core/dtos/dependentes/contasPagar/contas-pagar-response.dto';
 import { StatusConta } from '@core/enums/status-conta.enum';
+import { dataLocalISO } from '@core/utils/data.utils';
 import { DataPagamentoDto } from '@core/dtos/dependentes/contasPagar/data-pagamento.dto';
 
 @Component({
     selector: 'app-contas-pagar',
     imports: [
         ReactiveFormsModule, TableModule, ButtonModule,
-        TagModule, TooltipModule, DialogModule,
-        InputNumberModule, CurrencyPipe, DatePipe,
+        TagModule, TooltipModule, DialogModule, InputTextModule,
+        CurrencyPipe, DatePipe,
         PageHeaderComponent,
     ],
     templateUrl: './contas-pagar.component.html',
@@ -35,9 +36,8 @@ export class ContasPagarComponent implements OnInit {
     contaSelecionada: ContasPagarResponseDto | null = null;
     processando = signal(false);
 
-    dtoData: DataPagamentoDto = {
-        dataPagamento: new Date().toISOString().split('T')[0],
-    };
+    // Limite do campo de data (atualizado ao abrir o diálogo)
+    hoje = dataLocalISO();
 
     breadcrumbs: MenuItem[] = [
         { label: 'Dashboard', routerLink: '/dashboard' },
@@ -45,9 +45,10 @@ export class ContasPagarComponent implements OnInit {
         { label: 'Contas a Pagar' },
     ];
 
+    // Na baixa só se escolhe a data (começa em hoje, não pode ser futura).
+    // Valor e forma de pagamento são os da venda/compra e aparecem só para conferência.
     formBaixa = this.fb.group({
-        dataPagamento: [new Date().toISOString().split('T')[0], Validators.required],
-        valor: [0, [Validators.required, Validators.min(0.01)]],
+        dataPagamento: [dataLocalISO(), Validators.required],
     });
 
     ngOnInit(): void {
@@ -62,7 +63,8 @@ export class ContasPagarComponent implements OnInit {
 
     abrirBaixa(conta: ContasPagarResponseDto): void {
         this.contaSelecionada = conta;
-        this.formBaixa.patchValue({ valor: conta.valor });
+        this.hoje = dataLocalISO();
+        this.formBaixa.patchValue({ dataPagamento: this.hoje });
         this.dialogBaixaVisivel.set(true);
     }
 
@@ -70,16 +72,15 @@ export class ContasPagarComponent implements OnInit {
         if (this.formBaixa.invalid || !this.contaSelecionada) return;
         this.processando.set(true);
 
-        const dto = {
-            dataPagamento: this.dtoData.dataPagamento,
-            statusConta: StatusConta.PAGO,
+        const dto: DataPagamentoDto = {
+            dataPagamento: this.formBaixa.getRawValue().dataPagamento!,
         };
 
-        this.contasPagarApi.pagar(this.contaSelecionada.id, dto as any).subscribe({
+        this.contasPagarApi.pagar(this.contaSelecionada.id, dto).subscribe({
         next: () => {
             this.messageService.add({
             severity: 'success',
-            summary: 'Recebimento registrado',
+            summary: 'Pagamento registrado',
             detail: `Parcela ${this.contaSelecionada!.numeroParcela}/${this.contaSelecionada!.totalParcelas} paga`,
             });
             this.dialogBaixaVisivel.set(false);

@@ -1,0 +1,105 @@
+<div class="p-4">
+
+    <app-page-header
+        titulo="Resumo Financeiro"
+        [breadcrumbs]="breadcrumbs"
+        [botaoVisivel]="false"
+    />
+
+    <!-- ━━━━━━━━━━ FILTROS ━━━━━━━━━━ -->
+    <form
+        [formGroup]="form"
+        (ngSubmit)="gerar()"
+        class="bg-white rounded-lg border border-gray-200 p-4 mb-6 flex flex-wrap items-end gap-4"
+    >
+        <div class="flex flex-col gap-1">
+            <label for="inicio" class="text-sm text-gray-600">Data inicial</label>
+            <input pInputText id="inicio" type="date" formControlName="inicio" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label for="fim" class="text-sm text-gray-600">Data final</label>
+            <input pInputText id="fim" type="date" formControlName="fim" />
+        </div>
+
+        <p-button
+            type="submit"
+            label="Gerar"
+            icon="pi pi-search"
+            [loading]="carregando()"
+            [disabled]="form.invalid"
+        />
+
+        <div class="ml-auto">
+            <app-botao-exportar
+                [desabilitado]="!resumo()"
+                [carregando]="exportando()"
+                (exportar)="exportar($event)"
+            />
+        </div>
+
+        @if (form.hasError('periodoInvalido')) {
+            <small class="w-full text-red-500">
+                A data inicial deve ser anterior ou igual à data final.
+            </small>
+        }
+    </form>
+
+    @if (resumo(); as resumo) {
+
+        <!-- ━━━━━━━━━━ VENDAS ━━━━━━━━━━ -->
+        <h2 class="text-lg font-semibold text-gray-700 mb-2">Vendas</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <div class="bg-white rounded-lg border border-gray-200 p-4">
+                <p class="text-sm text-gray-500">Vendas</p>
+                <p class="text-2xl font-bold text-gray-800">{{ resumo.faturamento.quantidadeVendas }}</p>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-200 p-4">
+                <p class="text-sm text-gray-500">Faturamento</p>
+                <p class="text-2xl font-bold text-gray-800">{{ resumo.faturamento.faturamento | currency:'BRL' }}</p>
+            </div>
+        </div>
+
+        <!-- ━━━━━━━━━━ CONTAS A RECEBER / A PAGAR ━━━━━━━━━━ -->
+        @for (secao of secoesContas(); track secao.titulo) {
+            <h2 class="text-lg font-semibold text-gray-700 mb-2">{{ secao.titulo }}</h2>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-3">
+                <div class="bg-white rounded-lg border border-gray-200 p-4">
+                    <p class="text-sm text-gray-500">Contas</p>
+                    <p class="text-2xl font-bold text-gray-800">{{ secao.contas.quantidadeContas }}</p>
+                </div>
+                <div class="bg-white rounded-lg border border-gray-200 p-4">
+                    <p class="text-sm text-gray-500">Valor total</p>
+                    <p class="text-2xl font-bold text-gray-800">{{ secao.contas.valorTotal | currency:'BRL' }}</p>
+                </div>
+                <div class="bg-white rounded-lg border border-gray-200 p-4">
+                    <p class="text-sm text-gray-500">{{ secao.rotuloQuitado }}</p>
+                    <p class="text-2xl font-bold text-green-700">{{ secao.contas.valorPago | currency:'BRL' }}</p>
+                </div>
+                <div class="bg-white rounded-lg border border-gray-200 p-4">
+                    <p class="text-sm text-gray-500">Em aberto</p>
+                    <p class="text-2xl font-bold" [class]="secao.contas.valorEmAberto > 0 ? 'text-amber-600' : 'text-gray-800'">
+                        {{ secao.contas.valorEmAberto | currency:'BRL' }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Barra de progresso: quanto do valor total já foi quitado -->
+            <div class="mb-6">
+                <div class="flex justify-between text-xs text-gray-500 mb-1">
+                    <span>{{ secao.rotuloQuitado }}</span>
+                    <span>{{ secao.percentualQuitado | percent:'1.0-0' }}</span>
+                </div>
+                <div class="h-2 w-full rounded-full bg-gray-200 overflow-hidden">
+                    <div class="h-full rounded-full bg-green-600" [style.width.%]="secao.percentualQuitado * 100"></div>
+                </div>
+            </div>
+        }
+
+        <p class="text-xs text-gray-400">
+            Contas consideradas pela data de vencimento dentro do período. Contas canceladas não entram nos valores.
+        </p>
+    }
+
+</div>

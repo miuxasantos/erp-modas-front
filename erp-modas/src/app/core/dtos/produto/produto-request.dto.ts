@@ -9,5 +9,6 @@ export interface ProdutoRequestDto {
     tecidoId: number;
     marcaId: number;
     categoriaId: number;
+    noCatalogo: boolean;
     imagem: string;
 }
