@@ -1,3 +1,4 @@
+import { parseDataLocal } from "@core/utils/data.utils";
 import { MovimentacoesCaixaResponseDto } from "../../dtos/dependentes/movimentacoesCaixa/movimentacoes-caixa-response.dto";
 import { OrigemMov } from "../../enums/origem-mov.enum";
 import { TipoMovCaixa } from "../../enums/tipo-mov-caixa.enum";
@@ -15,7 +16,7 @@ export class MovimentacoesCaixa {
 
     constructor(dto: MovimentacoesCaixaResponseDto) {
         this.id = dto.id;
-        this.data = new Date(dto.data);
+        this.data = parseDataLocal(dto.data)!;
         this.tipoMovCaixa = dto.tipoMovCaixa;
         this.valor = dto.valor;
         this.descricao = dto.descricao;

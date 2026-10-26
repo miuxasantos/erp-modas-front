@@ -122,7 +122,7 @@ export class CatalogoListComponent implements OnInit {
     });
 
     const p = this.route.snapshot.queryParamMap;
-    if (['categoriaId', 'corId', 'tamanhoId', 'sort'].some(k => p.has(k))) {
+    if (['categoriaId', 'corId', 'tamanhoId', 'ordem'].some(k => p.has(k))) {
       this.filtrosAbertos.set(true);
     }
 

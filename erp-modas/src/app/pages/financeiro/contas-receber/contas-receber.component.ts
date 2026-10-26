@@ -57,11 +57,7 @@ export class ContasReceberComponent implements OnInit {
 
     carregar(): void {
         this.contasReceberApi.getAll().subscribe({
-        next: (contas) => {
-            console.log('Contas recebidas:', contas);
-            console.log('Primeira conta:', contas[0]);
-            this.contas = contas;
-        }
+        next: contas => this.contas = contas,
         });
     }
 

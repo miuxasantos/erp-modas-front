@@ -33,7 +33,7 @@ export class SidebarComponent {
             label: 'Principais',
             items: [
                 { label: 'Home', icon: 'pi pi-home', route: '/home'},
-                { label: 'Dashboard', icon: 'pi pi-chart-bar', route: '/dashboard'},
+                { label: 'Dashboard', icon: 'pi pi-chart-bar', route: '/dashboard', visivel: () => this.auth.isProprietario()},
                 { label: 'Vendas', icon: 'pi pi-shopping-cart', route: '/vendas'},
                 { label: 'Condicionais', icon: 'pi pi-box', route: '/condicionais'},
                 { label: 'Compras', icon: 'pi pi-truck', route: '/compras'},

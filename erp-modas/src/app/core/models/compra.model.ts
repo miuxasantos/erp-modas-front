@@ -1,3 +1,4 @@
+import { parseDataLocal } from "@core/utils/data.utils";
 import { CompraResponseDto } from "../dtos/compra/compra-response.dto";
 import { FormaPagamento } from "../enums/forma-pagamento.enum";
 import { ContasPagar } from "./dependentes/contas-pagar.model";
@@ -20,7 +21,7 @@ export class Compra {
         this.id = dto.id;
         this.fornecedor = new Fornecedor(dto.fornecedor);
         this.lote = dto.lote;
-        this.dataChegada = new Date(dto.dataChegada);
+        this.dataChegada = parseDataLocal(dto.dataChegada)!;
         this.observacoes = dto.observacoes;
         this.formaPagamento = dto.formaPagamento;
         this.numeroParcelas = dto.numeroParcelas;

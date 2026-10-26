@@ -1,11 +1,13 @@
+import { parseDataLocal } from "@core/utils/data.utils";
 import { CaixaResponseDto } from "../dtos/caixa/caixa-response.dto";
 import { StatusCaixa } from "../enums/status-caixa.enum";
 import { MovimentacoesCaixa } from "./dependentes/movimentacoes-caixa.model";
+import { parse } from "path";
 
 export class Caixa {
     id: number;
     dataAbertura: Date;
-    dataFechamento: Date;
+    dataFechamento: Date | null;
     saldoAbertura: number;
     saldoFechamento: number;
     statusCaixa: StatusCaixa;
@@ -16,8 +18,8 @@ export class Caixa {
 
     constructor(dto: CaixaResponseDto) {
         this.id = dto.id;
-        this.dataAbertura = new Date(dto.dataAbertura);
-        this.dataFechamento = new Date(dto.dataFechamento);
+        this.dataAbertura = parseDataLocal(dto.dataAbertura)!;
+        this.dataFechamento = parseDataLocal(dto.dataFechamento);
         this.saldoAbertura = dto.saldoAbertura;
         this.saldoFechamento = dto.saldoFechamento;
         this.statusCaixa = dto.statusCaixa;

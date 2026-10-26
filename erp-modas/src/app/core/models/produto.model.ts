@@ -1,3 +1,4 @@
+import { parseDataLocal } from "@core/utils/data.utils";
 import { ProdutoResponseDto } from "../dtos/produto/produto-response.dto";
 import { Tecido } from "./apoio/tecido.model";
 import { Categoria } from "./categoria.model";
@@ -27,8 +28,8 @@ export class Produto {
         this.ativo = dto.ativo;
         this.precoCusto = dto.precoCusto;
         this.precoVenda = dto.precoVenda;
-        this.dataInclusao = new Date(dto.dataInclusao);
-        this.dataDesativacao = dto.dataDesativacao != null ? new Date(dto.dataDesativacao) : null;;
+        this.dataInclusao = parseDataLocal(dto.dataInclusao)!;
+        this.dataDesativacao = parseDataLocal(dto.dataDesativacao);
         this.tecido = new Tecido(dto.tecido);
         this.marca = new Marca(dto.marca);
         this.categoria = new Categoria(dto.categoria);

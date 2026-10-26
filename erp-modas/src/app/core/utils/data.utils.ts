@@ -32,3 +32,9 @@ export function periodoValidoValidator(campoInicio = 'inicio', campoFim = 'fim')
         return inicio <= fim ? null : { periodoInvalido: true };
     };
 }
+
+export function parseDataLocal(valor: string | null | undefined): Date | null {
+    if (!valor) return null;
+    const [ano, mes, dia] = valor.substring(0, 10).split('-').map(Number);
+    return new Date(ano, mes - 1, dia);
+}

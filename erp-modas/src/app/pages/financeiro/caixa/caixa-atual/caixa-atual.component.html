@@ -29,7 +29,7 @@
             </p>
             @if (caixaAtual() && caixaAberto()) {
                 <p class="text-sm text-gray-400">
-                Aberto desde {{ caixaAtual()!.dataAbertura | date:'dd/MM/yyyy HH:mm' }}
+                Aberto desde {{ caixaAtual()!.dataAbertura | date:'dd/MM/yyyy'}}
                 </p>
             }
             </div>

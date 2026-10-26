@@ -52,9 +52,9 @@ export const routes: Routes = [
             {
                 path: 'dashboard',
                 canActivate: [adminGuard],
-                loadComponent: () =>
-                    import('./pages/dashboard/dashboard.compontent')
-                        .then(c => c.DashboardComponent)
+                loadChildren: () =>
+                    import('./pages/dashboard/dashboard.route')
+                        .then(m => m.dashboardRoutes)
             },
             {
                 path: 'produtos',

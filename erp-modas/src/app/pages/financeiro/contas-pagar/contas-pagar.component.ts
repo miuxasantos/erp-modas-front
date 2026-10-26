@@ -57,7 +57,7 @@ export class ContasPagarComponent implements OnInit {
 
     carregar(): void {
         this.contasPagarApi.getAll().subscribe({
-        next: contas => {console.log('contas:', contas), this.contas = contas},
+        next: contas => this.contas = contas,
         });
     }
 

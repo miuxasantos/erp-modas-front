@@ -29,7 +29,7 @@ export class CatalogoApiService {
         if(filtros?.categoriaId) params = params.set('categoriaId', filtros.categoriaId);
         if(filtros?.corId) params = params.set('corId', filtros.corId);
         if(filtros?.tamanhoId) params = params.set('tamanhoId', filtros.tamanhoId);
-
+        if (filtros?.sort) params = params.set('sort', filtros.sort);
         return this.http.get<PageableDto<CatalogoResponseDto>>(this.url, {params});
     }
 

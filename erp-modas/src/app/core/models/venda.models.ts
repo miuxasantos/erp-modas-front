@@ -1,3 +1,4 @@
+import { parseDataLocal } from "@core/utils/data.utils";
 import { VendaResponseDto } from "../dtos/venda/venda-response.dto";
 import { FormaPagamento } from "../enums/forma-pagamento.enum";
 import { Cliente } from "./cliente.model";
@@ -19,7 +20,7 @@ export class Venda {
     constructor(dto: VendaResponseDto) {
         this.id = dto.id;
         this.cliente = new Cliente(dto.cliente);
-        this.dataVenda = new Date(dto.dataVenda);
+        this.dataVenda = parseDataLocal(dto.dataVenda)!;
         this.observacoes = dto.observacoes;
         this.formaPagamento = dto.formaPagamento;
         this.valorTotal = dto.valorTotal;
