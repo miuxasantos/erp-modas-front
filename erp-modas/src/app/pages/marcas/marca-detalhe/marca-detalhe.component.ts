@@ -24,7 +24,7 @@ export class MarcaDetalheComponent implements OnInit {
     marca: MarcaResponseDto | null = null;
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard',  routerLink: '/dashboard' },
+        { label: 'Home',  routerLink: '/home' },
         { label: 'Marcas',   routerLink: '/marcas' },
         { label: 'Detalhe' },
     ];

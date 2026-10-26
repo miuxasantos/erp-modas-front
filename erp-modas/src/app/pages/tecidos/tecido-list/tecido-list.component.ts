@@ -48,7 +48,7 @@ export class TecidoListComponent implements OnInit {
     elasticidades = Object.values(Elasticidade);
 
     breadcrumbs: MenuItem[] = [
-        {label: 'Dashboard', routerLink: '/dashboard'},
+        {label: 'Home', routerLink: '/home'},
         {label: 'Tecidos'},
     ];
 

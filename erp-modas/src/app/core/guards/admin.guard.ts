@@ -12,7 +12,7 @@ export const adminGuard: CanActivateFn = () => {
     }
 
     if(!authService.isProprietario()) {
-        router.navigate(['/dashboard']);
+        router.navigate(['/home']);
         return false;
     }
 

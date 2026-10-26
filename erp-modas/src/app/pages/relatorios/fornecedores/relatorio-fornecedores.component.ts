@@ -37,7 +37,7 @@ export class RelatorioFornecedoresComponent implements OnInit {
     private readonly CAMINHO_EXPORTACAO = 'compras/fornecedores';
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Relatórios' },
         { label: 'Fornecedores' },
     ];

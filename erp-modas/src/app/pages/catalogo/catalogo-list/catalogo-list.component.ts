@@ -121,6 +121,11 @@ export class CatalogoListComponent implements OnInit {
       next: f => this.opcoes.set(f),
     });
 
+    const p = this.route.snapshot.queryParamMap;
+    if (['categoriaId', 'corId', 'tamanhoId', 'sort'].some(k => p.has(k))) {
+      this.filtrosAbertos.set(true);
+    }
+
     this.route.queryParamMap.pipe(
       tap(params => {
         this.lerParams(params);

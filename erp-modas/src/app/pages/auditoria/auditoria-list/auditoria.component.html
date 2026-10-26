@@ -1,0 +1,71 @@
+
+<div class="p-4">
+  <app-page-header titulo="Auditoria"
+    [breadcrumbs]="breadcrumbs" />
+
+  <div class="mt-4 rounded-lg border border-gray-200 bg-white p-4">
+    <p-table
+      [value]="auditorias()"
+      [loading]="carregando()"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Exibindo {first} a {last} de {totalRecords} registros"
+      [tableStyle]="{ 'min-width': '55rem' }"
+      class="p-datatable-sm"
+      dataKey="id"
+      [rowHover]="true"
+      [stripedRows]="true"
+      [showGridlines]="true"
+      emptyMessage="Nenhum registro de auditoria encontrado."
+    >
+      <ng-template #header>
+        <tr>
+          <th pSortableColumn="id">
+            ID
+            <p-sortIcon field="id" />
+          </th>
+
+          <th pSortableColumn="usuarioId">
+            Usuário
+            <p-sortIcon field="usuarioId" />
+          </th>
+
+          <th pSortableColumn="tipoAcaoAud">
+            Ação
+            <p-sortIcon field="tipoAcaoAud" />
+          </th>
+
+          <th pSortableColumn="entidade">
+            Entidade
+            <p-sortIcon field="entidade" />
+          </th>
+
+          <th pSortableColumn="entidadeId">
+            ID da entidade
+            <p-sortIcon field="entidadeId" />
+          </th>
+
+          <th pSortableColumn="dataHora">
+            Data e hora
+            <p-sortIcon field="dataHora" />
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template #body let-auditoria>
+        <tr>
+          <td>{{ auditoria.id }}</td>
+          <td>{{ auditoria.usuarioId }}</td>
+          <td>{{ auditoria.tipoAcaoAud }}</td>
+          <td>{{ auditoria.entidade }}</td>
+          <td>{{ auditoria.entidadeId }}</td>
+          <td>
+            {{ auditoria.dataHora | date: 'dd/MM/yyyy HH:mm:ss' }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

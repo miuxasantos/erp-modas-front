@@ -71,7 +71,7 @@ export class CondicionalFormComponent implements OnInit {
     produtoSelecionado: ProdutoResponseDto | null = null;
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Condicionais',    routerLink: '/condicionais' },
         { label: 'Nova Condicional' },
     ];

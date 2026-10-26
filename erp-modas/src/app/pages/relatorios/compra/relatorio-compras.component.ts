@@ -32,7 +32,7 @@ export class RelatorioComprasComponent implements OnInit {
     private readonly CAMINHO_EXPORTACAO = 'compras/periodo';
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Relatórios' },
         { label: 'Compras' },
     ];

@@ -15,6 +15,7 @@ import { FornecedorResponseDto } from "@core/dtos/fornecedor/fornecedor-response
 import { TemPermissaoDirective } from "@core/directives/tem-permissao.directive";
 import { AssessoriaApiService } from "@core/services/assessoria-api.service";
 import { AssessoriaResponseDto } from "@core/dtos/assessoria/assessoria-response.dto";
+import { MascaraPipe } from "@core/pipes/mascara.pipe";
 
 @Component({
     selector: 'app-fornecedor-list',
@@ -27,6 +28,7 @@ import { AssessoriaResponseDto } from "@core/dtos/assessoria/assessoria-response
         InputTextModule,
         SelectModule,
         TagModule,
+        MascaraPipe,
         PageHeaderComponent,
         TemPermissaoDirective
     ],
@@ -48,7 +50,7 @@ export class FornecedorListComponent implements OnInit {
     assessorias: AssessoriaResponseDto[] = [];
 
     breadcrumbs: MenuItem[] = [
-        {label: 'Dashboard', routerLink: '/dashboard'},
+        {label: 'Home', routerLink: '/home'},
         {label: 'Fornecedores'},
     ];
 

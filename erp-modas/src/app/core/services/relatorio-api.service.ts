@@ -18,6 +18,7 @@ import { FaturamentoPeriodoResponseDto } from "@core/dtos/relatorios/financeiro/
 import { ContasPeriodoResponseDto } from "@core/dtos/relatorios/financeiro/contas-periodo.response.dto";
 import { FiltroFiscalDto } from "@core/dtos/relatorios/fiscal/filtro-fiscal.dto";
 import { RelatorioFiscalResponseDto } from "@core/dtos/relatorios/fiscal/relatorio-fiscal-response.dto";
+import { TempoSaidaResponseDto } from "@core/dtos/relatorios/estoque/tempo-saida-response.dto";
 
 export type FiltrosRelatorio = Record<string, string | number | boolean | null | undefined>;
 
@@ -99,6 +100,12 @@ export class RelatorioApiService {
 
     fiscal(filtro: FiltroFiscalDto): Observable<RelatorioFiscalResponseDto> {
         return this.http.get<RelatorioFiscalResponseDto>(`${this.url}/financeiro/fiscal`, {
+            params: this.montarParams({ ...filtro }),
+        });
+    }
+
+    tempoSaida(filtro: FiltroPeriodoDto): Observable<TempoSaidaResponseDto> {
+        return this.http.get<TempoSaidaResponseDto>(`${this.url}/estoque/tempo-saida`, {
             params: this.montarParams({ ...filtro }),
         });
     }

@@ -3,9 +3,11 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import {STATUS_TELA} from "./http-context.interceptor";
+import { AuthService } from '@core/services/auth/auth.service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     const messageService = inject(MessageService);
+    const authService = inject(AuthService);
 
       return next(req).pipe(
       catchError((erroOriginal: HttpErrorResponse) =>
@@ -27,11 +29,13 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
             switch (error.status) {
               case 401:
-                messageService.add({
-                  severity: 'warn',
-                  summary: 'Sessão expirada',
-                  detail: 'Faça login novamente',
-                });
+                if (authService.logado()) {
+                  messageService.add({
+                    severity: 'warn',
+                    summary: 'Sessão expirada',
+                    detail: 'Faça login novamente',
+                  });
+                }
                 break;
 
               case 403:

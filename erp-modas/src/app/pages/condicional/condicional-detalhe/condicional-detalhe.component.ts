@@ -29,7 +29,7 @@ export class CondicionalDetalheComponent implements OnInit {
     condicional: CondicionalResponseDto  | null = null;
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Condicionais', routerLink: '/condicionais' },
         { label: 'Detalhe' },
     ];

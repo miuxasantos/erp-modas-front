@@ -41,7 +41,7 @@ export class RelatorioVendasComponent implements OnInit {
     private readonly CAMINHO_EXPORTACAO = 'vendas';
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Relatórios' },
         { label: 'Vendas' },
     ];

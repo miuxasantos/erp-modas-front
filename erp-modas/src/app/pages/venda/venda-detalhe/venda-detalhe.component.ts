@@ -29,7 +29,7 @@ export class VendaDetalheComponent implements OnInit {
     venda: VendaResponseDto | null = null;
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Vendas',    routerLink: '/vendas' },
         { label: 'Detalhe' },
     ];

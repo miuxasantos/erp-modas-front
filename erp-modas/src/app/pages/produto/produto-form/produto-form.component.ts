@@ -19,6 +19,7 @@ import { MarcaApiService } from '@core/services/marca-api.service';
 import { TecidoResponseDto } from '@core/dtos/apoio/tecido/tecido-response.dto';
 import { MarcaResponseDto } from '@core/dtos/marca/marca-response.dto';
 import { CompraFluxoService } from '@core/services/compra/compra-fluxo.service';
+import { ImagemUrlPipe } from '@core/pipes/imagens-url.pipe';
 
 @Component({
   selector: 'app-produto-form',
@@ -30,6 +31,7 @@ import { CompraFluxoService } from '@core/services/compra/compra-fluxo.service';
     InputNumberModule,
     SelectModule,
     CheckboxModule,
+    ImagemUrlPipe,
     PageHeaderComponent,
   ],
   templateUrl: './produto-form.component.html',
@@ -57,7 +59,7 @@ export class ProdutoFormComponent implements OnInit {
   tecidos: TecidoResponseDto[] = [];
 
   breadcrumbs: MenuItem[] = [
-    { label: 'Dashboard', routerLink: '/dashboard' },
+    { label: 'Home', routerLink: '/home' },
     { label: 'Produtos',  routerLink: '/produtos' },
     { label: 'Novo Produto' },
   ];

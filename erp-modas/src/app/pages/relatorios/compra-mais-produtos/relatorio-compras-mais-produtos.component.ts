@@ -37,7 +37,7 @@ export class RelatorioComprasMaisProdutosComponent implements OnInit {
     private readonly CAMINHO_EXPORTACAO = 'compras/mais-produtos';
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Relatórios' },
         { label: 'Compras com mais produtos' },
     ];

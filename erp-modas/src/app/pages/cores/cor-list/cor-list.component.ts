@@ -40,7 +40,7 @@ export class CorListComponent implements OnInit {
     corEditando: CorResponseDto | null = null;
 
     breadcrumbs: MenuItem[] = [
-        {label: 'Dashboard', routerLink: '/dashboard'},
+        {label: 'Home', routerLink: '/home'},
         {label: 'Cores'},
     ];
 

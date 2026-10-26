@@ -7,9 +7,9 @@ import { AuditoriaResponseDto } from "@core/dtos/auditoria/auditoria-response.dt
 @Injectable({ providedIn: 'root' })
 export class AuditoriaApiService {
     private readonly http = inject(HttpClient);
-    private readonly url = `${environment.apiUrl}/auditorias`;
+    private readonly url = `${environment.apiUrl}/auditoria`;
 
-    getAll(): Observable<AuditoriaResponseDto[]> {
+    listar(): Observable<AuditoriaResponseDto[]> {
         return this.http.get<AuditoriaResponseDto[]>(this.url);
     }
 

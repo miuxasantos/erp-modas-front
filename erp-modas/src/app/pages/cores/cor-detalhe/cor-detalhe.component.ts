@@ -24,7 +24,7 @@ export class CorDetalheComponent implements OnInit {
     cor: CorResponseDto | null = null;
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard',  routerLink: '/dashboard' },
+        { label: 'Home',  routerLink: '/home' },
         { label: 'Cores',   routerLink: '/cores' },
         { label: 'Detalhe' },
     ];

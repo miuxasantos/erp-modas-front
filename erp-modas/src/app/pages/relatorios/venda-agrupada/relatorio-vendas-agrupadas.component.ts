@@ -60,7 +60,7 @@ export class RelatorioVendasAgrupadasComponent implements OnInit {
     private readonly fb = inject(FormBuilder);
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Relatórios' },
         { label: 'Vendas agrupadas' },
     ];

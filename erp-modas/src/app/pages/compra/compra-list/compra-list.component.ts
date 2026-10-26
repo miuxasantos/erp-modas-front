@@ -37,7 +37,7 @@ export class CompraListComponent implements OnInit {
     compras: CompraResponseDto[] = [];
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Compras' },
     ];
 

@@ -41,7 +41,7 @@ export class ProdutoListComponent implements OnInit {
     produtoEditando: ProdutoResponseDto | null = null;
 
     breadcrumbs: MenuItem[] = [
-        {label: 'Dashboard', routerLink: '/dashboard'},
+        {label: 'Home', routerLink: '/home'},
         {label: 'Produtos'},
     ];
 

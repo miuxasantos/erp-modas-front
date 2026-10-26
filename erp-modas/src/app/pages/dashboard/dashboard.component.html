@@ -1,0 +1,166 @@
+<div class="p-4">
+
+    @if (auth.isProprietario()) {
+
+        <!-- ━━━━━━━━━━ CABEÇALHO + SELETOR DE MÊS ━━━━━━━━━━ -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
+                <p class="text-sm text-gray-500">Olá, {{ auth.usuario()?.primeiroNome }}. Resumo do mês selecionado.</p>
+            </div>
+
+            <div class="flex items-center gap-1 bg-white rounded-lg border border-gray-200 px-1">
+                <p-button
+                    icon="pi pi-chevron-left"
+                    [text]="true"
+                    severity="secondary"
+                    pTooltip="Mês anterior"
+                    [disabled]="carregando()"
+                    (onClick)="mudarMes(-1)"
+                />
+                <span class="w-36 text-center font-medium text-gray-700 first-letter:uppercase">
+                    {{ mes() | date:"MMMM 'de' y" }}
+                </span>
+                <p-button
+                    icon="pi pi-chevron-right"
+                    [text]="true"
+                    severity="secondary"
+                    pTooltip="Próximo mês"
+                    [disabled]="carregando() || ehMesAtual()"
+                    (onClick)="mudarMes(1)"
+                />
+            </div>
+        </div>
+
+        @if (dados(); as d) {
+
+            <!-- ━━━━━━━━━━ CARDS ━━━━━━━━━━ -->
+            <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6" [class.opacity-50]="carregando()">
+                <div class="bg-white rounded-lg border border-gray-200 p-4">
+                    <p class="text-sm text-gray-500">Faturamento</p>
+                    <p class="text-xl font-bold text-gray-800">{{ d.vendas.faturamento | currency:'BRL' }}</p>
+                </div>
+                <div class="bg-white rounded-lg border border-gray-200 p-4">
+                    <p class="text-sm text-gray-500">Vendas</p>
+                    <p class="text-xl font-bold text-gray-800">{{ d.vendas.quantidadeVendas }}</p>
+                </div>
+                <div class="bg-white rounded-lg border border-gray-200 p-4">
+                    <p class="text-sm text-gray-500">Ticket médio</p>
+                    <p class="text-xl font-bold text-gray-800">{{ d.vendas.ticketMedio | currency:'BRL' }}</p>
+                </div>
+                <a routerLink="/financeiro/contas-receber"
+                   class="bg-white rounded-lg border border-gray-200 p-4 hover:border-green-400 transition-colors">
+                    <p class="text-sm text-gray-500">A receber em aberto</p>
+                    <p class="text-xl font-bold text-green-700">{{ d.contasReceber.valorEmAberto | currency:'BRL' }}</p>
+                </a>
+                <a routerLink="/financeiro/contas-pagar"
+                   class="bg-white rounded-lg border border-gray-200 p-4 hover:border-red-300 transition-colors">
+                    <p class="text-sm text-gray-500">A pagar em aberto</p>
+                    <p class="text-xl font-bold text-red-600">{{ d.contasPagar.valorEmAberto | currency:'BRL' }}</p>
+                </a>
+                <div class="bg-white rounded-lg border border-gray-200 p-4">
+                    <p class="text-sm text-gray-500">Tempo médio de saída</p>
+                    <p class="text-xl font-bold text-gray-800">
+                        @if (d.tempoSaida.mediaDias !== null) {
+                            {{ d.tempoSaida.mediaDias | number:'1.1-1' }}
+                            <span class="text-sm font-normal text-gray-400">dias</span>
+                        } @else {
+                            –
+                        }
+                    </p>
+                    </div>
+            </div>
+
+            <!-- ━━━━━━━━━━ GRÁFICOS ━━━━━━━━━━ -->
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-4" [class.opacity-50]="carregando()">
+
+                <div class="bg-white rounded-lg border border-gray-200 p-4 xl:col-span-2">
+                    <h2 class="font-semibold text-gray-700 mb-2">Faturamento por dia</h2>
+                    @let fatDia = faturamentoPorDia();
+                    <apx-chart
+                        [chart]="chartFaturamento"
+                        [series]="fatDia.series"
+                        [xaxis]="fatDia.xaxis"
+                        [yaxis]="moeda"
+                        [tooltip]="tooltipMoeda"
+                        [colors]="corPrincipal"
+                        [stroke]="{ curve: 'monotoneCubic', width: 2 }"
+                    />
+                </div>
+
+                <div class="bg-white rounded-lg border border-gray-200 p-4">
+                    <h2 class="font-semibold text-gray-700 mb-2">Vendas por forma de pagamento</h2>
+                    @let formas = porFormaPagamento();
+                    <apx-chart
+                        [chart]="chartFormas"
+                        [series]="formas.series"
+                        [labels]="formas.labels"
+                        [colors]="coresCategoricas"
+                        [tooltip]="tooltipMoeda"
+                        [legend]="{ position: 'bottom' }"
+                    />
+                </div>
+
+                <div class="bg-white rounded-lg border border-gray-200 p-4 xl:col-span-2">
+                    <div class="flex items-center justify-between mb-2">
+                        <h2 class="font-semibold text-gray-700">Top 5 produtos (peças vendidas)</h2>
+                        <a routerLink="/relatorios/vendas-agrupadas" class="text-sm text-green-700 hover:underline">Ver todos</a>
+                    </div>
+                    @let top = topProdutos();
+                    <apx-chart
+                        [chart]="chartProdutos"
+                        [series]="top.series"
+                        [xaxis]="top.xaxis"
+                        [plotOptions]="barrasHorizontais"
+                        [colors]="corPrincipal"
+                    />
+                </div>
+
+                <div class="bg-white rounded-lg border border-gray-200 p-4">
+                    <h2 class="font-semibold text-gray-700 mb-2">Faturamento por categoria</h2>
+                    @let cat = porCategoria();
+                    <apx-chart
+                        [chart]="chartCategorias"
+                        [series]="cat.series"
+                        [xaxis]="cat.xaxis"
+                        [yaxis]="moeda"
+                        [tooltip]="tooltipMoeda"
+                        [plotOptions]="colunas"
+                        [colors]="corPrincipal"
+                    />
+                </div>
+            </div>
+
+        } @else if (carregando()) {
+            <div class="flex justify-center py-16 text-gray-400">
+                <i class="pi pi-spin pi-spinner text-3xl"></i>
+            </div>
+        }
+
+    } @else {
+
+        <!-- ━━━━━━━━━━ VENDEDOR: sem acesso aos relatórios, só atalhos ━━━━━━━━━━ -->
+        <h1 class="text-2xl font-bold text-gray-800 mb-1">Olá, {{ auth.usuario()?.primeiroNome }}!</h1>
+        <p class="text-gray-500 mb-6">O que você quer fazer agora?</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <a routerLink="/vendas/nova" class="bg-white rounded-lg border border-gray-200 p-6 hover:border-green-400 transition-colors">
+                <i class="pi pi-plus-circle text-2xl text-green-600 mb-2"></i>
+                <p class="font-semibold text-gray-800">Nova venda</p>
+            </a>
+            <a routerLink="/vendas" class="bg-white rounded-lg border border-gray-200 p-6 hover:border-green-400 transition-colors">
+                <i class="pi pi-shopping-cart text-2xl text-green-600 mb-2"></i>
+                <p class="font-semibold text-gray-800">Vendas</p>
+            </a>
+            <a routerLink="/condicionais" class="bg-white rounded-lg border border-gray-200 p-6 hover:border-green-400 transition-colors">
+                <i class="pi pi-clock text-2xl text-green-600 mb-2"></i>
+                <p class="font-semibold text-gray-800">Condicionais</p>
+            </a>
+            <a routerLink="/clientes" class="bg-white rounded-lg border border-gray-200 p-6 hover:border-green-400 transition-colors">
+                <i class="pi pi-users text-2xl text-green-600 mb-2"></i>
+                <p class="font-semibold text-gray-800">Clientes</p>
+            </a>
+        </div>
+    }
+
+</div>

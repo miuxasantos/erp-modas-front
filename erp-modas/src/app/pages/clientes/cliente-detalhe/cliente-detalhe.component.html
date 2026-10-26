@@ -19,11 +19,11 @@
                     </div>
                     <div>
                         <p class="text-xs text-gray-400">Contato</p>
-                        <p class="text-sm font-medium">{{ cliente.contato }}</p>
+                        <p class="text-sm font-medium">{{ cliente.contato | mascara:'telefone'}}</p>
                     </div>
                     <div>
                         <p class="text-xs text-gray-400">Documento</p>
-                        <p class="text-sm font-medium">{{ cliente.documento || '—' }}</p>
+                        <p class="text-sm font-medium">{{ cliente.documento | mascara:'documento' }}</p>
                     </div>
                 </div>
             </p-card>

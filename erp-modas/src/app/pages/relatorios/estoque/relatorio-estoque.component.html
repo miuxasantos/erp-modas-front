@@ -88,7 +88,7 @@
             <ng-template #caption>
                 <div class="flex flex-wrap items-center justify-between gap-2">
                     <p-iconfield>
-                        <p-inputicon styleClass="pi pi-search" />
+                        <p-inputicon class="pi pi-search" />
                         <input
                             pInputText
                             type="text"
@@ -135,7 +135,7 @@
                     <td>
                         {{ produto.nome }}
                         @if (!produto.ativo) {
-                            <p-tag value="Inativo" severity="secondary" styleClass="ml-2" />
+                            <p-tag value="Inativo" severity="secondary" class="ml-2" />
                         }
                     </td>
                     <td>{{ produto.categoria }}</td>

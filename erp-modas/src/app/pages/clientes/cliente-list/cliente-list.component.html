@@ -28,8 +28,8 @@
         <ng-template #body let-cliente>
             <tr>
                 <td>{{ cliente.nome}}</td>
-                <td>{{ cliente.contato }}</td>
-                <td>{{ cliente.documento }}</td>
+                <td>{{ cliente.contato | mascara:'telefone'}}</td>
+                <td>{{ cliente.documento | mascara:'documento'}}</td>
                 <td>{{ cliente.cidade }}</td>
                 <td>
                     <div class="flex gap-1">

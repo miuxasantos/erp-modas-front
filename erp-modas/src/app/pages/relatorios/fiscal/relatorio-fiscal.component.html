@@ -30,7 +30,7 @@
                 [options]="opcoesMes"
                 optionLabel="label"
                 optionValue="value"
-                styleClass="w-40"
+                class="w-40"
             />
         </div>
 
@@ -101,10 +101,10 @@
         </div>
 
         <!-- 12 colunas: rolagem horizontal em telas menores, com a coluna da data fixa -->
-        <p-table [value]="relatorio.dias" [scrollable]="true" size="small" styleClass="text-sm">
+        <p-table [value]="relatorio.dias" [scrollable]="true" size="small" class="text-sm">
             <ng-template #header>
                 <tr>
-                    <th rowspan="2" pFrozenColumn class="min-w-24 bg-white">Data</th>
+                    <th rowspan="2" pFrozenColumn class="min-w-24 !bg-white">Data</th>
                     <th colspan="5" class="text-center border-l border-gray-200">Entradas</th>
                     <th colspan="5" class="text-center border-l border-gray-200">Saídas</th>
                     <th rowspan="2" class="text-right border-l border-gray-200 min-w-28">Saldo</th>
@@ -121,7 +121,7 @@
 
             <ng-template #body let-dia>
                 <tr [class.text-gray-400]="semMovimento(dia)">
-                    <td pFrozenColumn class="bg-white whitespace-nowrap">
+                    <td pFrozenColumn class="!bg-white whitespace-nowrap">
                         {{ dia.data | date:'dd/MM' }}
                         <span class="text-xs text-gray-400">{{ dia.data | date:'EEE' }}</span>
                     </td>
@@ -143,7 +143,7 @@
 
             <ng-template #footer>
                 <tr class="font-semibold">
-                    <td pFrozenColumn class="bg-gray-50">Total</td>
+                    <td pFrozenColumn class="!bg-gray-50">Total</td>
                     @for (coluna of colunasEntrada; track coluna.campo; let primeira = $first) {
                         <td class="text-right" [class.border-l]="primeira" [class.border-gray-200]="primeira">{{ totais[coluna.campo] | currency:'BRL' }}</td>
                     }
@@ -188,12 +188,6 @@
                 </tr>
             </ng-template>
         </p-table>
-
-        <p class="text-xs text-gray-400 mt-2">
-            Valores pelo dia da venda ou da compra que gerou a conta, com o valor total (parcelas incluídas),
-            confirmados ou não. Contas canceladas não entram. Lançamentos avulsos do caixa entram pela data do lançamento.
-            Cartão inclui crédito e débito; "Outros" inclui boleto.
-        </p>
     }
 
 </div>

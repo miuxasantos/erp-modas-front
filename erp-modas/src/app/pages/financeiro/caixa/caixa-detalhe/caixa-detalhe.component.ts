@@ -32,7 +32,7 @@ export class CaixaDetalheComponent implements OnInit {
     movimentacoes: MovimentacoesCaixaResponseDto[] = [];
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Financeiro' },
         { label: 'Caixa', routerLink: '/financeiro/caixa' },
         { label: 'Histórico', routerLink: '/financeiro/caixa/historico' },

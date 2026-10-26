@@ -35,7 +35,7 @@ export class CondicionalListComponent implements OnInit {
     condicionais: CondicionalResponseDto[] = [];
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Condicionais' },
     ];
 

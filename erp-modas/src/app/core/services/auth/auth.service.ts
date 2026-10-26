@@ -38,7 +38,7 @@ export class AuthService {
                 localStorage.setItem(this.TOKEN_KEY, response.token);
                 localStorage.setItem(this.USUARIO_KEY, JSON.stringify(usuario));
                 this._usuario.set(new Usuario(usuario));
-                this.router.navigate(['/dashboard']);
+                this.router.navigate(['/home']);
             }),
             map(() => void 0)
         );  

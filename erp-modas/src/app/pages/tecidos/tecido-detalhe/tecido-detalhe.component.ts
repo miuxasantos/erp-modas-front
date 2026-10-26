@@ -24,7 +24,7 @@ export class TecidoDetalheComponent implements OnInit {
     tecido: TecidoResponseDto | null = null;
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard',  routerLink: '/dashboard' },
+        { label: 'Home',  routerLink: '/home' },
         { label: 'Tecidos',   routerLink: '/tecidos' },
         { label: 'Detalhe' },
     ];

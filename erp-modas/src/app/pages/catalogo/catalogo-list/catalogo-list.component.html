@@ -1,8 +1,12 @@
 <!-- pages/catalogo/catalogo-list/catalogo-list.component.html -->
 <div class="max-w-7xl mx-auto px-4 py-6 md:px-6">
 
+  <h1 class="text-xl font-bold flex flex-row justify-center items-center">
+    Catálogo Online
+  </h1>
+
   <app-page-header
-    titulo="Catálogo"
+    titulo=""
     [breadcrumbs]="breadcrumbs"
     [botaoVisivel]="false"
   />
@@ -10,10 +14,9 @@
   <!-- Filtros -->
   <section class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
 
-    <!-- Linha 1: busca + botão de filtros (mobile) -->
     <div class="flex gap-2">
       <p-iconfield class="flex-1 min-w-0">
-        <p-inputicon styleClass="pi pi-search" />
+        <p-inputicon class="pi pi-search" />
         <input
           pInputText
           type="search"
@@ -30,26 +33,26 @@
         icon="pi pi-search"
         [outlined]="true"
         severity="secondary"
-        styleClass="max-sm:!hidden"
+        class="max-sm:!hidden"
         (onClick)="filtrar()"
       />
 
-      <!-- Só no mobile: abre/fecha os selects -->
       <p-button
         icon="pi pi-sliders-h"
         [label]="qtdFiltrosAtivos() ? 'Filtros (' + qtdFiltrosAtivos() + ')' : 'Filtros'"
         [outlined]="!filtrosAbertos()"
         severity="secondary"
-        styleClass="md:!hidden whitespace-nowrap"
+        class="whitespace-nowrap"
         [attr.aria-expanded]="filtrosAbertos()"
+        aria-controls="filtros-catalogo"
         (onClick)="alternarFiltros()"
       />
     </div>
 
-    <!-- Linha 2: selects (recolhidos no mobile) -->
     <div
+    id="filtros-catalogo"
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mt-4"
-      [ngClass]="{ 'max-md:hidden': !filtrosAbertos() }"
+      [ngClass]="{ 'hidden': !filtrosAbertos() }"
     >
       <div class="flex flex-col gap-1">
         <label for="filtro-categoria" class="text-xs text-gray-400">Categoria</label>
@@ -61,7 +64,7 @@
           optionValue="id"
           placeholder="Todas"
           [showClear]="true"
-          styleClass="w-full"
+          Class="w-full"
           (onChange)="filtrar()"
         />
       </div>
@@ -78,7 +81,7 @@
           [showClear]="true"
           [filter]="opcoes().cores.length > 8"
           filterBy="nome"
-          styleClass="w-full"
+          class="w-full"
           (onChange)="filtrar()"
         >
           <ng-template #item let-cor>
@@ -103,7 +106,7 @@
           optionValue="id"
           placeholder="Todos"
           [showClear]="true"
-          styleClass="w-full"
+          class="w-full"
           (onChange)="filtrar()"
         />
       </div>
@@ -116,7 +119,7 @@
           [options]="opcoesOrdenacao"
           optionLabel="label"
           optionValue="value"
-          styleClass="w-full"
+          class="w-full"
           (onChange)="filtrar()"
         />
       </div>
@@ -159,8 +162,8 @@
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
       @for (s of skeleton; track $index) {
         <div>
-          <p-skeleton styleClass="!w-full !h-auto aspect-[3/4] mb-3" borderRadius="0.75rem" />
-          <p-skeleton width="80%" height="1rem" styleClass="mb-2" />
+          <p-skeleton class="!w-full !h-auto aspect-[3/4] mb-3" borderRadius="0.75rem" />
+          <p-skeleton width="80%" height="1rem" class="mb-2" />
           <p-skeleton width="40%" height="1rem" />
         </div>
       }
@@ -216,7 +219,7 @@
             }
 
             @if (esgotado(produto)) {
-              <p-tag value="Esgotado" severity="secondary" styleClass="absolute top-2 left-2" />
+              <p-tag value="Esgotado" severity="secondary" class="absolute top-2 left-2" />
             }
           </div>
 

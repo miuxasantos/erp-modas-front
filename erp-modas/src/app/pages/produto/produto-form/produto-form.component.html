@@ -119,12 +119,11 @@
 
             <label class="text-sm text-gray-600">Imagem do produto</label>
             <!-- preview -->
-            @if (imagemPreview()) {
-              <img
-                [src]="imagemPreview()"
-                class="w-32 h-32 object-cover rounded-lg border border-gray-200"
-              />
-            }
+           <img
+              class="w-1/2 h-auto rounded-sm"
+              [src]="imagemPreview() | imagemUrl"
+              [alt]="form.get('nome')?.value || 'Imagem do produto'"
+            />
             @if (uploading()) {
               <span class="text-sm text-gray-400">Enviando...</span>
             }

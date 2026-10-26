@@ -40,7 +40,7 @@ export class ContasReceberComponent implements OnInit {
     hoje = dataLocalISO();
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Financeiro' },
         { label: 'Contas a Receber' },
     ];

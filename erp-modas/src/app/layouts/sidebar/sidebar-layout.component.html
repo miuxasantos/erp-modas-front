@@ -4,7 +4,7 @@
 >
 
   <div class="h-16 flex items-center justify-between px-4 border-b border-gray-200">
-    <span class="font-bold text-xl text-gray-800">ERP Modas</span>
+    <span class="font-bold text-xl text-gray-800">Shirleys Modas</span>
     <p-button
       icon="pi pi-times"
       [text]="true"
@@ -37,5 +37,19 @@
       <p-divider />
     }
   </nav>
+
+  <div class="border-t border-gray-200 p-3">
+    <a
+      routerLink="/catalogo"
+      target="_blank"
+      rel="noopener"
+      class="flex items-center gap-3 px-3 py-2.5 rounded-lg border border-pink-200 bg-pink-50 text-pink-700 hover:bg-pink-100 transition-colors"
+      (click)="fechar.emit()"
+    >
+      <i class="pi pi-shop text-lg"></i>
+      <span class="text-sm font-medium flex-1">Cátalogo Online</span>
+      <i class="pi pi-external-link text-xs"></i>
+    </a>
+  </div>
 
 </aside>

@@ -12,6 +12,7 @@ import { Router } from "@angular/router";
 import { AssessoriaApiService } from "@core/services/assessoria-api.service";
 import { AssessoriaResponseDto } from "@core/dtos/assessoria/assessoria-response.dto";
 import { TemPermissaoDirective } from "@core/directives/tem-permissao.directive";
+import { MascaraPipe } from "@core/pipes/mascara.pipe";
 
 @Component({
     selector: 'app-assessoria-list',
@@ -23,6 +24,7 @@ import { TemPermissaoDirective } from "@core/directives/tem-permissao.directive"
         InputMaskModule,
         InputTextModule,
         TagModule,
+        MascaraPipe,
         PageHeaderComponent,
         TemPermissaoDirective
     ],
@@ -42,7 +44,7 @@ export class AssessoriaListComponent implements OnInit {
     assessoriaEditando: AssessoriaResponseDto | null = null;
 
     breadcrumbs: MenuItem[] = [
-        {label: 'Dashboard', routerLink: '/dashboard'},
+        {label: 'Home', routerLink: '/home'},
         {label: 'Assessorias'},
     ];
 

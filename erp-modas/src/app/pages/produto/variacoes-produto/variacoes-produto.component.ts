@@ -96,7 +96,7 @@ export class VariacoesProdutoComponent implements OnInit {
     uploadingEsp = signal(false);
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Produtos',  routerLink: '/produtos' },
         { label: 'Variações' },
     ];

@@ -1,13 +1,12 @@
-<!-- layout/public-layout/footer/footer-public.component.html -->
-<footer class="bg-pink-900 text-pink-200 max-h-100">
+<footer class="bg-black text-white max-h-40">
 
-  <div class="px-4 md:px-8 py-4 grid grid-cols-1 md:grid-cols-4 gap-8">
+  <div class="px-4 md:px-8 py-1 grid grid-cols-1 md:grid-cols-4 gap-8">
 
     <div class="md:col-span-2">
-      <p class="text-lg font-semibold tracking-widest text-pink-100 mb-3">
+      <p class="text-base font-semibold tracking-widest text-white mb-3">
         Shirleys Modas
       </p>
-      <p class="text-sm text-pink-300 leading-relaxed">
+      <p class="text-xs text-white leading-relaxed">
         Rua Manoel Ribas, 779 - Centro, Paranavaí
         <br />
         CEP: 87701-000
@@ -17,12 +16,12 @@
     </div>
 
     <div>
-      <p class="text-sm font-medium text-pink-100 mb-3">Fale conosco</p>
+      <p class="text-xs font-medium text-white mb-3">Fale conosco</p>
       <div class="flex flex-col gap-2">
         <a
           [href]="loja.instagram"
           target="_blank"
-          class="text-sm text-pink-300 hover:text-pink-100 transition-colors flex items-center gap-2"
+          class="text-xs text-white hover:text-gray-600 transition-colors flex items-center gap-2"
         >
           <i class="pi pi-instagram"></i>
           Instagram
@@ -31,7 +30,7 @@
         <a
           [href]="whatsapp"
           target="_blank"
-          class="text-sm text-pink-300 hover:text-pink-100 transition-colors flex items-center gap-2"
+          class="text-xs text-white hover:text-gray-600 transition-colors flex items-center gap-2"
         >
           <i class="pi pi-whatsapp"></i>
           WhatsApp
@@ -39,7 +38,7 @@
 
         <a
           [href]="'mailto:' + loja.email"
-          class="text-sm text-pink-300 hover:text-pink-100 transition-colors flex items-center gap-2"
+          class="text-xs text-white hover:text-gray-600 transition-colors flex items-center gap-2"
         >
           <i class="pi pi-envelope"></i>
           E-mail
@@ -50,12 +49,12 @@
   </div>
 
   <div class="px-4 md:px-8 py-2 flex flex-wrap items-center justify-between gap-2">
-    <p class="text-xs text-pink-400">
+    <p class="text-xs text-white">
       © {{ ano }} Shirleys Modas. Todos os direitos reservados.
     </p>
     <a
       routerLink="/auth/login"
-      class="text-xs text-pink-500 hover:text-pink-300 transition-colors"
+      class="text-xs text-gray-800 hover:text-gray-700 transition-colors"
     >
       Acesso administrativo
     </a>

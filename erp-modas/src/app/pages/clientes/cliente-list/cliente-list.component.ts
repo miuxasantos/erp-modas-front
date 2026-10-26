@@ -12,6 +12,7 @@ import { ConfirmationService, MenuItem, MessageService } from "primeng/api";
 import { Router } from "@angular/router";
 import { ClienteResponseDto } from "@core/dtos/cliente/cliente-response.dto";
 import { TemPermissaoDirective } from "@core/directives/tem-permissao.directive";
+import { MascaraPipe } from "@core/pipes/mascara.pipe";
 
 @Component({
     selector: 'app-cliente-list',
@@ -24,6 +25,7 @@ import { TemPermissaoDirective } from "@core/directives/tem-permissao.directive"
         InputTextModule,
         TagModule,
         PageHeaderComponent,
+        MascaraPipe,
         TemPermissaoDirective
     ],
     templateUrl: './cliente-list.component.html'
@@ -42,7 +44,7 @@ export class ClienteListComponent implements OnInit {
     clienteEditando: ClienteResponseDto | null = null;
 
     breadcrumbs: MenuItem[] = [
-        {label: 'Dashboard', routerLink: '/dashboard'},
+        {label: 'Home', routerLink: '/home'},
         {label: 'Clientes'},
     ];
 

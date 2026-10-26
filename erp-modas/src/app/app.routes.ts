@@ -24,6 +24,11 @@ export const routes: Routes = [
                 .then(c => c.AuthLayoutComponent),
         children: [
             {
+                path: '',
+                redirectTo: 'home',
+                pathMatch: 'full'
+            },
+            {
                 path: 'login',
                 loadComponent: () =>
                     import('./pages/auth/login/login-page.component')
@@ -39,10 +44,17 @@ export const routes: Routes = [
                 .then(c => c.MainLayoutComponent),
         children: [
             {
+                path: 'home',
+                loadComponent: () =>
+                    import('./pages/home/home.component')
+                        .then(c => c.HomeComponent)
+            },
+            {
                 path: 'dashboard',
-                loadChildren: () =>
-                    import('./pages/produto/produto.routes')
-                        .then(m => m.produtosRoutes)
+                canActivate: [adminGuard],
+                loadComponent: () =>
+                    import('./pages/dashboard/dashboard.compontent')
+                        .then(c => c.DashboardComponent)
             },
             {
                 path: 'produtos',
@@ -135,6 +147,13 @@ export const routes: Routes = [
                 loadChildren: () =>
                     import('./pages/relatorios/relatorios.route')
                         .then(m => m.relatoriosRoutes)
+            },
+            {
+                path: 'auditoria',
+                canActivate: [adminGuard],
+                loadChildren: () =>
+                    import('./pages/auditoria/auditoria.route')
+                        .then(m => m.auditoriaRoutes)
             }
         ]
     }

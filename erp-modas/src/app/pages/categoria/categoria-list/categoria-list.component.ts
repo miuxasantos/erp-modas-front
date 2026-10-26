@@ -40,7 +40,7 @@ export class CategoriaListComponent implements OnInit {
     categoriaEditando: CategoriaResponseDto | null = null;
 
     breadcrumbs: MenuItem[] = [
-        {label: 'Dashboard', routerLink: '/dashboard'},
+        {label: 'Home', routerLink: '/home'},
         {label: 'Categorias'},
     ];
 

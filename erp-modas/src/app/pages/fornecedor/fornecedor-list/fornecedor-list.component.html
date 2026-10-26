@@ -27,7 +27,7 @@
         <ng-template #body let-fornecedor>
             <tr>
                 <td>{{ fornecedor.nome }}</td>
-                <td>{{ fornecedor.contato }}</td>
+                <td>{{ fornecedor.contato | mascara:'telefone' }}</td>
                 <td>{{ fornecedor.assessoria?.nome ?? "—" }}</td>
                 <td>
                     <div class="flex gap-1">

@@ -53,7 +53,7 @@ export class RelatorioFiscalComponent implements OnInit {
     private readonly CAMINHO_EXPORTACAO = 'financeiro/fiscal';
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Relatórios' },
         { label: 'Fiscal mensal' },
     ];

@@ -7,10 +7,11 @@ import { ClienteResponseDto } from '@core/dtos/cliente/cliente-response.dto';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { MenuItem } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
+import { MascaraPipe } from '@core/pipes/mascara.pipe';
 
 @Component({
     selector: 'app-cliente-detalhe',
-    imports: [ButtonModule, CardModule, PageHeaderComponent],
+    imports: [ButtonModule, CardModule, MascaraPipe, PageHeaderComponent],
     templateUrl: './cliente-detalhe.component.html',
 })
 
@@ -24,7 +25,7 @@ export class ClienteDetalheComponent implements OnInit {
     cliente: ClienteResponseDto | null = null;
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard',  routerLink: '/dashboard' },
+        { label: 'Home',  routerLink: '/home' },
         { label: 'Clientes',   routerLink: '/clientes' },
         { label: 'Detalhe' },
     ];

@@ -40,7 +40,7 @@ export class MarcaListComponent implements OnInit {
     marcaEditando: MarcaResponseDto | null = null;
 
     breadcrumbs: MenuItem[] = [
-        {label: 'Dashboard', routerLink: '/dashboard'},
+        {label: 'Home', routerLink: '/home'},
         {label: 'Marcas'},
     ];
 

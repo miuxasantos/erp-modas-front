@@ -12,7 +12,7 @@ export class ContasPagar {
     totalParcelas: number;
     observacoes: string;
     statusConta: StatusConta;
-    formaPagamento: FormaPagamento;
+    formaPagamento: FormaPagamento | null;
 
     constructor(dto: ContasPagarResponseDto) {
         this.id = dto.id;

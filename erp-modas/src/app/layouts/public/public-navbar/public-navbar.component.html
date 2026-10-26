@@ -1,27 +1,19 @@
-<nav class="h-16 bg-white border-b border-gray-200 flex items-center px-8 gap-8 sticky top-0 z-30">
+<nav class="h-20 bg-black border-b border-gray-200 flex flex-row justify-between items-center px-8 gap-8 sticky top-0 z-30">
 
-  <a routerLink="/" class="font-semibold text-xl tracking-widest text-pink-800 flex-1">
-    {{ loja.nome }}  
-  </a>
+  <img 
+    src="logo.png" class="w-26 max-w-3xl rounded-xl"
+  />
 
   <div class="flex gap-6">
-    <a
-      routerLink="/catalogo"
-      routerLinkActive="text-pink-700 font-medium"
-      class="text-sm text-gray-500 hover:text-pink-700 transition-colors"
-    >
-      Catálogo
-    </a>
-
     <a
       [href]="whatsapp"
       target="_blank"
       rel="noopener noreferrer"
-      class="text-sm text-gray-500 hover:text-pink-700 transition-colors"
+      class="text-sm text-white hover:text-gray-600 transition-colors"
       aria-label="Contato pelo WhatsApp"
     >
       <i class="pi pi-whatsapp"></i>
-      <span class="max-sm:hidden">Contato</span>
+      <span class="max-sm:hidden p-2 text-white hover:text-gray-600">Contato</span>
     </a>
   </div>
 

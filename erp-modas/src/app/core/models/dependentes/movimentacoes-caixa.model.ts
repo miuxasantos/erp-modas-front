@@ -11,7 +11,7 @@ export class MovimentacoesCaixa {
     descricao: string;
     origem: OrigemMov;
     origemId: number;
-    formaPagamento: FormaPagamento;
+    formaPagamento: FormaPagamento | null;
 
     constructor(dto: MovimentacoesCaixaResponseDto) {
         this.id = dto.id;

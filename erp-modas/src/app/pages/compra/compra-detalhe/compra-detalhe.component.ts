@@ -30,7 +30,7 @@ export class CompraDetalheComponent implements OnInit {
     compra: CompraResponseDto | null = null;
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Compras',    routerLink: '/compras' },
         { label: 'Detalhe' },
     ];

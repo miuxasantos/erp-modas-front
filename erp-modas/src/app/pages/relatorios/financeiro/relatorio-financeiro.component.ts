@@ -50,7 +50,7 @@ export class RelatorioFinanceiroComponent implements OnInit {
     private readonly CAMINHO_EXPORTACAO = 'financeiro/resumo';
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Relatórios' },
         { label: 'Financeiro' },
     ];

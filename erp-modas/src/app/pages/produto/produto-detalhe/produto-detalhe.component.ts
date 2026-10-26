@@ -27,7 +27,7 @@ export class ProdutoDetalheComponent implements OnInit {
     produto: Produto | null = null;
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard',  routerLink: '/dashboard' },
+        { label: 'Home',  routerLink: '/home' },
         { label: 'Produtos',   routerLink: '/produtos' },
         { label: 'Detalhe' },
     ];

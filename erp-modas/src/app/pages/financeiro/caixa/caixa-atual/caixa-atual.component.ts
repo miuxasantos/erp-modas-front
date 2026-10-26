@@ -46,7 +46,7 @@ export class CaixaAtualComponent implements OnInit {
     processando = signal(false);
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Financeiro' },
         { label: 'Caixa' },
     ];

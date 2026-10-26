@@ -22,7 +22,7 @@ export class CaixaHistoricoComponent implements OnInit {
   caixas: Caixa[] = [];
 
   breadcrumbs: MenuItem[] = [
-    { label: 'Dashboard',  routerLink: '/dashboard' },
+    { label: 'Home',  routerLink: '/home' },
     { label: 'Financeiro' },
     { label: 'Caixa',      routerLink: '/financeiro/caixa' },
     { label: 'Histórico' },

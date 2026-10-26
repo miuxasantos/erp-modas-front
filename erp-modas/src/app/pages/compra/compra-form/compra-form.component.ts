@@ -80,7 +80,7 @@ export class CompraFormComponent implements OnInit {
     private rascunho: RascunhoCompra | null = null;
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Compras',    routerLink: '/compras' },
         { label: 'Nova Compra' },
     ];

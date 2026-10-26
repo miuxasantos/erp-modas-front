@@ -24,7 +24,7 @@ export class UsuarioDetalheComponent implements OnInit {
     usuario: UsuarioResponseDto | null = null;
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard',  routerLink: '/dashboard' },
+        { label: 'Home',  routerLink: '/home' },
         { label: 'Usuarios',   routerLink: '/usuarios' },
         { label: 'Detalhe' },
     ];

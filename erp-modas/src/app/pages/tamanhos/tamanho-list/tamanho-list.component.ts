@@ -24,7 +24,7 @@ export class TamanhoListComponent implements OnInit {
     tamanhos: TamanhoResponseDto[] = [];
     
     breadcrumbs: MenuItem[] = [
-        {label: 'Dashboard', routerLink: '/dashboard'},
+        {label: 'Home', routerLink: '/home'},
         {label: 'Tamanhos'},
     ];
 

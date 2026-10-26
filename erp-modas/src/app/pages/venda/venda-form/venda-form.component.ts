@@ -79,7 +79,7 @@ export class VendaFormComponent implements OnInit {
     tamanhos: TamanhoResponseDto[] = [];
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Vendas',    routerLink: '/vendas' },
         { label: 'Nova Venda' },
     ];

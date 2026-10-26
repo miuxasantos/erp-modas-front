@@ -32,7 +32,8 @@ export class SidebarComponent {
         {
             label: 'Principais',
             items: [
-                { label: 'Dashboard', icon: 'pi pi-home', route: '/dashboard'},
+                { label: 'Home', icon: 'pi pi-home', route: '/home'},
+                { label: 'Dashboard', icon: 'pi pi-chart-bar', route: '/dashboard'},
                 { label: 'Vendas', icon: 'pi pi-shopping-cart', route: '/vendas'},
                 { label: 'Condicionais', icon: 'pi pi-box', route: '/condicionais'},
                 { label: 'Compras', icon: 'pi pi-truck', route: '/compras'},
@@ -49,6 +50,7 @@ export class SidebarComponent {
                 { label: 'Marcas', icon: 'pi pi-star', route: '/marcas'},
                 { label: 'Tecidos', icon: 'pi pi-th-large', route: '/tecidos'},
                 { label: 'Assessoria', icon: 'pi pi-briefcase', route: '/assessorias'},
+                { label: 'Tamanhos', icon: 'pi pi-sort-alt', route: '/tamanhos'},
             ]
         },
         {
@@ -57,14 +59,6 @@ export class SidebarComponent {
                 { label: 'Caixa', icon: 'pi pi-wallet', route: '/financeiro/caixa'},
                 { label: 'Contas a Pagar', icon: 'pi pi-arrow-down-left', route: '/financeiro/contas-pagar', visivel: () => this.auth.isProprietario()},
                 { label: 'Contas a Receber', icon: 'pi pi-arrow-up-right', route: '/financeiro/contas-receber', visivel: () => this.auth.isProprietario()},
-            ]
-        },
-        {
-            label: 'Configurações',
-            items: [
-                { label: 'Usuários', icon: 'pi pi-user', route: '/usuarios', visivel: () => this.auth.isProprietario()},
-                { label: 'Auditoria', icon: 'pi pi-history', route: '/auditoria', visivel: () => this.auth.isProprietario() },
-                { label: 'Tamanhos', icon: 'pi pi-sort-alt', route: '/tamanhos'},
             ]
         },
         {
@@ -78,6 +72,13 @@ export class SidebarComponent {
                 { label: 'Estoque', icon: 'pi pi-warehouse', route: '/relatorios/estoque', visivel: () => this.auth.isProprietario() },
                 { label: 'Financeiro', icon: 'pi pi-wallet', route: '/relatorios/financeiro', visivel: () => this.auth.isProprietario() },
                 { label: 'Fiscal mensal', icon: 'pi pi-calculator', route: '/relatorios/fiscal', visivel: () => this.auth.isProprietario() },
+            ]
+        },
+        {
+            label: 'Configurações',
+            items: [
+                { label: 'Usuários', icon: 'pi pi-user', route: '/usuarios', visivel: () => this.auth.isProprietario()},
+                { label: 'Auditoria', icon: 'pi pi-history', route: '/auditoria', visivel: () => this.auth.isProprietario() },
             ]
         }
     ];

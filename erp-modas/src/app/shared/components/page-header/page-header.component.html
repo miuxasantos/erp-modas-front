@@ -8,11 +8,16 @@
       {{ titulo() }}
     </h1>
 
+    <div  class="w-fit overflow-hidden rounded-lg
+             [&_.p-breadcrumb]:!rounded-lg
+             [&_.p-breadcrumb]:!border-none
+             [&_.p-breadcrumb]:!bg-white">
+             
     <p-breadcrumb
       [model]="breadcrumbs()"
-      styleClass="!p-0 !bg-transparent !border-none"
+      class="!rounded-lg !border-none !bg-white"
     />
-
+  </div>
   </div>
 
   <!-- Lado direito — botão de ação -->

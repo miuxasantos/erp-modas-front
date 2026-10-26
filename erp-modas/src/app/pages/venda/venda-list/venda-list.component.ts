@@ -35,7 +35,7 @@ export class VendaListComponent implements OnInit {
     vendas: VendaResponseDto[] = [];
 
     breadcrumbs: MenuItem[] = [
-        { label: 'Dashboard', routerLink: '/dashboard' },
+        { label: 'Home', routerLink: '/home' },
         { label: 'Vendas' },
     ];
 
